@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>محمد جمال | متجر إلكتروني</title>
+  <meta name="description" content="متجر محمد جمال الإلكتروني">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="top">
+  <div class="nav wrap">
+    <a class="brand" href="#">
+      <img src="logo.png" alt="محمد جمال" onerror="this.style.display='none'">
+      <span>محمد جمال</span>
+    </a>
+    <div class="search"><input id="search" placeholder="ابحث عن منتج..."><button onclick="focusSearch()">⌕</button></div>
+    <button class="cartBtn" onclick="toggleCart()">🛒 السلة <b id="cartCount">0</b></button>
+  </div>
+</header>
+
+<main>
+  <section class="hero wrap">
+    <div>
+      <span class="pill">متجر محمد جمال</span>
+      <h1>تسوّق بسهولة<br><em>وبأسلوبك</em></h1>
+      <p>منتجات مختارة، أسعار واضحة، وتجربة شراء بسيطة من الموبايل أو الكمبيوتر.</p>
+      <a href="#products" class="primary">تصفح المنتجات</a>
+    </div>
+    <div class="heroCard">
+      <div class="shine"></div>
+      <strong>خصم يصل إلى 30%</strong>
+      <span>على المنتجات المختارة</span>
+    </div>
+  </section>
+
+  <section class="wrap">
+    <div class="sectionHead">
+      <div><small>المتجر</small><h2 id="products">المنتجات</h2></div>
+      <select id="category" onchange="render()">
+        <option value="all">كل المنتجات</option>
+        <option value="ملابس">ملابس</option>
+        <option value="إكسسوارات">إكسسوارات</option>
+        <option value="عطور">عطور</option>
+      </select>
+    </div>
+    <div id="grid" class="grid"></div>
+  </section>
+</main>
+
+<aside id="cart" class="drawer">
+  <div class="drawerHead"><h2>سلة المشتريات</h2><button onclick="toggleCart()">✕</button></div>
+  <div id="cartItems"></div>
+  <div class="total"><span>المجموع</span><strong id="total">0 ل.س</strong></div>
+  <button class="checkout" onclick="checkout()">إتمام الطلب عبر واتساب</button>
+  <p class="note">يمكن ربط الموقع لاحقًا بالدفع الإلكتروني والشحن.</p>
+</aside>
+<div id="overlay" class="overlay" onclick="toggleCart()"></div>
+
+<footer><div class="wrap"><strong>محمد جمال</strong><span>© 2026 جميع الحقوق محفوظة</span></div></footer>
+<script src="script.js"></script>
+</body>
+</html>
