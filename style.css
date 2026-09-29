@@ -117,3 +117,19 @@ button{font-family:inherit;cursor:pointer}
 .settings-toggle.on{background:#48a847}
 .settings-toggle:after{content:"";position:absolute;top:4px;right:25px;width:18px;height:18px;background:#fff;border-radius:50%;transition:.2s}
 .settings-toggle.on:after{right:5px}
+
+/* Registration + profile */
+.signup-note{background:#f3faf3;border:1px solid #dcebdc;border-radius:12px;padding:12px 14px;margin:8px 0 14px;color:#516159;font-size:13px;line-height:1.8}
+.signup-form label{display:grid;gap:6px;font-weight:700}
+.signup-form input,.signup-form select{width:100%;box-sizing:border-box}
+.checkline{display:flex!important;grid-template-columns:none!important;align-items:center;gap:8px!important;font-weight:500!important;color:#4f5c54}
+.checkline input{width:18px!important;height:18px}
+.login-hint{font-size:12px;color:#78837d;line-height:1.7;margin:10px 0 0}
+.profile-summary{display:flex;align-items:center;gap:14px;background:#f3faf3;border:1px solid #deebdf;border-radius:14px;padding:14px;margin-bottom:12px}
+.profile-summary h3{margin:0 0 4px}.profile-summary p{margin:0;color:#77827b;font-size:13px}
+.profile-avatar{width:58px;height:58px;border-radius:50%;background:#e8f5e9;display:grid;place-items:center;font-size:30px;flex:0 0 auto}
+.profile-card{text-align:center;background:#f5faf5;border:1px solid #dfe9df;border-radius:16px;padding:18px;margin-bottom:14px}
+.profile-card .profile-avatar{margin:auto}.profile-card h2{margin:9px 0 3px}.profile-card p{margin:0;color:#768179;font-size:13px}
+.profile-fields{display:grid;gap:8px}.profile-fields>div{display:flex;justify-content:space-between;gap:15px;padding:11px 12px;border-bottom:1px solid #edf0ed}.profile-fields b{color:#4c5851}.profile-fields span{text-align:left;color:#202720;max-width:60%;word-break:break-word}.profile-edit{width:100%;margin-top:14px}
+#drawerUserBox{display:grid;gap:3px}.userbox small{display:block;color:#718078;font-size:11px;margin-right:25px}
+@media(max-width:700px){.modalbox{max-height:88vh;overflow:auto}.form-row{grid-template-columns:1fr}.profile-fields span{max-width:58%}}

@@ -72,6 +72,8 @@ function renderSubcats(){
 function renderUser(){
  const u=state.user;
  $("#accountBtn").innerHTML=`👤 <small>${u?"مرحباً، "+esc(u.name):"مرحباً، سجل الدخول"}</small><b>${u?"حسابي ▾":"تسجيل الدخول ▾"}</b>`;
+ const ub=$("#drawerUserBox");
+ if(ub) ub.innerHTML=u?`👤 <b>مرحباً، ${esc(u.name)}</b><small>ملفك الشخصي جاهز</small>`:`👤 <b>مرحباً! تسجيل الدخول / إنشاء حساب</b>`;
 }
 function updateCounts(){$("#cartCount").textContent=cartQty()}
 function add(id,qty=1,opts={}){
@@ -98,13 +100,59 @@ function productModal(id){
 }
 function toggleFav(id){state.fav=state.fav.includes(id)?state.fav.filter(x=>x!==id):[...state.fav,id];persist();toast(state.fav.includes(id)?"تمت الإضافة للمفضلة":"تمت الإزالة من المفضلة");renderProducts()}
 function authModal(){
- modal(state.user?"حسابك":"تسجيل الدخول / إنشاء حساب",state.user?`<div class="account-grid"><button data-account="orders">📦 طلباتك</button><button data-account="fav">♡ المفضلة (${state.fav.length})</button><button data-account="address">📍 عناوينك</button><button data-account="payments">💳 طرق الدفع</button><button data-account="recent">👁 شاهدته مؤخراً</button><button data-account="returns">↩️ الإرجاع والاسترداد</button><button data-logout>🚪 تسجيل الخروج</button></div>`:`<form id="loginForm" class="form"><input id="loginName" required placeholder="اسم المستخدم"><input id="loginPhone" required placeholder="رقم الهاتف"><input id="loginPass" type="password" required placeholder="كلمة المرور"><button class="primary">دخول / إنشاء الحساب</button></form>`,box=>{
-   $("#loginForm",box)?.addEventListener("submit",e=>{e.preventDefault();state.user={name:$("#loginName").value.trim(),phone:$("#loginPhone").value.trim()};persist();renderUser();closeModal();toast("تم إنشاء الحساب وتسجيل الدخول")});
-   $$("[data-account]",box).forEach(b=>b.onclick=()=>accountSection(b.dataset.account));
-   $("[data-logout]",box)?.addEventListener("click",()=>{state.user=null;persist();renderUser();closeModal();toast("تم تسجيل الخروج")})
+ if(state.user){
+   modal("حسابي",`<div class="profile-summary"><div class="profile-avatar">👤</div><div><h3>${esc(state.user.name)}</h3><p>${esc(state.user.email||state.user.phone||"")}</p></div></div><div class="account-grid"><button data-account="profile">👤 ملفي الشخصي</button><button data-account="orders">📦 طلباتك</button><button data-account="fav">♡ المفضلة (${state.fav.length})</button><button data-account="address">📍 عناوينك</button><button data-account="payments">💳 طرق الدفع</button><button data-account="recent">👁 شاهدته مؤخراً</button><button data-account="returns">↩️ الإرجاع والاسترداد</button><button data-logout>🚪 تسجيل الخروج</button></div>`,box=>{
+     $$('[data-account]',box).forEach(b=>b.onclick=()=>accountSection(b.dataset.account));
+     $("[data-logout]",box)?.addEventListener("click",()=>{state.user=null;persist();renderUser();closeModal();toast("تم تسجيل الخروج")});
+   });
+   return;
+ }
+ modal("إنشاء حساب جديد",`<div class="signup-note">أدخل بياناتك الأساسية لإنشاء حسابك، وبعد التسجيل سيظهر اسمك في ملفك الشخصي.</div><form id="signupForm" class="form signup-form">
+   <div class="form-row"><label>الاسم<input id="signupFirst" required placeholder="الاسم الأول"></label><label>الكنية / اسم العائلة<input id="signupLast" required placeholder="اسم العائلة"></label></div>
+   <label>الجنس<select id="signupGender"><option value="">اختر الجنس</option><option value="ذكر">ذكر</option><option value="أنثى">أنثى</option></select></label>
+   <label>تاريخ الميلاد<input id="signupBirth" type="date" required></label>
+   <label>البريد الإلكتروني<input id="signupEmail" type="email" required placeholder="example@email.com"></label>
+   <div class="form-row"><label>رمز الدولة<select id="signupCode"><option value="+90">🇹🇷 +90</option><option value="+963">🇸🇾 +963</option><option value="+49">🇩🇪 +49</option><option value="+33">🇫🇷 +33</option></select></label><label>رقم الهاتف<input id="signupPhone" required inputmode="tel" placeholder="5xxxxxxxxx"></label></div>
+   <label>كلمة المرور<input id="signupPass" type="password" minlength="6" required placeholder="6 أحرف أو أكثر"></label>
+   <label class="checkline"><input id="signupMarketing" type="checkbox"> أريد تلقي العروض والتنبيهات الجديدة</label>
+   <button class="primary" type="submit">إنشاء الحساب</button>
+ </form><p class="login-hint">لديك حساب مسبقاً؟ أدخل بياناتك في نفس النموذج وسيتم حفظ الحساب على هذا الجهاز.</p>`,box=>{
+   $("#signupForm",box).addEventListener("submit",e=>{
+     e.preventDefault();
+     const first=$("#signupFirst",box).value.trim(), last=$("#signupLast",box).value.trim();
+     state.user={name:`${first} ${last}`.trim(),firstName:first,lastName:last,gender:$("#signupGender",box).value,birthDate:$("#signupBirth",box).value,email:$("#signupEmail",box).value.trim(),countryCode:$("#signupCode",box).value,phone:$("#signupPhone",box).value.trim(),marketing:$("#signupMarketing",box).checked};
+     persist();renderUser();closeModal();toast("تم إنشاء حسابك بنجاح 🎉");
+     setTimeout(profileModal,180);
+   });
  });
 }
+function profileModal(){
+ if(!state.user)return authModal();
+ const u=state.user;
+ modal("👤 ملفي الشخصي",`<div class="profile-card"><div class="profile-avatar">👤</div><h2>${esc(u.name)}</h2><p>${esc(u.email||"")}</p></div><div class="profile-fields">
+   <div><b>الاسم الكامل</b><span>${esc(u.name)}</span></div>
+   <div><b>الجنس</b><span>${esc(u.gender||"غير محدد")}</span></div>
+   <div><b>تاريخ الميلاد</b><span>${esc(u.birthDate||"غير محدد")}</span></div>
+   <div><b>البريد الإلكتروني</b><span>${esc(u.email||"-")}</span></div>
+   <div><b>الهاتف</b><span>${esc((u.countryCode||"")+" "+(u.phone||""))}</span></div>
+   <div><b>العروض والإشعارات</b><span>${u.marketing?"مفعلة":"غير مفعلة"}</span></div>
+ </div><button class="secondary profile-edit" id="editProfile">تعديل بياناتي</button>`,box=>{$("#editProfile",box).onclick=()=>editProfileModal()});
+}
+function editProfileModal(){
+ const u=state.user||{};
+ modal("تعديل الملف الشخصي",`<form id="editProfileForm" class="form signup-form">
+   <div class="form-row"><label>الاسم<input id="editFirst" required value="${esc(u.firstName||u.name||"")}"></label><label>الكنية / اسم العائلة<input id="editLast" required value="${esc(u.lastName||"")}"></label></div>
+   <label>الجنس<select id="editGender"><option value="">اختر الجنس</option><option ${u.gender==="ذكر"?"selected":""}>ذكر</option><option ${u.gender==="أنثى"?"selected":""}>أنثى</option></select></label>
+   <label>تاريخ الميلاد<input id="editBirth" type="date" value="${esc(u.birthDate||"")}"></label>
+   <label>البريد الإلكتروني<input id="editEmail" type="email" required value="${esc(u.email||"")}"></label>
+   <div class="form-row"><label>رمز الدولة<select id="editCode"><option value="+90" ${u.countryCode==="+90"?"selected":""}>🇹🇷 +90</option><option value="+963" ${u.countryCode==="+963"?"selected":""}>🇸🇾 +963</option><option value="+49" ${u.countryCode==="+49"?"selected":""}>🇩🇪 +49</option><option value="+33" ${u.countryCode==="+33"?"selected":""}>🇫🇷 +33</option></select></label><label>رقم الهاتف<input id="editPhone" required value="${esc(u.phone||"")}"></label></div>
+   <label class="checkline"><input id="editMarketing" type="checkbox" ${u.marketing?"checked":""}> أريد تلقي العروض والتنبيهات الجديدة</label>
+   <button class="primary" type="submit">حفظ التعديلات</button>
+ </form>`,box=>{$("#editProfileForm",box).onsubmit=e=>{e.preventDefault();const first=$("#editFirst",box).value.trim(),last=$("#editLast",box).value.trim();state.user={...state.user,name:`${first} ${last}`.trim(),firstName:first,lastName:last,gender:$("#editGender",box).value,birthDate:$("#editBirth",box).value,email:$("#editEmail",box).value.trim(),countryCode:$("#editCode",box).value,phone:$("#editPhone",box).value.trim(),marketing:$("#editMarketing",box).checked};persist();renderUser();closeModal();toast("تم تحديث الملف الشخصي");setTimeout(profileModal,150)}});
+}
+
 function accountSection(type){
+ if(type==="profile")return profileModal();
  if(type==="orders")return ordersModal();
  if(type==="fav")return favModal();
  if(type==="address")return addressModal();
