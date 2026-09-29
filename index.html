@@ -2,110 +2,93 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>سوريا أونلاين — متجر إلكتروني</title>
-<style>
-:root{--green:#49b95f;--dark:#123b1b;--mint:#effbf1;--line:#e5ece6;--muted:#6f7b72;--red:#ef4444;--shadow:0 8px 28px #123b1b12}
-*{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Tahoma,Arial,sans-serif;background:#f7faf7;color:#172019}
-button,input,select,textarea{font:inherit}button{cursor:pointer;border:0}.top{background:#eff9f0;border-bottom:1px solid var(--line);padding:8px 4%;display:flex;justify-content:space-between;font-size:13px}
-.header{background:#fff;padding:15px 4%;display:grid;grid-template-columns:auto 1fr auto;gap:22px;align-items:center;position:sticky;top:0;z-index:20;box-shadow:0 2px 15px #123b1b0b}
-.logo{font-weight:950;font-size:27px;color:#20a544;white-space:nowrap}.logo span{color:#172019}.tag{display:block;font-size:10px;color:#718077;font-weight:500}
-.search{display:flex;height:50px;background:#f4f7f4;border:1px solid #d9e4da;border-radius:12px;overflow:hidden}.search input{flex:1;border:0;background:transparent;padding:0 17px;outline:0}.search button{width:58px;background:var(--green);color:#fff;font-size:21px}
-.actions{display:flex;gap:16px;align-items:center}.act{background:transparent;font-weight:800;position:relative}.badge{position:absolute;top:-9px;right:-9px;background:var(--red);color:#fff;border-radius:99px;padding:2px 6px;font-size:10px}
-.nav{background:#fff;border-top:1px solid #eef3ee;border-bottom:1px solid var(--line);padding:11px 4%;display:flex;gap:28px;overflow:auto;white-space:nowrap}.nav button{background:none;font-weight:750;color:#263229}.nav button:hover{color:#159447}
-.wrap{max-width:1450px;margin:auto;padding:15px 3%}.hero{display:grid;grid-template-columns:2fr 1fr;gap:12px}.heroMain,.heroSmall{border-radius:18px;min-height:280px;overflow:hidden}.heroMain{background:linear-gradient(110deg,#c8f3cc,#effbf1);position:relative}.heroMain:after{content:"";position:absolute;left:5%;top:12%;width:40%;height:70%;border-radius:50%;background:#fff8}.heroText{position:relative;z-index:2;padding:48px 7%;max-width:650px}.heroText h1{font-size:42px;color:#125e25;margin:0 0 12px}.heroText p{font-size:18px;line-height:1.8}.cta,.primary{background:#229b42;color:#fff;border-radius:10px;padding:12px 23px;font-weight:900}.side{display:grid;gap:12px}.heroSmall{padding:28px;color:#123b1c}.one{background:linear-gradient(120deg,#d9f6df,#bdeac5)}.two{background:linear-gradient(120deg,#eaf8ec,#c9f0d1)}
-.cats{display:flex;gap:12px;overflow:auto;padding:16px 0}.cat{min-width:105px;background:#fff;border:1px solid var(--line);border-radius:16px;padding:12px;text-align:center;box-shadow:var(--shadow)}.ico{width:62px;height:62px;margin:auto auto 7px;border-radius:50%;display:grid;place-items:center;background:#e7f8ea;font-size:30px}
-.section{margin-top:17px;background:#fff;border-radius:17px;padding:18px;box-shadow:var(--shadow)}.sectionHead{display:flex;justify-content:space-between;align-items:center}.sectionHead h2{margin:0}.more{color:#209443;font-weight:850}
-.toolbar{display:flex;gap:9px;flex-wrap:wrap;margin-top:14px}.toolbar select,.toolbar button{padding:9px 12px;border:1px solid var(--line);border-radius:9px;background:#fff}.toolbar button.active{background:#e7f8ea;border-color:#9bd9a5;color:#16853a}
-.products{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-top:15px}.product{position:relative;border:1px solid #edf1ed;border-radius:14px;padding:10px;background:#fff;transition:.2s}.product:hover{transform:translateY(-3px);box-shadow:var(--shadow)}.pic{height:180px;border-radius:11px;background:linear-gradient(135deg,#f1f5f2,#e4eee5);display:grid;place-items:center;font-size:70px;cursor:pointer}.discount{position:absolute;top:18px;right:18px;background:var(--red);color:#fff;border-radius:6px;padding:4px 7px;font-size:12px;font-weight:850}.fav{position:absolute;top:15px;left:15px;background:#fff;border-radius:50%;width:34px;height:34px;font-size:19px}.fav.on{color:#e53935}.stars{color:#efa900;margin:8px 0 3px}.price{font-size:20px;font-weight:950;color:#159447}.old{text-decoration:line-through;color:#9aa49c;font-size:13px;margin-right:7px}.add{width:100%;margin-top:9px;background:#39a84d;color:#fff;border-radius:9px;padding:10px;font-weight:850}
-.bannerRow{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:17px}.banner{min-height:145px;border-radius:15px;padding:24px;background:#dff6e2}.banner:nth-child(2){background:#cdeed3}.banner:nth-child(3){background:#d7f3e0}.services{display:grid;grid-template-columns:repeat(4,1fr);gap:15px;padding:25px 0}.service{text-align:center}.service b{display:block;font-size:17px}.service span{color:var(--muted);font-size:13px}
-.overlay{position:fixed;inset:0;background:#0007;z-index:60;display:none}.overlay.open{display:block}.panel{position:absolute;right:0;top:0;height:100%;width:min(480px,95%);background:#fff;padding:20px;overflow:auto}.panel h2{display:flex;justify-content:space-between}.close{background:#eef3ef;border-radius:9px;padding:7px 11px}.cartItem{display:grid;grid-template-columns:62px 1fr auto;gap:10px;align-items:center;padding:13px 0;border-bottom:1px solid #eee}.mini{width:62px;height:62px;background:#edf7ef;border-radius:10px;display:grid;place-items:center;font-size:30px}.qty{display:flex;align-items:center;gap:6px}.qty button{width:28px;height:28px;background:#edf7ef;border-radius:7px}.total{display:flex;justify-content:space-between;font-size:22px;font-weight:950;padding:17px 0}.fullBtn{width:100%;padding:14px;background:#159447;color:#fff;border-radius:10px;font-weight:900}
-.modal{position:fixed;inset:0;background:#0007;z-index:70;display:none;align-items:center;justify-content:center;padding:14px}.modal.open{display:flex}.box{background:#fff;border-radius:18px;width:min(850px,100%);max-height:92vh;overflow:auto;padding:23px}.formGrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.formGrid input,.formGrid textarea,.formGrid select{width:100%;padding:12px;border:1px solid #d8e2d9;border-radius:9px;outline:0}.formGrid textarea{min-height:95px}.full{grid-column:1/-1}.actionsRow{display:flex;gap:9px;margin-top:15px}.secondary{background:#eef3ef;padding:12px 18px;border-radius:9px}
-.productView{display:grid;grid-template-columns:1fr 1.1fr;gap:25px}.bigPic{min-height:390px;background:#edf7ef;border-radius:18px;display:grid;place-items:center;font-size:130px}.priceBig{font-size:32px;font-weight:950;color:#159447}.chips{display:flex;gap:7px;flex-wrap:wrap}.chip{background:#eef8ef;padding:7px 10px;border-radius:20px}
-.accountGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.accountCard{padding:18px;background:#f5faf6;border:1px solid var(--line);border-radius:13px}
-.toast{position:fixed;bottom:20px;left:20px;background:#173c20;color:#fff;padding:12px 17px;border-radius:10px;z-index:100;display:none}.toast.show{display:block}
-@media(max-width:900px){.header{grid-template-columns:1fr;gap:10px}.actions{justify-content:center}.hero{grid-template-columns:1fr}.products{grid-template-columns:repeat(2,1fr)}.bannerRow{grid-template-columns:1fr}.services{grid-template-columns:repeat(2,1fr)}.productView{grid-template-columns:1fr}.bigPic{min-height:280px}}
-@media(max-width:520px){.products{gap:8px}.pic{height:145px}.heroText{padding:34px 6%}.heroText h1{font-size:31px}.formGrid{grid-template-columns:1fr}.full{grid-column:auto}.logo{font-size:23px}.accountGrid{grid-template-columns:1fr}}
-</style>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0b5f3b">
+<title>سوريا أونلاين | SYRIA ONLINE</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
-<div class="top"><span>🚚 توصيل داخل سوريا حسب المنطقة</span><span>دعم العملاء • عروض يومية • سوريا أونلاين</span></div>
+<div class="topbar">🚚 توصيل سريع داخل سوريا <span>•</span> عروض أسبوعية <span>•</span> دفع آمن</div>
 <header class="header">
-  <div class="logo">سوريا <span>أونلاين</span><small class="tag">تسوّق بسهولة وبأمان</small></div>
-  <div class="search"><input id="search" placeholder="ابحث عن منتج، قسم أو علامة تجارية..." oninput="renderProducts()"><button onclick="renderProducts()">⌕</button></div>
-  <div class="actions">
-    <button class="act" onclick="openAccount()">👤 الحساب</button>
-    <button class="act" onclick="openFav()">♡ المفضلة <b class="badge" id="favBadge">0</b></button>
-    <button class="act" onclick="openCart()">🛒 السلة <b class="badge" id="cartBadge">0</b></button>
-  </div>
+  <button class="icon-btn menu-btn" id="menuBtn" aria-label="القائمة">☰</button>
+  <a class="brand" href="#">
+    <div class="logo-mark"><span>SO</span></div>
+    <div><strong>سوريا أونلاين</strong><small>SYRIA ONLINE</small></div>
+  </a>
+  <div class="search"><input id="search" placeholder="ابحث عن منتج، قسم أو ماركة..." /><button id="searchBtn">⌕</button></div>
+  <div class="actions"><button class="icon-btn">♡</button><button class="cart" id="cartBtn">🛒 <b id="cartCount">0</b></button></div>
 </header>
-<nav class="nav">
-  <button onclick="filterCat('الكل')">كل المنتجات</button><button onclick="filterCat('إلكترونيات')">إلكترونيات</button><button onclick="filterCat('أزياء')">أزياء</button><button onclick="filterCat('منزل')">المنزل</button><button onclick="filterCat('عناية')">العناية والجمال</button><button onclick="filterCat('أطفال')">الأطفال</button><button onclick="filterCat('بقالة')">البقالة</button><button onclick="showOrders()">طلباتي</button>
+
+<nav class="desktop-nav">
+  <button data-cat="all">الرئيسية</button>
+  <button data-cat="men">رجالي</button>
+  <button data-cat="women">نسائي</button>
+  <button data-cat="kids">أطفال</button>
+  <button data-cat="shoes">أحذية</button>
+  <button data-cat="bags">حقائب</button>
+  <button data-cat="beauty">عطور وتجميل</button>
+  <button data-cat="electronics">إلكترونيات</button>
+  <button data-cat="home">منزل</button>
+  <button data-cat="food">غذائيات</button>
+  <button class="sale" data-cat="sale">🔥 العروض</button>
 </nav>
-<main class="wrap">
+
+<aside class="drawer" id="drawer">
+  <div class="drawer-head"><b>الأقسام</b><button id="closeDrawer">×</button></div>
+  <div class="drawer-section"><button class="parent">رجالي <span>⌄</span></button><div class="subs"><button data-cat="men">ملابس رجالية</button><button data-cat="men">أحذية رجالية</button><button data-cat="men">ساعات وإكسسوارات</button></div></div>
+  <div class="drawer-section"><button class="parent">نسائي <span>⌄</span></button><div class="subs"><button data-cat="women">ملابس نسائية</button><button data-cat="women">أحذية نسائية</button><button data-cat="women">حقائب</button><button data-cat="women">إكسسوارات</button></div></div>
+  <div class="drawer-section"><button class="parent">أطفال <span>⌄</span></button><div class="subs"><button data-cat="kids">ملابس أطفال</button><button data-cat="kids">أحذية أطفال</button><button data-cat="kids">ألعاب</button></div></div>
+  <div class="drawer-section"><button class="parent">أقسام أخرى <span>⌄</span></button><div class="subs"><button data-cat="beauty">عطور وتجميل</button><button data-cat="electronics">إلكترونيات</button><button data-cat="home">منزل</button><button data-cat="food">غذائيات</button></div></div>
+</aside>
+<div class="overlay" id="overlay"></div>
+
+<main>
 <section class="hero">
-  <div class="heroMain"><div class="heroText"><h1>كل اللي بدك ياه… بمكان واحد</h1><p>تسوّق منتجات مختارة، اكتشف العروض، وأكمل طلبك بسهولة من الموبايل.</p><button class="cta" onclick="document.getElementById('products').scrollIntoView()">ابدأ التسوق</button></div></div>
-  <div class="side"><div class="heroSmall one"><h2>🔥 عروض اليوم</h2><p>خصومات على منتجات مختارة.</p><button class="primary" onclick="filterSale()">شوف العروض</button></div><div class="heroSmall two"><h2>🚚 توصيل سريع</h2><p>أدخل عنوانك بالتفصيل عند إتمام الطلب.</p></div></div>
+  <div class="hero-copy"><span class="eyebrow">SYRIA ONLINE • NEW SEASON</span><h1>كل ما تحتاجه<br><em>بمكان واحد.</em></h1><p>تسوّق ملابس، أحذية، حقائب، عطور، إلكترونيات، منزل وغذائيات — بتجربة سورية عصرية.</p><div class="hero-buttons"><button class="primary" data-cat="all">تسوّق الآن</button><button class="secondary" id="openCategories">استكشف الأقسام</button></div></div>
+  <div class="hero-art"><div class="bag bag1">SO</div><div class="bag bag2">🛍</div><div class="orb">S</div></div>
 </section>
-<div class="cats" id="cats"></div>
-<section class="section" id="products">
- <div class="sectionHead"><h2>منتجات مقترحة</h2><span class="more" id="resultText"></span></div>
- <div class="toolbar"><select id="sort" onchange="renderProducts()"><option value="featured">ترتيب: المقترحة</option><option value="low">السعر: الأقل</option><option value="high">السعر: الأعلى</option><option value="rating">الأعلى تقييماً</option></select><button onclick="filterCat('الكل')">الكل</button><button onclick="filterSale()">العروض</button></div>
- <div class="products" id="productGrid"></div>
+
+<section class="categories">
+  <div class="section-head"><div><span>SHOP BY CATEGORY</span><h2>تسوّق حسب القسم</h2></div></div>
+  <div class="cat-grid">
+    <button data-cat="men"><b>👔</b><span>رجالي</span><small>ملابس وأحذية</small></button>
+    <button data-cat="women"><b>👗</b><span>نسائي</span><small>أزياء وإكسسوارات</small></button>
+    <button data-cat="kids"><b>🧸</b><span>أطفال</span><small>كل الأعمار</small></button>
+    <button data-cat="shoes"><b>👟</b><span>أحذية</span><small>موديلات متنوعة</small></button>
+    <button data-cat="bags"><b>👜</b><span>حقائب</span><small>يومي ورسمية</small></button>
+    <button data-cat="beauty"><b>✨</b><span>عطور وتجميل</span><small>جمال وعناية</small></button>
+    <button data-cat="electronics"><b>📱</b><span>إلكترونيات</span><small>تقنية ذكية</small></button>
+    <button data-cat="home"><b>🏠</b><span>منزل</span><small>كل احتياجات البيت</small></button>
+  </div>
 </section>
-<div class="bannerRow"><div class="banner"><h2>🎁 هدايا وعروض</h2><p>اكتشف المنتجات المخفّضة.</p></div><div class="banner"><h2>💚 سوريا أونلاين</h2><p>تجربة متجر حديثة للموبايل والكمبيوتر.</p></div><div class="banner"><h2>🔒 طلب آمن</h2><p>بياناتك تبقى داخل جهازك في هذه النسخة التجريبية.</p></div></div>
-<div class="services"><div class="service">🚚<b>توصيل</b><span>حسب المنطقة</span></div><div class="service">↩️<b>خدمة ما بعد البيع</b><span>نظام قابل للتطوير</span></div><div class="service">🔐<b>حماية البيانات</b><span>بيانات الطلب محلية</span></div><div class="service">💬<b>دعم العملاء</b><span>واتساب عند الربط</span></div></div>
+
+<section class="products">
+  <div class="section-head"><div><span>FEATURED COLLECTION</span><h2 id="productsTitle">منتجات مختارة</h2></div><button class="viewall" data-cat="all">عرض الكل ←</button></div>
+  <div class="product-grid" id="productGrid"></div>
+</section>
+
+<section class="payment">
+  <div><span class="eyebrow">PAYMENT OPTIONS</span><h2>طرق دفع متعددة</h2><p>اختر طريقة الدفع المناسبة عند إتمام الطلب.</p></div>
+  <div class="pay-grid">
+    <div class="pay-card"><b>SC</b><strong>شام كاش</strong><small>متاح عند تجهيز بيانات الحساب</small></div>
+    <div class="pay-card"><b>₮</b><strong>USDT</strong><small>دفع بالعملات الرقمية</small></div>
+    <div class="pay-card"><b>VISA</b><strong>Visa</strong><small>بطاقات Visa</small></div>
+    <div class="pay-card"><b>MC</b><strong>Mastercard</strong><small>بطاقات Mastercard</small></div>
+  </div>
+  <div class="payment-note">ملاحظة: الدفع الحقيقي يحتاج ربط حسابات/بوابات دفع merchant الخاصة بك؛ هذه الواجهة جاهزة لإضافة بيانات الربط لاحقاً.</div>
+</section>
 </main>
 
-<div class="overlay" id="cartOverlay" onclick="if(event.target.id==='cartOverlay')closeCart()"><aside class="panel"><h2>🛒 سلة المشتريات <button class="close" onclick="closeCart()">×</button></h2><div id="cartItems"></div><div class="total"><span>المجموع</span><span id="cartTotal">0 ل.س</span></div><button class="fullBtn" onclick="checkout()">إتمام الطلب</button></aside></div>
+<div class="cart-panel" id="cartPanel">
+  <div class="cart-head"><h3>سلة التسوق</h3><button id="closeCart">×</button></div>
+  <div id="cartItems" class="cart-items"></div>
+  <div class="cart-foot"><div><span>المجموع</span><strong id="total">0 ل.س</strong></div><button class="primary" id="checkout">متابعة الدفع</button></div>
+</div>
 
-<div class="modal" id="modal"><div class="box" id="modalBox"></div></div>
-<div class="toast" id="toast"></div>
-
-<script>
-const products=[
-{id:1,name:"هاتف ذكي حديث",cat:"إلكترونيات",price:1850000,old:2100000,emoji:"📱",rating:4.8,sale:true},
-{id:2,name:"سماعات لاسلكية",cat:"إلكترونيات",price:245000,old:300000,emoji:"🎧",rating:4.6,sale:true},
-{id:3,name:"ساعة ذكية",cat:"إلكترونيات",price:390000,old:450000,emoji:"⌚",rating:4.7,sale:true},
-{id:4,name:"حقيبة نسائية",cat:"أزياء",price:180000,old:220000,emoji:"👜",rating:4.5,sale:true},
-{id:5,name:"حذاء رياضي",cat:"أزياء",price:295000,old:350000,emoji:"👟",rating:4.7,sale:true},
-{id:6,name:"طقم أطباق",cat:"منزل",price:165000,old:0,emoji:"🍽️",rating:4.4,sale:false},
-{id:7,name:"ماكينة قهوة",cat:"منزل",price:620000,old:700000,emoji:"☕",rating:4.8,sale:true},
-{id:8,name:"عطر فاخر",cat:"عناية",price:275000,old:330000,emoji:"🌸",rating:4.9,sale:true},
-{id:9,name:"مجموعة عناية",cat:"عناية",price:190000,old:230000,emoji:"🧴",rating:4.6,sale:true},
-{id:10,name:"لعبة أطفال",cat:"أطفال",price:95000,old:120000,emoji:"🧸",rating:4.7,sale:true},
-{id:11,name:"حقيبة مدرسية",cat:"أطفال",price:130000,old:0,emoji:"🎒",rating:4.5,sale:false},
-{id:12,name:"سلة مواد غذائية",cat:"بقالة",price:240000,old:280000,emoji:"🛒",rating:4.3,sale:true}
-];
-let cart=JSON.parse(localStorage.getItem("so_cart")||"[]"), fav=JSON.parse(localStorage.getItem("so_fav")||"[]"), currentCat="الكل", saleOnly=false;
-const cats=[["📱","إلكترونيات"],["👕","أزياء"],["🏠","منزل"],["💄","عناية"],["🧸","أطفال"],["🛒","بقالة"],["🔥","العروض"]];
-function money(n){return n.toLocaleString("ar-SY")+" ل.س"}
-function save(){localStorage.setItem("so_cart",JSON.stringify(cart));localStorage.setItem("so_fav",JSON.stringify(fav));updateBadges()}
-function updateBadges(){document.getElementById("cartBadge").textContent=cart.reduce((a,x)=>a+x.qty,0);document.getElementById("favBadge").textContent=fav.length}
-function filterCat(c){currentCat=c;saleOnly=false;renderProducts();document.getElementById("products").scrollIntoView({behavior:"smooth"})}
-function filterSale(){saleOnly=true;currentCat="الكل";renderProducts();document.getElementById("products").scrollIntoView({behavior:"smooth"})}
-function renderCats(){document.getElementById("cats").innerHTML=cats.map(x=>`<div class="cat" onclick="${x[1]==="العروض"?"filterSale()":`filterCat('${x[1]}')`}"><div class="ico">${x[0]}</div><b>${x[1]}</b></div>`).join("")}
-function renderProducts(){
- let q=document.getElementById("search").value.trim().toLowerCase(), arr=products.filter(p=>(currentCat==="الكل"||p.cat===currentCat)&&(!saleOnly||p.sale)&&(!q||p.name.toLowerCase().includes(q)||p.cat.toLowerCase().includes(q)));
- let s=document.getElementById("sort").value;if(s==="low")arr.sort((a,b)=>a.price-b.price);if(s==="high")arr.sort((a,b)=>b.price-a.price);if(s==="rating")arr.sort((a,b)=>b.rating-a.rating);
- document.getElementById("resultText").textContent=`${arr.length} منتج`;
- document.getElementById("productGrid").innerHTML=arr.map(p=>`<article class="product"><button class="fav ${fav.includes(p.id)?"on":""}" onclick="toggleFav(${p.id})">${fav.includes(p.id)?"♥":"♡"}</button>${p.sale?'<span class="discount">خصم</span>':""}<div class="pic" onclick="openProduct(${p.id})">${p.emoji}</div><b>${p.name}</b><div class="stars">★★★★★ <small>${p.rating}</small></div><div><span class="price">${money(p.price)}</span>${p.old?`<span class="old">${money(p.old)}</span>`:""}</div><button class="add" onclick="addCart(${p.id})">أضف إلى السلة</button></article>`).join("")||"<p>ما لقينا منتجات مطابقة.</p>";
-}
-function addCart(id){let x=cart.find(a=>a.id===id);if(x)x.qty++;else cart.push({id,qty:1});save();toast("تمت إضافة المنتج إلى السلة 🛒")}
-function changeQty(id,d){let x=cart.find(a=>a.id===id);if(!x)return;x.qty+=d;if(x.qty<=0)cart=cart.filter(a=>a.id!==id);save();renderCart()}
-function openCart(){document.getElementById("cartOverlay").classList.add("open");renderCart()}
-function closeCart(){document.getElementById("cartOverlay").classList.remove("open")}
-function renderCart(){let box=document.getElementById("cartItems");if(!cart.length){box.innerHTML="<p>السلة فارغة حالياً.</p>";document.getElementById("cartTotal").textContent=money(0);return}let total=0;box.innerHTML=cart.map(x=>{let p=products.find(a=>a.id===x.id);total+=p.price*x.qty;return `<div class="cartItem"><div class="mini">${p.emoji}</div><div><b>${p.name}</b><div class="price">${money(p.price)}</div></div><div class="qty"><button onclick="changeQty(${p.id},-1)">−</button><b>${x.qty}</b><button onclick="changeQty(${p.id},1)">+</button></div></div>`}).join("");document.getElementById("cartTotal").textContent=money(total)}
-function toggleFav(id){if(fav.includes(id))fav=fav.filter(x=>x!==id);else fav.push(id);save();renderProducts()}
-function openFav(){let arr=products.filter(p=>fav.includes(p.id));document.getElementById("modalBox").innerHTML=`<h2>♡ المفضلة <button class="close" onclick="closeModal()">×</button></h2><div class="products">${arr.length?arr.map(p=>`<article class="product"><div class="pic">${p.emoji}</div><b>${p.name}</b><div class="price">${money(p.price)}</div><button class="add" onclick="addCart(${p.id})">أضف إلى السلة</button></article>`).join(""):"<p>ما أضفت منتجات للمفضلة بعد.</p>"}</div>`;openModal()}
-function openProduct(id){let p=products.find(x=>x.id===id);document.getElementById("modalBox").innerHTML=`<div class="sectionHead"><h2>${p.name}</h2><button class="close" onclick="closeModal()">×</button></div><div class="productView"><div class="bigPic">${p.emoji}</div><div><p class="chips"><span class="chip">${p.cat}</span><span class="chip">⭐ ${p.rating}</span><span class="chip">🚚 توصيل</span></p><h1>${p.name}</h1><p>منتج تجريبي ضمن متجر سوريا أونلاين. يمكن لاحقاً ربط هذه الصفحة بقاعدة بيانات حقيقية وصور وأسعار ومخزون.</p><div class="priceBig">${money(p.price)}</div>${p.old?`<p class="old">${money(p.old)}</p>`:""}<button class="fullBtn" onclick="addCart(${p.id});closeModal()">أضف إلى السلة</button></div></div>`;openModal()}
-function checkout(){if(!cart.length)return toast("السلة فارغة");closeCart();let total=cart.reduce((s,x)=>s+products.find(p=>p.id===x.id).price*x.qty,0);document.getElementById("modalBox").innerHTML=`<h2>إتمام الطلب <button class="close" onclick="closeModal()">×</button></h2><p>المجموع: <b>${money(total)}</b></p><div class="formGrid"><input id="name" placeholder="الاسم الكامل *"><input id="phone" placeholder="رقم الهاتف *"><input id="email" placeholder="البريد الإلكتروني"><select id="city"><option value="">اختر المدينة *</option><option>دمشق</option><option>حلب</option><option>حمص</option><option>حماة</option><option>اللاذقية</option><option>طرطوس</option><option>إدلب</option><option>ريف دمشق</option></select><input id="area" placeholder="المنطقة / الحي *"><input id="street" placeholder="الشارع ورقم البناء *"><textarea id="address" class="full" placeholder="العنوان بالتفصيل: بناء، طابق، شقة، علامة مميزة..."></textarea><select id="payment"><option>الدفع عند الاستلام</option><option>تحويل/دفع إلكتروني (يُربط لاحقاً)</option></select><input placeholder="كود الخصم (اختياري)"></div><div class="actionsRow"><button class="fullBtn" onclick="submitOrder()">تأكيد الطلب</button><button class="secondary" onclick="closeModal()">إلغاء</button></div>`;openModal()}
-function submitOrder(){let n=document.getElementById("name").value.trim(),ph=document.getElementById("phone").value.trim(),city=document.getElementById("city").value;if(!n||!ph||!city)return toast("عبّي الاسم والهاتف والمدينة أولاً");let orders=JSON.parse(localStorage.getItem("so_orders")||"[]");orders.unshift({id:"SO-"+Date.now(),date:new Date().toLocaleString("ar-SY"),name:n,phone:ph,city,total:cart.reduce((s,x)=>s+products.find(p=>p.id===x.id).price*x.qty,0),status:"جديد"});localStorage.setItem("so_orders",JSON.stringify(orders));cart=[];save();closeModal();toast("تم تسجيل طلبك بنجاح ✅")}
-function openAccount(){document.getElementById("modalBox").innerHTML=`<h2>👤 حسابي <button class="close" onclick="closeModal()">×</button></h2><div class="accountGrid"><div class="accountCard">👤<b>بيانات الحساب</b><p>اسم العميل والبريد والهاتف</p></div><div class="accountCard" onclick="showOrders()">📦<b>طلباتي</b><p>عرض الطلبات وحالتها</p></div><div class="accountCard">📍<b>عناويني</b><p>يمكن إضافة أكثر من عنوان</p></div></div><hr><p>هذه نسخة واجهة تجريبية. تسجيل الدخول الحقيقي وربط قاعدة البيانات يتم في المرحلة التالية.</p>`;openModal()}
-function showOrders(){let orders=JSON.parse(localStorage.getItem("so_orders")||"[]");document.getElementById("modalBox").innerHTML=`<h2>📦 طلباتي <button class="close" onclick="closeModal()">×</button></h2>${orders.length?orders.map(o=>`<div class="accountCard" style="margin:10px 0"><b>${o.id}</b><br>${o.date}<br>${o.city} — ${money(o.total)}<br>الحالة: <b>${o.status}</b></div>`).join(""):"<p>ما عندك طلبات مسجلة بعد.</p>"}`;openModal()}
-function openModal(){document.getElementById("modal").classList.add("open")}function closeModal(){document.getElementById("modal").classList.remove("open")}
-function toast(t){let x=document.getElementById("toast");x.textContent=t;x.classList.add("show");setTimeout(()=>x.classList.remove("show"),2200)}
-renderCats();renderProducts();updateBadges();
-</script>
+<footer><div class="footer-brand"><div class="logo-mark"><span>SO</span></div><div><b>سوريا أونلاين</b><small>SYRIA ONLINE</small></div></div><p>متجر إلكتروني سوري بتجربة عصرية.</p><div>© 2026 SYRIA ONLINE</div></footer>
+<script src="app.js"></script>
 </body>
 </html>
