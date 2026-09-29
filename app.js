@@ -196,42 +196,14 @@ function setLanguage(lang){
 }
 
 function activateServiceCards(){
-  const cards=[...document.querySelectorAll("a,button,.service-card,.feature-card,.info-card,.benefit-card")];
-  cards.forEach(el=>{
-    const text=(el.textContent||"").replace(/\s+/g," ").trim();
-    if(!text || el.dataset.serviceBound==="1") return;
-    let action=null;
-    if(text.includes("توصيل سريع")||/Fast Delivery|Hızlı Teslimat/i.test(text)) action=()=>openOrdersPage("shipping");
-    else if(text.includes("دفع آمن")||/Secure Payment|Güvenli Ödeme/i.test(text)) action=()=>openPaymentPage();
-    else if(text==="إرجاع"||text.includes("إرجاع")) action=()=>openReturnsPage();
-    else if(text.includes("خدمة العملاء")||/Customer Service|Müşteri Hizmetleri/i.test(text)) action=()=>customerService();
-    if(action){
-      el.dataset.serviceBound="1";
-      el.style.cursor="pointer";
-      el.addEventListener("click",e=>{
-        if(el.tagName==="A" && el.getAttribute("href") && el.getAttribute("href")!=="#") return;
-        e.preventDefault(); action();
-      });
-    }
-  });
-}
-
-function openOrdersPage(tab){
-  const orders=load("so_orders_v6",[]);
-  modal(tr("orders"),`<div class="info-page"><h3>📦 ${tr("orders")}</h3>
-  <p>${orders.length?orders.map(o=>`<div class="support-box"><b>#${esc(o.id||"SO-"+Math.random().toString(36).slice(2,8).toUpperCase())}</b><p>${esc(o.status||"Processing")}</p></div>`).join(""):`<p>${tr("noProducts")}</p>`}</div>`);
-}
-function openPaymentPage(){
-  modal(tr("payments"),`<div class="info-page"><h3>🔒 ${tr("payments")}</h3>
-  <div class="support-box"><p>💳 Visa / Mastercard</p><p>📱 ${lang==="ar"?"شام كاش":lang==="tr"?"Sham Cash":"Sham Cash"}</p><p>₿ USDT</p><p>🔐 ${tr("available")}</p></div></div>`);
-}
-function openReturnsPage(){
-  const orders=load("so_orders_v6",[]);
-  modal(tr("return"),`<div class="info-page"><h3>↩️ ${tr("return")}</h3>
-  <p>${tr("returns")}</p><p>${tr("orders")}: ${orders.length}</p>
-  <button class="primary" id="startReturn">${lang==="ar"?"طلب إرجاع":lang==="tr"?"İade Talebi":"Request a Return"}</button></div>`,box=>{
-    $("#startReturn",box)?.addEventListener("click",()=>customerService());
-  });
+  const box=$("#serviceCards");
+  if(!box) return;
+  const cards=[...box.children];
+  if(cards[0]) cards[0].onclick=()=>openOrdersPage("shipping");
+  if(cards[1]) cards[1].onclick=()=>openPaymentPage();
+  if(cards[2]) cards[2].onclick=()=>openReturnsPage();
+  if(cards[3]) cards[3].onclick=()=>customerService();
+  cards.forEach(c=>{c.style.cursor="pointer";});
 }
 
 function customerService(){
