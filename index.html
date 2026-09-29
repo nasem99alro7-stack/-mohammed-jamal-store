@@ -3,7 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#0b5f3b">
+<meta name="theme-color" content="#0d6b43">
+<meta name="description" content="سوريا أونلاين — متجر إلكتروني سوري">
 <title>سوريا أونلاين | SYRIA ONLINE</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -11,84 +12,115 @@
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<div class="topbar">🚚 توصيل سريع داخل سوريا <span>•</span> عروض أسبوعية <span>•</span> دفع آمن</div>
+<div class="topbar"><div class="container topbar-inner"><span>🚚 توصيل سريع داخل سوريا</span><i></i><span>عروض أسبوعية</span><i></i><span>دفع آمن</span></div></div>
+
 <header class="header">
-  <button class="icon-btn menu-btn" id="menuBtn" aria-label="القائمة">☰</button>
-  <a class="brand" href="#">
-    <div class="logo-mark"><span>SO</span></div>
-    <div><strong>سوريا أونلاين</strong><small>SYRIA ONLINE</small></div>
-  </a>
-  <div class="search"><input id="search" placeholder="ابحث عن منتج، قسم أو ماركة..." /><button id="searchBtn">⌕</button></div>
-  <div class="actions"><button class="icon-btn">♡</button><button class="cart" id="cartBtn">🛒 <b id="cartCount">0</b></button></div>
+  <div class="container header-inner">
+    <button class="icon-btn menu-btn" id="menuBtn" aria-label="القائمة">☰</button>
+    <a class="brand" href="#" aria-label="سوريا أونلاين">
+      <div class="brand-mark"><span>س</span><b>SO</b></div>
+      <div class="brand-copy"><strong>سوريا أونلاين</strong><small>SYRIA ONLINE</small></div>
+    </a>
+    <div class="search"><button id="searchBtn" aria-label="بحث">⌕</button><input id="search" placeholder="ابحث عن منتج، قسم أو ماركة..." autocomplete="off"></div>
+    <div class="actions">
+      <button class="icon-btn" id="favBtn" aria-label="المفضلة">♡<em id="favCount">0</em></button>
+      <button class="icon-btn account-btn" id="accountBtn" aria-label="حسابي">♙</button>
+      <button class="cart" id="cartBtn" aria-label="السلة">🛒<b id="cartCount">0</b></button>
+    </div>
+  </div>
 </header>
 
-<nav class="desktop-nav">
-  <button data-cat="all">الرئيسية</button>
-  <button data-cat="men">رجالي</button>
-  <button data-cat="women">نسائي</button>
-  <button data-cat="kids">أطفال</button>
-  <button data-cat="shoes">أحذية</button>
-  <button data-cat="bags">حقائب</button>
-  <button data-cat="beauty">عطور وتجميل</button>
-  <button data-cat="electronics">إلكترونيات</button>
-  <button data-cat="home">منزل</button>
-  <button data-cat="food">غذائيات</button>
-  <button class="sale" data-cat="sale">🔥 العروض</button>
-</nav>
+<nav class="category-strip"><div class="container category-scroll" id="categoryStrip"></div></nav>
 
 <aside class="drawer" id="drawer">
-  <div class="drawer-head"><b>الأقسام</b><button id="closeDrawer">×</button></div>
-  <div class="drawer-section"><button class="parent">رجالي <span>⌄</span></button><div class="subs"><button data-cat="men">ملابس رجالية</button><button data-cat="men">أحذية رجالية</button><button data-cat="men">ساعات وإكسسوارات</button></div></div>
-  <div class="drawer-section"><button class="parent">نسائي <span>⌄</span></button><div class="subs"><button data-cat="women">ملابس نسائية</button><button data-cat="women">أحذية نسائية</button><button data-cat="women">حقائب</button><button data-cat="women">إكسسوارات</button></div></div>
-  <div class="drawer-section"><button class="parent">أطفال <span>⌄</span></button><div class="subs"><button data-cat="kids">ملابس أطفال</button><button data-cat="kids">أحذية أطفال</button><button data-cat="kids">ألعاب</button></div></div>
-  <div class="drawer-section"><button class="parent">أقسام أخرى <span>⌄</span></button><div class="subs"><button data-cat="beauty">عطور وتجميل</button><button data-cat="electronics">إلكترونيات</button><button data-cat="home">منزل</button><button data-cat="food">غذائيات</button></div></div>
+  <div class="drawer-head"><strong>سوريا أونلاين</strong><button id="closeDrawer">×</button></div>
+  <div class="drawer-user" id="drawerUser"></div>
+  <div class="drawer-grid" id="drawerCats"></div>
+  <div class="drawer-links">
+    <button data-open="orders">📦 طلباتي</button><button data-open="addresses">🏠 عناويني</button>
+    <button data-open="favorites">❤️ المفضلة</button><button data-open="support">💬 خدمة العملاء</button>
+  </div>
 </aside>
 <div class="overlay" id="overlay"></div>
 
 <main>
-<section class="hero">
-  <div class="hero-copy"><span class="eyebrow">SYRIA ONLINE • NEW SEASON</span><h1>كل ما تحتاجه<br><em>بمكان واحد.</em></h1><p>تسوّق ملابس، أحذية، حقائب، عطور، إلكترونيات، منزل وغذائيات — بتجربة سورية عصرية.</p><div class="hero-buttons"><button class="primary" data-cat="all">تسوّق الآن</button><button class="secondary" id="openCategories">استكشف الأقسام</button></div></div>
-  <div class="hero-art"><div class="bag bag1">SO</div><div class="bag bag2">🛍</div><div class="orb">S</div></div>
-</section>
-
-<section class="categories">
-  <div class="section-head"><div><span>SHOP BY CATEGORY</span><h2>تسوّق حسب القسم</h2></div></div>
-  <div class="cat-grid">
-    <button data-cat="men"><b>👔</b><span>رجالي</span><small>ملابس وأحذية</small></button>
-    <button data-cat="women"><b>👗</b><span>نسائي</span><small>أزياء وإكسسوارات</small></button>
-    <button data-cat="kids"><b>🧸</b><span>أطفال</span><small>كل الأعمار</small></button>
-    <button data-cat="shoes"><b>👟</b><span>أحذية</span><small>موديلات متنوعة</small></button>
-    <button data-cat="bags"><b>👜</b><span>حقائب</span><small>يومي ورسمية</small></button>
-    <button data-cat="beauty"><b>✨</b><span>عطور وتجميل</span><small>جمال وعناية</small></button>
-    <button data-cat="electronics"><b>📱</b><span>إلكترونيات</span><small>تقنية ذكية</small></button>
-    <button data-cat="home"><b>🏠</b><span>منزل</span><small>كل احتياجات البيت</small></button>
+<section class="hero container">
+  <div class="hero-copy">
+    <span class="eyebrow">SYRIA ONLINE • NEW SEASON</span>
+    <h1>كل ما تحتاجه<br><em>بمكان واحد.</em></h1>
+    <p>تسوّق ملابس، أحذية، حقائب، عطور، إلكترونيات، منزل وغذائيات — بتجربة سورية عصرية.</p>
+    <div class="hero-buttons"><button class="primary" data-cat="all">تسوّق الآن</button><button class="secondary" id="openCategories">استكشف الأقسام</button></div>
+    <div class="hero-trust"><span>✓ منتجات مختارة</span><span>✓ توصيل داخل سوريا</span><span>✓ دعم سريع</span></div>
   </div>
+  <div class="hero-art"><div class="art-card card-back">🛍️</div><div class="art-card card-front"><span>س</span><small>سوريا أونلاين</small></div><div class="art-orb"></div></div>
 </section>
 
-<section class="products">
-  <div class="section-head"><div><span>FEATURED COLLECTION</span><h2 id="productsTitle">منتجات مختارة</h2></div><button class="viewall" data-cat="all">عرض الكل ←</button></div>
+<section class="container quick-features">
+  <button data-open="support"><b>💬</b><span>خدمة العملاء</span><small>مساعدة سريعة</small></button>
+  <button data-open="payment"><b>🔐</b><span>دفع آمن</span><small>خيارات متعددة</small></button>
+  <button data-open="orders"><b>📦</b><span>تتبع الطلب</span><small>من صفحة طلباتك</small></button>
+  <button data-open="addresses"><b>🏠</b><span>عناويني</span><small>احفظ أكثر من عنوان</small></button>
+</section>
+
+<section class="section container" id="categories">
+  <div class="section-head"><div><span>SHOP BY CATEGORY</span><h2>تسوّق حسب القسم</h2></div></div>
+  <div class="cat-grid" id="catGrid"></div>
+</section>
+
+<section class="section container">
+  <div class="section-head">
+    <div><span>SYRIA ONLINE PICKS</span><h2 id="productsTitle">منتجات مميزة</h2></div>
+    <div class="sort-wrap"><button class="filter-btn" id="filterBtn">☷ فلترة وترتيب</button></div>
+  </div>
+  <div class="filter-panel" id="filterPanel">
+    <button data-sort="featured">مميزة</button><button data-sort="new">وصل حديثاً</button><button data-sort="best">الأكثر مبيعاً</button><button data-sort="low">السعر: الأقل</button><button data-sort="high">السعر: الأعلى</button>
+  </div>
   <div class="product-grid" id="productGrid"></div>
+  <div class="empty" id="emptyState" hidden>ما لقينا منتجات مطابقة.</div>
 </section>
 
-<section class="payment">
-  <div><span class="eyebrow">PAYMENT OPTIONS</span><h2>طرق دفع متعددة</h2><p>اختر طريقة الدفع المناسبة عند إتمام الطلب.</p></div>
+<section class="section container promo-row">
+  <div class="promo-card hot"><span>🔥 عروض اليوم</span><strong>خصومات مختارة كل يوم</strong><button data-cat="sale">شاهد العروض</button></div>
+  <div class="promo-card new"><span>✨ وصل حديثاً</span><strong>منتجات جديدة باستمرار</strong><button data-sort="new">اكتشف الجديد</button></div>
+  <div class="promo-card best"><span>⭐ الأكثر مبيعاً</span><strong>اختيارات الزبائن</strong><button data-sort="best">شاهد الأكثر مبيعاً</button></div>
+</section>
+
+<section class="section container payment-section" id="payment">
+  <div class="section-head"><div><span>SAFE CHECKOUT</span><h2>طرق الدفع</h2></div></div>
   <div class="pay-grid">
-    <div class="pay-card"><b>SC</b><strong>شام كاش</strong><small>متاح عند تجهيز بيانات الحساب</small></div>
+    <div class="pay-card"><b>SC</b><strong>شام كاش</strong><small>دفع عبر حساب شام كاش</small></div>
     <div class="pay-card"><b>₮</b><strong>USDT</strong><small>دفع بالعملات الرقمية</small></div>
     <div class="pay-card"><b>VISA</b><strong>Visa</strong><small>بطاقات Visa</small></div>
     <div class="pay-card"><b>MC</b><strong>Mastercard</strong><small>بطاقات Mastercard</small></div>
   </div>
-  <div class="payment-note">ملاحظة: الدفع الحقيقي يحتاج ربط حسابات/بوابات دفع merchant الخاصة بك؛ هذه الواجهة جاهزة لإضافة بيانات الربط لاحقاً.</div>
+  <p class="payment-note">واجهة الدفع جاهزة للربط مع بيانات وحسابات الدفع الخاصة بالمتجر.</p>
 </section>
 </main>
 
 <div class="cart-panel" id="cartPanel">
-  <div class="cart-head"><h3>سلة التسوق</h3><button id="closeCart">×</button></div>
+  <div class="panel-head"><h3>سلة التسوق</h3><button id="closeCart">×</button></div>
   <div id="cartItems" class="cart-items"></div>
-  <div class="cart-foot"><div><span>المجموع</span><strong id="total">0 ل.س</strong></div><button class="primary" id="checkout">متابعة الدفع</button></div>
+  <div class="cart-coupon"><input id="couponInput" placeholder="كود الخصم"><button id="couponBtn">تطبيق</button></div>
+  <div class="cart-foot"><div><span>الإجمالي</span><strong id="total">0 ل.س</strong></div><button class="primary" id="checkout">متابعة الشراء</button></div>
 </div>
 
-<footer><div class="footer-brand"><div class="logo-mark"><span>SO</span></div><div><b>سوريا أونلاين</b><small>SYRIA ONLINE</small></div></div><p>متجر إلكتروني سوري بتجربة عصرية.</p><div>© 2026 SYRIA ONLINE</div></footer>
+<footer>
+  <div class="container footer-inner">
+    <div><div class="footer-brand"><div class="brand-mark"><span>س</span><b>SO</b></div><div><strong>سوريا أونلاين</strong><small>SYRIA ONLINE</small></div></div><p>متجر إلكتروني سوري بتجربة عصرية.</p></div>
+    <div class="footer-links"><button data-open="support">خدمة العملاء</button><button data-open="orders">تتبع الطلب</button><button data-open="payment">طرق الدفع</button><button data-open="addresses">العناوين</button></div>
+    <div class="footer-pay"><span>SC</span><span>₮</span><span>VISA</span><span>MC</span></div>
+    <div class="copyright">© 2026 SYRIA ONLINE</div>
+  </div>
+</footer>
+
+<div class="bottom-nav">
+  <button data-open="account">♙<span>حسابي</span></button>
+  <button id="bottomCart">🛒<span>السلة</span><em id="bottomCartCount">0</em></button>
+  <button data-open="favorites">♡<span>المفضلة</span></button>
+  <button id="bottomCategories">▦<span>الأقسام</span></button>
+  <button data-cat="all">⌂<span>الرئيسية</span></button>
+</div>
+
 <script src="app.js"></script>
 </body>
 </html>
