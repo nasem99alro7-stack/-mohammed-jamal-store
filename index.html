@@ -1,16 +1,94 @@
-<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#0f7a4b"><title>سوريا أونلاين | SYRIA ONLINE</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet"><link rel="stylesheet" href="style.css"></head><body>
-<div class="topline">🚚 توصيل سريع داخل سوريا <b>•</b> عروض أسبوعية <b>•</b> دفع آمن</div>
-<header><button class="menu" id="menuBtn">☰</button><a class="brand" href="#home"><img src="syria-online-logo.svg" alt="سوريا أونلاين"></a><div class="search"><input id="search" placeholder="ماركة، منتج أو فئة ابحث هنا..."><button id="searchBtn">⌕</button></div><div class="headBtns"><button id="accountBtn">👤<span>حسابي</span></button><button id="favBtn">♡<span>المفضلة</span></button><button id="cartBtn" class="cart">🛒<b id="cartCount">0</b><span>السلة</span></button></div></header>
-<nav class="catbar" id="catbar"></nav>
-<main id="home">
-<section class="hero"><div><small>SYRIA ONLINE • NEW SEASON</small><h1>كل ما تحتاجه<br><em>بمكان واحد.</em></h1><p>تسوّق ملابس، إلكترونيات، عطور، منزل وغذائيات — بتجربة سورية عصرية.</p><div class="heroBtns"><button class="primary" data-scroll="products">تسوّق الآن</button><button class="secondary" data-scroll="categories">استكشف الأقسام</button></div></div><div class="heroArt"><div class="heroBag">SO</div><div class="heroBubble">🛍️</div><span>SYRIA<br><b>ONLINE</b></span></div></section>
-<section class="quick"><button data-open="orders">📦<strong>طلباتي</strong><small>تتبع الطلب</small></button><button data-open="favorites">❤️<strong>المفضلة</strong><small>محفوظاتك</small></button><button data-open="addresses">🏠<strong>عناويني</strong><small>عدة عناوين</small></button><button data-open="filter">🔎<strong>بحث وفلترة</strong><small>ترتيب المنتجات</small></button></section>
-<section class="section" id="categories"><div class="sectionHead"><div><small>SHOP BY CATEGORY</small><h2>تسوّق حسب القسم</h2></div></div><div class="categoryGrid" id="categoryGrid"></div></section>
-<section class="section" id="products"><div class="sectionHead"><div><small>FEATURED FOR YOU</small><h2 id="productsTitle">منتجات مختارة</h2></div><div class="sort"><button id="filterBtn">فلترة</button><select id="sort"><option value="default">ترتيب</option><option value="low">الأرخص</option><option value="high">الأغلى</option><option value="rating">الأعلى تقييماً</option></select></div></div><div class="chips" id="chips"></div><div class="productGrid" id="productGrid"></div></section>
-<section class="promo"><div><small>SYRIA ONLINE</small><h2>عروض اليوم 🔥</h2><p>خصومات مختارة لفترة محدودة.</p></div><button class="primary" data-cat="sale">شاهد العروض</button></section>
-<section class="section"><div class="sectionHead"><div><small>NEW ARRIVALS</small><h2>وصل حديثاً</h2></div></div><div class="productGrid" id="newGrid"></div></section>
-<section class="delivery"><div><small>SYRIA ONLINE</small><h2>توصيل داخل سوريا 🚚</h2><p>أدخل المحافظة والمدينة والعنوان بالتفصيل عند إتمام الشراء.</p></div><div class="deliveryGrid"><div>📍<b>عنوان واضح</b><span>محافظة، مدينة، منطقة</span></div><div>🔐<b>دفع آمن</b><span>خيارات متعددة</span></div><div>📦<b>تتبع الطلب</b><span>من صفحة طلباتك</span></div></div></section>
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0b5f3b">
+<title>سوريا أونلاين | SYRIA ONLINE</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="topbar">🚚 توصيل سريع داخل سوريا <span>•</span> عروض أسبوعية <span>•</span> دفع آمن</div>
+<header class="header">
+  <button class="icon-btn menu-btn" id="menuBtn" aria-label="القائمة">☰</button>
+  <a class="brand" href="#">
+    <div class="logo-mark"><span>SO</span></div>
+    <div><strong>سوريا أونلاين</strong><small>SYRIA ONLINE</small></div>
+  </a>
+  <div class="search"><input id="search" placeholder="ابحث عن منتج، قسم أو ماركة..." /><button id="searchBtn">⌕</button></div>
+  <div class="actions"><button class="icon-btn">♡</button><button class="cart" id="cartBtn">🛒 <b id="cartCount">0</b></button></div>
+</header>
+
+<nav class="desktop-nav">
+  <button data-cat="all">الرئيسية</button>
+  <button data-cat="men">رجالي</button>
+  <button data-cat="women">نسائي</button>
+  <button data-cat="kids">أطفال</button>
+  <button data-cat="shoes">أحذية</button>
+  <button data-cat="bags">حقائب</button>
+  <button data-cat="beauty">عطور وتجميل</button>
+  <button data-cat="electronics">إلكترونيات</button>
+  <button data-cat="home">منزل</button>
+  <button data-cat="food">غذائيات</button>
+  <button class="sale" data-cat="sale">🔥 العروض</button>
+</nav>
+
+<aside class="drawer" id="drawer">
+  <div class="drawer-head"><b>الأقسام</b><button id="closeDrawer">×</button></div>
+  <div class="drawer-section"><button class="parent">رجالي <span>⌄</span></button><div class="subs"><button data-cat="men">ملابس رجالية</button><button data-cat="men">أحذية رجالية</button><button data-cat="men">ساعات وإكسسوارات</button></div></div>
+  <div class="drawer-section"><button class="parent">نسائي <span>⌄</span></button><div class="subs"><button data-cat="women">ملابس نسائية</button><button data-cat="women">أحذية نسائية</button><button data-cat="women">حقائب</button><button data-cat="women">إكسسوارات</button></div></div>
+  <div class="drawer-section"><button class="parent">أطفال <span>⌄</span></button><div class="subs"><button data-cat="kids">ملابس أطفال</button><button data-cat="kids">أحذية أطفال</button><button data-cat="kids">ألعاب</button></div></div>
+  <div class="drawer-section"><button class="parent">أقسام أخرى <span>⌄</span></button><div class="subs"><button data-cat="beauty">عطور وتجميل</button><button data-cat="electronics">إلكترونيات</button><button data-cat="home">منزل</button><button data-cat="food">غذائيات</button></div></div>
+</aside>
+<div class="overlay" id="overlay"></div>
+
+<main>
+<section class="hero">
+  <div class="hero-copy"><span class="eyebrow">SYRIA ONLINE • NEW SEASON</span><h1>كل ما تحتاجه<br><em>بمكان واحد.</em></h1><p>تسوّق ملابس، أحذية، حقائب، عطور، إلكترونيات، منزل وغذائيات — بتجربة سورية عصرية.</p><div class="hero-buttons"><button class="primary" data-cat="all">تسوّق الآن</button><button class="secondary" id="openCategories">استكشف الأقسام</button></div></div>
+  <div class="hero-art"><div class="bag bag1">SO</div><div class="bag bag2">🛍</div><div class="orb">S</div></div>
+</section>
+
+<section class="categories">
+  <div class="section-head"><div><span>SHOP BY CATEGORY</span><h2>تسوّق حسب القسم</h2></div></div>
+  <div class="cat-grid">
+    <button data-cat="men"><b>👔</b><span>رجالي</span><small>ملابس وأحذية</small></button>
+    <button data-cat="women"><b>👗</b><span>نسائي</span><small>أزياء وإكسسوارات</small></button>
+    <button data-cat="kids"><b>🧸</b><span>أطفال</span><small>كل الأعمار</small></button>
+    <button data-cat="shoes"><b>👟</b><span>أحذية</span><small>موديلات متنوعة</small></button>
+    <button data-cat="bags"><b>👜</b><span>حقائب</span><small>يومي ورسمية</small></button>
+    <button data-cat="beauty"><b>✨</b><span>عطور وتجميل</span><small>جمال وعناية</small></button>
+    <button data-cat="electronics"><b>📱</b><span>إلكترونيات</span><small>تقنية ذكية</small></button>
+    <button data-cat="home"><b>🏠</b><span>منزل</span><small>كل احتياجات البيت</small></button>
+  </div>
+</section>
+
+<section class="products">
+  <div class="section-head"><div><span>FEATURED COLLECTION</span><h2 id="productsTitle">منتجات مختارة</h2></div><button class="viewall" data-cat="all">عرض الكل ←</button></div>
+  <div class="product-grid" id="productGrid"></div>
+</section>
+
+<section class="payment">
+  <div><span class="eyebrow">PAYMENT OPTIONS</span><h2>طرق دفع متعددة</h2><p>اختر طريقة الدفع المناسبة عند إتمام الطلب.</p></div>
+  <div class="pay-grid">
+    <div class="pay-card"><b>SC</b><strong>شام كاش</strong><small>متاح عند تجهيز بيانات الحساب</small></div>
+    <div class="pay-card"><b>₮</b><strong>USDT</strong><small>دفع بالعملات الرقمية</small></div>
+    <div class="pay-card"><b>VISA</b><strong>Visa</strong><small>بطاقات Visa</small></div>
+    <div class="pay-card"><b>MC</b><strong>Mastercard</strong><small>بطاقات Mastercard</small></div>
+  </div>
+  <div class="payment-note">ملاحظة: الدفع الحقيقي يحتاج ربط حسابات/بوابات دفع merchant الخاصة بك؛ هذه الواجهة جاهزة لإضافة بيانات الربط لاحقاً.</div>
+</section>
 </main>
-<footer><img src="syria-online-logo.svg"><p>متجر إلكتروني سوري بتجربة عصرية.</p><span>© 2026 SYRIA ONLINE</span></footer>
-<nav class="bottom"><button data-scroll="home">⌂<span>الرئيسية</span></button><button data-open="categories">▦<span>الأقسام</span></button><button data-open="favorites">♡<span>المفضلة</span></button><button data-open="cart">🛒<span>السلة</span><b id="bottomCart">0</b></button><button data-open="account">👤<span>حسابي</span></button></nav>
-<div class="drawer" id="drawer"><div class="drawerHead"><b>الأقسام</b><button id="closeDrawer">×</button></div><div id="drawerCats"></div></div><div class="overlay" id="overlay"></div><div class="modalWrap" id="modalWrap"><div class="modal" id="modal"></div></div><aside class="cartPanel" id="cartPanel"><div class="panelHead"><h3>سلة التسوق</h3><button data-close="cart">×</button></div><div id="cartItems" class="cartItems"></div><div class="cartFoot"><div><span>الإجمالي</span><b id="cartTotal">0 ل.س</b></div><button class="primary" id="checkoutBtn">متابعة الشراء</button></div></aside><div id="toast" class="toast"></div><script src="app.js"></script></body></html>
+
+<div class="cart-panel" id="cartPanel">
+  <div class="cart-head"><h3>سلة التسوق</h3><button id="closeCart">×</button></div>
+  <div id="cartItems" class="cart-items"></div>
+  <div class="cart-foot"><div><span>المجموع</span><strong id="total">0 ل.س</strong></div><button class="primary" id="checkout">متابعة الدفع</button></div>
+</div>
+
+<footer><div class="footer-brand"><div class="logo-mark"><span>SO</span></div><div><b>سوريا أونلاين</b><small>SYRIA ONLINE</small></div></div><p>متجر إلكتروني سوري بتجربة عصرية.</p><div>© 2026 SYRIA ONLINE</div></footer>
+<script src="app.js"></script>
+</body>
+</html>
