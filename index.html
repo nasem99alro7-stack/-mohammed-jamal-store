@@ -2,106 +2,39 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>سوريا أونلاين</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css">
+<title>سوريا أوتو | قطع وإكسسوارات السيارات</title>
+<meta name="description" content="متجر سوري لقطع وإكسسوارات السيارات مع طلب مباشر وتوصيل داخل سوريا">
+<link rel="stylesheet" href="styles.css">
 </head>
 <body>
-<div class="top">
-  <div class="wrap topin">
-    <span>🚚 توصيل سريع داخل سوريا وتركيا</span>
-    <div><a id="helpTop">المساعدة</a><a id="trackTop">تتبع الطلب</a><a id="serviceTop">خدمة العملاء</a></div>
-  </div>
-</div>
+<header class="top"><div class="wrap nav">
+  <a class="brand" href="#"><span>🚗</span><b>سوريا أوتو</b></a>
+  <div class="search"><input id="search" placeholder="ابحث باسم القطعة، السيارة أو رقم القطعة"><button onclick="searchProducts()">بحث</button></div>
+  <div class="actions"><button class="ghost" onclick="openAccount()">👤 حسابي</button><button class="cartBtn" onclick="openCart()">🛒 السلة <b id="cartCount">0</b></button></div>
+</div></header>
 
-<header>
-  <div class="wrap head">
-    <button class="hamb" id="menuBtn">☰</button>
-    <a class="logo"><b>سوريا</b> أونلاين <small>كل ما تحتاجه في مكان واحد</small></a>
-    <div class="searchbox">
-      <select id="searchCat"><option>كل الأقسام</option><option>إلكترونيات</option><option>أزياء</option><option>منزل</option><option>جمال</option><option>ألعاب</option></select>
-      <input id="search" placeholder="إبحث عن منتجات، ماركات أو أقسام..." autocomplete="off">
-      <button>⌕</button>
-      <div id="suggestions"></div>
-    </div>
-    <div class="headlinks">
-      <button id="accountBtn">👤 <small>مرحباً، سجل الدخول</small><b>حسابي ▾</b></button>
-      <button id="ordersBtn">📦 <small>طلباتك</small><b>تتبع الطلب</b></button>
-      <button id="favBtn">♡ <small>قائمتك</small><b>المفضلة</b></button>
-      <button id="cartBtn" class="cart">🛒 <i id="cartCount">0</i><b>السلة</b></button>
-    </div>
-  </div>
-  <nav>
-    <div class="wrap navin">
-      <a id="allBtn">☰ جميع الأقسام</a><a id="navDeals">عروض اليوم</a><a id="navNew">وصل حديثاً</a><a id="navBest">الأكثر مبيعاً</a><a id="navFeatured">المنتجات المميزة</a><a id="navBrands">العلامات التجارية</a><a id="navGift">بطاقات الهدايا</a><a id="navSell">بيع معنا</a>
-    </div>
-  </nav>
-</header>
+<section class="hero"><div class="wrap heroGrid">
+  <div><span class="pill">متجر سيارات سوري</span><h1>قطعتك المناسبة<br><em>بكل سهولة.</em></h1>
+  <p>ابحث حسب السيارة أو القطعة، اطلبها مباشرة، وننسّق مع المورد والتوصيل داخل سوريا.</p>
+  <div class="heroBtns"><button class="primary" onclick="document.getElementById('catalog').scrollIntoView()">تصفح المنتجات</button><button class="secondary" onclick="requestPart()">🔎 لم تجد القطعة؟ اطلبها</button></div>
+  <div class="trust"><span>✓ موردون محليون</span><span>✓ دعم واتساب</span><span>✓ تأكيد التوافق قبل الطلب</span></div></div>
+  <div class="heroCard"><div class="carIcon">🚘</div><b>ابحث برقم القطعة</b><span>OEM / Part Number</span><input id="oem" placeholder="مثال: 90915-YZZD1"><button onclick="searchOEM()">بحث عن القطعة</button></div>
+</div></section>
 
-<div id="drawer" class="drawer">
-  <div class="drawerhead"><b>تصفح سوريا أونلاين</b><button id="closeMenu">×</button></div>
-  <div class="userbox" id="drawerUserBox">👤 <b>مرحباً! تسجيل الدخول / إنشاء حساب</b></div>
-  <h3>تصفح حسب القسم</h3>
-  <div id="drawerCategories" class="drawer-categories"></div>
-  <div id="adminSection" style="display:none"><h3>الإدارة</h3><a class="drawer-admin-link" id="drawerAdminLink" href="admin.html">⚙️ لوحة التحكم</a></div><h3>حسابك</h3><a data-account="profile">👤 ملفي الشخصي</a><a data-account="orders">طلباتك</a><a data-account="fav">قائمة المفضلة</a><a data-account="address">العناوين</a><a data-account="payments">طرق الدفع</a><a data-account="recent">المنتجات التي شاهدتها</a><a data-account="returns">الإرجاع والاسترداد</a><h3>الإعدادات</h3><a id="drawerSettings" class="drawer-settings">⚙️ الإعدادات العامة</a><a id="drawerLogout" class="drawer-logout" style="display:none">🚪 تسجيل الخروج</a>
-</div>
-<div id="shade"></div>
+<section class="wrap quick"><div class="quickTitle"><h2>تصفح حسب القسم</h2><span>كل ما تحتاجه لسيارتك</span></div>
+<div class="cats">
+<button onclick="filterCat('زيوت وفلاتر')">🛢️ زيوت وفلاتر</button><button onclick="filterCat('إكسسوارات')">✨ إكسسوارات</button><button onclick="filterCat('كهربائيات')">💡 كهربائيات</button><button onclick="filterCat('فرامل')">🛞 فرامل</button><button onclick="filterCat('محرك')">⚙️ محرك</button><button onclick="filterCat('تنظيف')">🧽 عناية وتنظيف</button>
+</div></section>
 
-<main class="wrap">
-<section class="hero">
-  <div class="heroMain"><div><span>منتجات أصلية • أسعار مميزة • توصيل سريع</span><h1>كل احتياجاتك<br><strong>من سوريا أونلاين</strong></h1><button id="heroShop">تسوق الآن ←</button></div><div class="heroArt">🛍️</div></div>
-  <div class="side">
-    <article><div><h2>إلكترونيات حديثة</h2><p>أفضل الماركات بأسعار مميزة</p><button id="heroElectronics">تسوق الآن</button></div><span>📱</span></article>
-    <article><div><h2>مستلزمات المنزل</h2><p>لبيت أجمل وحياة أكثر راحة</p><button id="heroHome">تسوق الآن</button></div><span>🛋️</span></article>
-  </div>
-</section>
+<main id="catalog" class="wrap"><div class="catalogHead"><div><span class="eyebrow">المتجر</span><h2>منتجات مختارة</h2></div>
+<div class="filters"><select id="category" onchange="render()"><option value="">كل الأقسام</option><option>زيوت وفلاتر</option><option>إكسسوارات</option><option>كهربائيات</option><option>فرامل</option><option>محرك</option><option>تنظيف</option></select>
+<select id="sort" onchange="render()"><option value="featured">الأكثر طلباً</option><option value="low">السعر: الأقل</option><option value="high">السعر: الأعلى</option></select></div></div>
+<div id="products" class="products"></div></main>
 
-<section class="cats" id="cats">
-  <a id="cat_offers">٪<small>عروض اليوم</small></a><a id="cat_women">👗<small>ملابس نسائية</small></a><a id="cat_men">👔<small>ملابس رجالية</small></a><a id="cat_kidswear">🧒<small>ملابس أطفال</small></a><a id="cat_electronics">📱<small>إلكترونيات</small></a><a id="cat_home">🛋️<small>المنزل والمطبخ</small></a><a id="cat_beauty">🌹<small>عطور وجمال</small></a><a id="cat_shoes">👟<small>أحذية وحقائب</small></a><a id="cat_sport">🏋️<small>رياضة</small></a><a id="cat_toys">🧸<small>ألعاب وهدايا</small></a>
-</section>
+<section class="fit"><div class="wrap fitGrid"><div><span class="eyebrow">خدمة مجانية</span><h2>مو متأكد إذا القطعة تركب على سيارتك؟</h2><p>أرسل الماركة والموديل والسنة وصورة القطعة أو رقمها، ونراجع التوافق قبل تثبيت الطلب.</p><button class="primary" onclick="requestPart()">أرسل طلب قطعة</button></div><div class="fitBox"><b>أرسل:</b><span>ماركة السيارة</span><span>الموديل والسنة</span><span>رقم القطعة أو صورة</span></div></div></section>
 
-<section class="deal section">
-  <div class="sectitle"><div><h2>🔥 عروض اليوم</h2><a id="showDeals">عرض الكل</a></div><div class="timer">تنتهي خلال <b id="timer">06:25:18</b></div></div>
-  <div class="products" id="deals"></div>
-</section>
+<footer><div class="wrap footerGrid"><div><b class="brand">🚗 سوريا أوتو</b><p>منصة بيع وطلب قطع وإكسسوارات السيارات في سوريا.</p></div><div><b>خدمة العملاء</b><span>واتساب للطلبات والاستفسارات</span><span>تأكيد السعر والتوفر قبل الدفع</span></div><div><b>للموردين</b><span>انضم كمورد محلي</span><span>تحديث الأسعار والمخزون</span></div></div><div class="copy">© 2026 سوريا أوتو — نسخة تجريبية قابلة للربط بقاعدة بيانات وموردين.</div></footer>
 
-<section class="section">
-  <div class="sectitle"><div><h2>الأكثر مبيعاً</h2><a id="showBest">عرض الكل</a></div><div class="scrollhint">← اسحب للتصفح →</div></div>
-  <div class="products" id="best"></div>
-</section>
-
-<section class="section recently" id="recentlySection"><div class="sectitle"><div><h2>👁 شاهدته مؤخراً</h2></div><a id="clearRecent">مسح</a></div><div class="products" id="recentProducts"></div></section>
-
-<section class="featuregrid">
-  <article><span>🧸</span><div><h3>ألعاب الأطفال</h3><p>عالم من المرح والإبداع</p><button id="featureToys">تسوق الآن</button></div></article>
-  <article><span>🛋️</span><div><h3>مستلزمات المنزل</h3><p>لمنزل أذكى وأناقة</p><button id="featureHome">تسوق الآن</button></div></article>
-  <article><span>💄</span><div><h3>مستلزمات التجميل</h3><p>جمال طبيعي كل يوم</p><button id="featureBeauty">تسوق الآن</button></div></article>
-</section>
-
-<section class="why">
-  <div>🚚<b>توصيل سريع</b><small>إلى جميع أنحاء سوريا وتركيا</small></div>
-  <div>💳<b>دفع آمن</b><small>بطاقة، شام كاش، USDT والمزيد</small></div>
-  <div>↩️<b>إرجاع سهل</b><small>خلال 14 يوم حسب المنتج</small></div>
-  <div>🎧<b>دعم العملاء</b><small>مساعدة على مدار الساعة</small></div>
-</section>
-</main>
-
-<footer>
- <div class="wrap footgrid">
-  <div><h3>خدمة العملاء</h3><a id="footerContact">تواصل معنا</a><a id="footerTrack">تتبع طلبك</a><a id="footerReturns">الإرجاع والاسترداد</a><a id="footerFaq">الأسئلة الشائعة</a></div>
-  <div><h3>حسابك</h3><a id="footerOrders">طلباتك</a><a id="footerFav">المفضلة</a><a id="footerAddress">عناوينك</a><a id="footerPayments">طرق الدفع</a></div>
-  <div><h3>تسوق معنا</h3><a id="footerDeals">العروض</a><a id="footerBest">الأكثر مبيعاً</a><a id="footerBrands">العلامات التجارية</a><a id="footerSell">بيع معنا</a></div>
-  <div><h3>سوريا أونلاين</h3><a id="footerAbout">من نحن</a><a id="footerPrivacy">سياسة الخصوصية</a><a id="footerTerms">شروط الاستخدام</a><a id="footerShipping">سياسة الشحن</a></div>
- </div>
- <div class="bottom"><button id="languageBtn">🌐 العربية / English / Türkçe</button><button id="currencyTRY">🇹🇷 ليرة تركية TRY</button><button id="currencySYP">🇸🇾 الليرة السورية SYP</button><span>© 2026 سوريا أونلاين</span></div>
-</footer>
-
-<div id="cartPanel" class="panel"><div class="panelhead"><h2>سلة التسوق</h2><button>×</button></div><div id="cartItems"></div><div class="coupon"><input id="couponCode" placeholder="رمز الخصم"><button id="applyCoupon">تطبيق</button></div><div id="couponMsg" class="coupon-msg"></div><div class="shipping-progress" id="shippingProgress"></div><div class="carttotal"><span>المجموع: <b id="total">₺0</b></span><small id="discountTotal"></small></div><button class="checkout">المتابعة إلى الدفع</button></div>
-<div id="modal" class="modal"><div class="modalbox"><button class="x">×</button><div id="modalContent"></div></div></div>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="supabase-config.js"></script>
+<div id="modal" class="modal hidden"><div class="overlay" onclick="closeModal()"></div><div class="panel" id="panel"></div></div>
 <script src="app.js"></script>
-</body>
-</html>
+</body></html>
