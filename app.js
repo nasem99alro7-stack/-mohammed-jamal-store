@@ -1,7 +1,7 @@
 
 (() => {
 const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
-const KEY={user:"so_user_v6",cart:"so_cart_v6",fav:"so_fav_v6",orders:"so_orders_v6",recent:"so_recent_v6",addresses:"so_addresses_v6",payments:"so_payments_v6"};
+const KEY={user:"so_user_v6",account:"so_account_v10",cart:"so_cart_v6",fav:"so_fav_v6",orders:"so_orders_v6",recent:"so_recent_v6",addresses:"so_addresses_v6",payments:"so_payments_v6"};
 const load=(k,d)=>{try{return JSON.parse(localStorage.getItem(k))??d}catch{return d}};
 const save=(k,v)=>localStorage.setItem(k,JSON.stringify(v));
 const money=n=>`₺${Number(n).toLocaleString("tr-TR")}`;
@@ -73,7 +73,7 @@ function renderUser(){
  const u=state.user;
  $("#accountBtn").innerHTML=`👤 <small>${u?"مرحباً، "+esc(u.name):"مرحباً، سجل الدخول"}</small><b>${u?"حسابي ▾":"تسجيل الدخول ▾"}</b>`;
  const ub=$("#drawerUserBox");
- if(ub) ub.innerHTML=u?`👤 <b>مرحباً، ${esc(u.name)}</b><small>ملفك الشخصي جاهز</small>`:`👤 <b>مرحباً! تسجيل الدخول / إنشاء حساب</b>`;
+ if(ub) ub.innerHTML=u?`👤 <b>مرحباً، ${esc(u.name)}</b><small>ملفك الشخصي جاهز</small>`:`👤 <b>مرحباً بك</b><div class="auth-drawer-actions"><button id="drawerLogin">تسجيل الدخول</button><button id="drawerSignup">إنشاء حساب</button></div>`;
  const logout=$("#drawerLogout");
  if(logout){ logout.style.display=u?"block":"none"; }
 }
@@ -105,10 +105,16 @@ function authModal(){
  if(state.user){
    modal("حسابي",`<div class="profile-summary"><div class="profile-avatar">👤</div><div><h3>${esc(state.user.name)}</h3><p>${esc(state.user.email||state.user.phone||"")}</p></div></div><div class="account-grid"><button data-account="profile">👤 ملفي الشخصي</button><button data-account="orders">📦 طلباتك</button><button data-account="fav">♡ المفضلة (${state.fav.length})</button><button data-account="address">📍 عناوينك</button><button data-account="payments">💳 طرق الدفع</button><button data-account="recent">👁 شاهدته مؤخراً</button><button data-account="returns">↩️ الإرجاع والاسترداد</button><button data-logout>🚪 تسجيل الخروج</button></div>`,box=>{
      $$('[data-account]',box).forEach(b=>b.onclick=()=>accountSection(b.dataset.account));
-     $("[data-logout]",box)?.addEventListener("click",()=>{state.user=null;persist();renderUser();closeModal();toast("تم تسجيل الخروج")});
+     $(`[data-logout]`,box)?.addEventListener("click",()=>{state.user=null;persist();renderUser();closeModal();toast("تم تسجيل الخروج")});
    });
    return;
  }
+ modal("أهلاً بك في سوريا أونلاين",`<div class="auth-choice"><p>إذا كان لديك حساب من قبل سجّل دخولك، وإذا كنت جديداً أنشئ حساباً جديداً.</p><div class="auth-choice-buttons"><button class="primary" id="openLogin">🔐 تسجيل الدخول</button><button class="secondary" id="openSignup">👤 إنشاء حساب جديد</button></div></div>`,box=>{
+   $("#openLogin",box).onclick=loginModal;
+   $("#openSignup",box).onclick=signupModal;
+ });
+}
+function signupModal(){
  modal("إنشاء حساب جديد",`<div class="signup-note">أدخل بياناتك الأساسية لإنشاء حسابك، وبعد التسجيل سيظهر اسمك في ملفك الشخصي.</div><form id="signupForm" class="form signup-form">
    <div class="form-row"><label>الاسم<input id="signupFirst" required placeholder="الاسم الأول"></label><label>الكنية / اسم العائلة<input id="signupLast" required placeholder="اسم العائلة"></label></div>
    <label>الجنس<select id="signupGender"><option value="">اختر الجنس</option><option value="ذكر">ذكر</option><option value="أنثى">أنثى</option></select></label>
@@ -118,16 +124,40 @@ function authModal(){
    <label>كلمة المرور<input id="signupPass" type="password" minlength="6" required placeholder="6 أحرف أو أكثر"></label>
    <label class="checkline"><input id="signupMarketing" type="checkbox"> أريد تلقي العروض والتنبيهات الجديدة</label>
    <button class="primary" type="submit">إنشاء الحساب</button>
- </form><p class="login-hint">لديك حساب مسبقاً؟ أدخل بياناتك في نفس النموذج وسيتم حفظ الحساب على هذا الجهاز.</p>`,box=>{
+ </form><p class="login-hint">لديك حساب مسبقاً؟ <a href="#" id="switchToLogin">تسجيل الدخول</a></p>`,box=>{
+   $("#switchToLogin",box).onclick=e=>{e.preventDefault();loginModal()};
    $("#signupForm",box).addEventListener("submit",e=>{
      e.preventDefault();
      const first=$("#signupFirst",box).value.trim(), last=$("#signupLast",box).value.trim();
-     state.user={name:`${first} ${last}`.trim(),firstName:first,lastName:last,gender:$("#signupGender",box).value,birthDate:$("#signupBirth",box).value,email:$("#signupEmail",box).value.trim(),countryCode:$("#signupCode",box).value,phone:$("#signupPhone",box).value.trim(),marketing:$("#signupMarketing",box).checked};
+     const email=$("#signupEmail",box).value.trim(), phone=$("#signupPhone",box).value.trim(), pass=$("#signupPass",box).value;
+     const account={name:`${first} ${last}`.trim(),firstName:first,lastName:last,gender:$("#signupGender",box).value,birthDate:$("#signupBirth",box).value,email,countryCode:$("#signupCode",box).value,phone,marketing:$("#signupMarketing",box).checked,password:pass};
+     save(KEY.account,account);
+     state.user={...account}; delete state.user.password;
      persist();renderUser();closeModal();toast("تم إنشاء حسابك بنجاح 🎉");
      setTimeout(profileModal,180);
    });
  });
 }
+function loginModal(){
+ modal("تسجيل الدخول",`<div class="signup-note">سجّل الدخول باستخدام البريد الإلكتروني أو رقم الهاتف وكلمة المرور.</div><form id="loginForm" class="form signup-form">
+   <label>البريد الإلكتروني أو رقم الهاتف<input id="loginId" required placeholder="example@email.com أو رقم الهاتف"></label>
+   <label>كلمة المرور<input id="loginPass" type="password" required placeholder="كلمة المرور"></label>
+   <button class="primary" type="submit">تسجيل الدخول</button>
+ </form><p class="login-hint">ما عندك حساب؟ <a href="#" id="switchToSignup">إنشاء حساب جديد</a></p>`,box=>{
+   $("#switchToSignup",box).onclick=e=>{e.preventDefault();signupModal()};
+   $("#loginForm",box).addEventListener("submit",e=>{
+     e.preventDefault();
+     const id=$("#loginId",box).value.trim().toLowerCase(), pass=$("#loginPass",box).value;
+     const account=load(KEY.account,null);
+     if(!account){toast("لا يوجد حساب محفوظ. أنشئ حساباً جديداً أولاً");return}
+     const matches=id===String(account.email||"").toLowerCase() || id===String(account.phone||"").toLowerCase() || id===String((account.countryCode||"")+String(account.phone||"")).toLowerCase();
+     if(!matches || pass!==account.password){toast("بيانات تسجيل الدخول غير صحيحة");return}
+     state.user={...account}; delete state.user.password;
+     persist();renderUser();closeModal();toast("تم تسجيل الدخول بنجاح 👋");
+   });
+ });
+}
+
 function profileModal(){
  if(!state.user)return authModal();
  const u=state.user;
@@ -380,7 +410,7 @@ function activateV6(){
  on("footerTerms",()=>simpleInfo("شروط الاستخدام","<p>باستخدام المتجر توافق على شروط الشراء والدفع والتوصيل والإرجاع المعروضة في الموقع.</p>"));
  on("footerShipping",()=>simpleInfo("سياسة الشحن","<p>مدة الشحن تختلف حسب المدينة والمنتج وتظهر أثناء إتمام الطلب.</p>"));
  on("languageBtn",languageModal);on("drawerSettings",()=>{closeDrawer();settingsModal();});
- on("drawerUserBox",()=>{closeDrawer();authModal();});
+ on("drawerLogin",()=>{closeDrawer();loginModal();}); on("drawerSignup",()=>{closeDrawer();signupModal();});
  on("drawerLogout",()=>{if(!state.user)return;state.user=null;persist();renderUser();closeDrawer();closeModal();toast("تم تسجيل الخروج بنجاح");});
  on("currencyTRY",()=>toast("العملة الحالية: الليرة التركية TRY"));on("currencySYP",()=>toast("العملة الحالية: الليرة السورية SYP"));
  setLanguage(currentLang);
