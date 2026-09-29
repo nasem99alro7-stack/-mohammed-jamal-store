@@ -135,8 +135,61 @@ function addressModal(){
  })
 }
 function paymentModal(){
- let a=load(KEY.payments,[]);
- modal("طرق الدفع",`<div class="pay-options"><div>💳 بطاقة Visa / Mastercard <small>يتم تأكيد الدفع عند ربط بوابة الدفع</small></div><div>💚 شام كاش <small>الدفع اليدوي مع تأكيد التحويل</small></div><div>₮ USDT <small>الدفع عبر عنوان المحفظة عند تفعيله</small></div><div>💵 الدفع عند الاستلام <small>متاح حسب المدينة والمنتج</small></div></div><p>طرق الدفع المعروضة هنا جاهزة كواجهة. التحصيل الإلكتروني الحقيقي يحتاج مفاتيح وربط مزود دفع.</p>`)
+ const title=currentLang==="ar"?"طرق الدفع":currentLang==="tr"?"Ödeme Yöntemleri":"Payment Methods";
+ const labels=currentLang==="ar"
+  ?{card:"بطاقة Visa / Mastercard",cardSub:"أدخل بيانات البطاقة لإتمام الدفع",cash:"شام كاش",cashSub:"أدخل بيانات التحويل لتأكيد الدفع",usdt:"USDT ₮",usdtSub:"أدخل بيانات محفظتك لتأكيد التحويل",cod:"الدفع عند الاستلام",codSub:"أدخل بيانات الاستلام للتأكيد",name:"الاسم الكامل",phone:"رقم الهاتف",cardNo:"رقم البطاقة",expiry:"تاريخ الانتهاء",cvv:"CVV",ref:"رقم/مرجع التحويل",wallet:"عنوان المحفظة",network:"الشبكة",address:"عنوان التوصيل",confirm:"تأكيد البيانات",saved:"تم حفظ بيانات الدفع",required:"يرجى تعبئة جميع البيانات المطلوبة"}
+  :currentLang==="tr"
+  ?{card:"Visa / Mastercard",cardSub:"Ödeme için kart bilgilerinizi girin",cash:"Sham Cash",cashSub:"Ödemeyi doğrulamak için transfer bilgilerini girin",usdt:"USDT ₮",usdtSub:"Transferi doğrulamak için cüzdan bilgilerinizi girin",cod:"Kapıda Ödeme",codSub:"Teslimat bilgilerinizi girin",name:"Ad Soyad",phone:"Telefon",cardNo:"Kart Numarası",expiry:"Son Kullanma",cvv:"CVV",ref:"Transfer Referansı",wallet:"Cüzdan Adresi",network:"Ağ",address:"Teslimat Adresi",confirm:"Bilgileri Onayla",saved:"Ödeme bilgileriniz kaydedildi",required:"Lütfen gerekli tüm alanları doldurun"}
+  :{card:"Visa / Mastercard Card",cardSub:"Enter your card details to complete payment",cash:"Sham Cash",cashSub:"Enter transfer details to confirm payment",usdt:"USDT ₮",usdtSub:"Enter wallet details to confirm the transfer",cod:"Cash on Delivery",codSub:"Enter delivery details to confirm",name:"Full Name",phone:"Phone Number",cardNo:"Card Number",expiry:"Expiry Date",cvv:"CVV",ref:"Transfer Reference",wallet:"Wallet Address",network:"Network",address:"Delivery Address",confirm:"Confirm Details",saved:"Payment details saved",required:"Please fill in all required fields"};
+
+ modal(title,`
+ <div class="pay-options" id="paymentChoices">
+   <button type="button" data-pay-choice="card"><b>💳 ${labels.card}</b><small>${labels.cardSub}</small></button>
+   <button type="button" data-pay-choice="cash"><b>💚 ${labels.cash}</b><small>${labels.cashSub}</small></button>
+   <button type="button" data-pay-choice="usdt"><b>₮ ${labels.usdt}</b><small>${labels.usdtSub}</small></button>
+   <button type="button" data-pay-choice="cod"><b>💵 ${labels.cod}</b><small>${labels.codSub}</small></button>
+ </div>
+ <div id="paymentFormArea"></div>
+ <p class="payment-note">${currentLang==="ar"?"بعد اختيار طريقة الدفع، ستظهر لك خانات تعبئة البيانات الخاصة بها.":currentLang==="tr"?"Ödeme yöntemini seçtikten sonra ilgili bilgi alanları açılacaktır.":"Choose a payment method to open its required information fields."}</p>
+ `,box=>{
+   const area=$("#paymentFormArea",box);
+   $$("[data-pay-choice]",box).forEach(btn=>btn.onclick=()=>{
+     const type=btn.dataset.payChoice;
+     const formClass="form payment-entry-form";
+     let fields="";
+     if(type==="card") fields=`
+       <input name="name" required placeholder="${labels.name}">
+       <input name="phone" required inputmode="tel" placeholder="${labels.phone}">
+       <input name="cardNo" required inputmode="numeric" maxlength="19" placeholder="${labels.cardNo}">
+       <div class="form-row"><input name="expiry" required placeholder="${labels.expiry}"><input name="cvv" required inputmode="numeric" maxlength="4" placeholder="${labels.cvv}"></div>`;
+     if(type==="cash") fields=`
+       <input name="name" required placeholder="${labels.name}">
+       <input name="phone" required inputmode="tel" placeholder="${labels.phone}">
+       <input name="ref" required placeholder="${labels.ref}">`;
+     if(type==="usdt") fields=`
+       <input name="name" required placeholder="${labels.name}">
+       <input name="wallet" required placeholder="${labels.wallet}">
+       <input name="network" required placeholder="${labels.network}">
+       <input name="ref" required placeholder="${labels.ref}">`;
+     if(type==="cod") fields=`
+       <input name="name" required placeholder="${labels.name}">
+       <input name="phone" required inputmode="tel" placeholder="${labels.phone}">
+       <textarea name="address" required placeholder="${labels.address}"></textarea>`;
+     area.innerHTML=`<form id="selectedPaymentForm" class="${formClass}" data-type="${type}">
+       <h3>${type==="card"?"💳 ":type==="cash"?"💚 ":type==="usdt"?"₮ ":"💵 "}${type==="card"?labels.card:type==="cash"?labels.cash:type==="usdt"?labels.usdt:labels.cod}</h3>
+       ${fields}
+       <button class="primary" type="submit">${labels.confirm}</button>
+     </form>`;
+     $("#selectedPaymentForm",box).onsubmit=e=>{
+       e.preventDefault();
+       const data=Object.fromEntries(new FormData(e.currentTarget).entries());
+       data.type=type; data.updatedAt=new Date().toISOString();
+       save("so_payment_profile_v6",data);
+       toast(labels.saved);
+     };
+     area.scrollIntoView({behavior:"smooth",block:"nearest"});
+   });
+ });
 }
 function checkout(){
  if(!state.user)return authModal();

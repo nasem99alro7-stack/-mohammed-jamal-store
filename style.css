@@ -90,3 +90,9 @@ button{font-family:inherit;cursor:pointer}
 .brand-list button{border:1px solid #dce5df;background:#fff;border-radius:10px;padding:13px;font:inherit;cursor:pointer;text-align:right}
 .info-page{line-height:2}
 .info-page p{color:#5f6963}
+
+.pay-options button{display:block;width:100%;text-align:right;border:1px solid #dce5df;background:#fff;border-radius:14px;padding:18px;margin:10px 0;cursor:pointer;font:inherit}
+.pay-options button b,.pay-options button small{display:block}
+.pay-options button small{margin-top:8px;color:#7b847f}
+.payment-entry-form{margin-top:16px;padding:16px;border:1px solid #dce5df;border-radius:14px;background:#f8fcf9}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
