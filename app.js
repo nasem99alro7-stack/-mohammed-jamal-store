@@ -23,13 +23,16 @@ const products=[
 ];
 
 const subcats={
-"إلكترونيات":["هواتف","سماعات","ساعات ذكية","إكسسوارات"],
-"أزياء":["ملابس رجالية","ملابس نسائية","ملابس أطفال","حقائب نسائية"],
-"المنزل والمطبخ":["أدوات المطبخ","أثاث","ديكور","أجهزة منزلية"],
-"عطور وجمال":["عطور نسائية","عطور رجالية","مكياج","عناية"],
-"ألعاب وهدايا":["ألعاب أطفال","هدايا","ألعاب تعليمية"],
-"أحذية وحقائب":["أحذية رجالية","أحذية نسائية","حقائب"],
-"رياضة ولياقة":["ملابس رياضية","معدات رياضية"]
+"إلكترونيات":["موبايلات","آيفون","سامسونج","هواتف","أيبادات","تابلت","كمبيوترات","لابتوبات","شاشات","سماعات","ساعات ذكية","كاميرات","إكسسوارات"],
+"أزياء":["ملابس رجالية","ملابس نسائية","ملابس أطفال","فساتين","جاكيتات","بناطيل","حقائب نسائية","حقائب رجالية","إكسسوارات"],
+"المنزل والمطبخ":["أدوات المطبخ","أواني الطبخ","أجهزة منزلية","أثاث","كنب","غرف نوم","ديكور","إضاءة","مفروشات"],
+"عطور وجمال":["عطور نسائية","عطور رجالية","مكياج","عناية بالبشرة","عناية بالشعر","عناية شخصية","مستلزمات تجميل"],
+"ألعاب وهدايا":["ألعاب أطفال","ألعاب تعليمية","ألعاب إلكترونية","هدايا","دمى","ألعاب خارجية"],
+"أحذية وحقائب":["أحذية رجالية","أحذية نسائية","أحذية أطفال","حقائب رجالية","حقائب نسائية","حقائب سفر"],
+"رياضة ولياقة":["ملابس رياضية","معدات رياضية","كمال أجسام","لياقة منزلية","كرة قدم","دراجات"],
+"سيارات":["إكسسوارات سيارات","زيوت وفلاتر","إلكترونيات سيارات","تنظيف وعناية","إطارات"],
+"مستلزمات مكتبية":["قرطاسية","طابعات","أحبار","مكاتب","كراسي مكتبية"],
+"سوبرماركت":["مواد غذائية","مشروبات","منظفات","مستلزمات منزلية"]
 };
 
 let state={cat:"كل الأقسام",sub:"",sort:"featured",q:"",user:load(KEY.user,null),cart:load(KEY.cart,[]),fav:load(KEY.fav,[]),orders:load(KEY.orders,[]),recent:load(KEY.recent,[])};
@@ -147,6 +150,85 @@ function searchRun(){
  state.q=$("#search").value.trim();state.cat=$("#searchCat").value||"كل الأقسام";state.sub="";renderProducts();
  $("#suggestions").innerHTML="";$("#allProducts")?.scrollIntoView({behavior:"smooth"})
 }
+
+/* V6 FULL activation: all visible navigation, footer, language and customer-service controls */
+const LANG_KEY="so_lang_v6";
+const LANG={
+ar:{dir:"rtl",name:"العربية",search:"إبحث عن منتجات، ماركات أو أقسام...",all:"كل الأقسام",deals:"عروض اليوم",new:"وصل حديثاً",best:"الأكثر مبيعاً",featured:"المنتجات المميزة",brands:"العلامات التجارية",gift:"بطاقات الهدايا",sell:"بيع معنا",help:"المساعدة",track:"تتبع الطلب",service:"خدمة العملاء",shop:"تسوق الآن",clear:"مسح الفلاتر",related:"منتجات مشابهة",details:"تفاصيل المنتج"},
+en:{dir:"ltr",name:"English",search:"Search products, brands or categories...",all:"All Categories",deals:"Today's Deals",new:"New Arrivals",best:"Best Sellers",featured:"Featured Products",brands:"Brands",gift:"Gift Cards",sell:"Sell With Us",help:"Help",track:"Track Order",service:"Customer Service",shop:"Shop Now",clear:"Clear Filters",related:"Related Products",details:"Product Details"},
+tr:{dir:"ltr",name:"Türkçe",search:"Ürün, marka veya kategori ara...",all:"Tüm Kategoriler",deals:"Günün Fırsatları",new:"Yeni Gelenler",best:"Çok Satanlar",featured:"Öne Çıkanlar",brands:"Markalar",gift:"Hediye Kartları",sell:"Bizimle Sat",help:"Yardım",track:"Sipariş Takibi",service:"Müşteri Hizmetleri",shop:"Şimdi Alışveriş Yap",clear:"Filtreleri Temizle",related:"Benzer Ürünler",details:"Ürün Detayları"}
+};
+let currentLang=localStorage.getItem(LANG_KEY)||"ar";
+function languageModal(){
+ modal("🌐 اللغة / Language / Dil",`<div class="lang-options"><button data-lang="ar">🇸🇾 العربية</button><button data-lang="en">🇬🇧 English</button><button data-lang="tr">🇹🇷 Türkçe</button></div>`,box=>{
+  $$("[data-lang]",box).forEach(b=>b.onclick=()=>{setLanguage(b.dataset.lang);closeModal()})
+ })
+}
+function setLanguage(lang){
+ currentLang=LANG[lang]?lang:"ar";localStorage.setItem(LANG_KEY,currentLang);
+ document.documentElement.lang=currentLang;document.documentElement.dir=LANG[currentLang].dir;
+ const t=LANG[currentLang];
+ $("#search").placeholder=t.search;
+ if($("#searchCat")?.options[0])$("#searchCat").options[0].textContent=t.all;
+ const texts={
+  "#helpTop":t.help,"#trackTop":t.track,"#serviceTop":t.service,
+  "#navDeals":t.deals,"#navNew":t.new,"#navBest":t.best,"#navFeatured":t.featured,"#navBrands":t.brands,"#navGift":t.gift,"#navSell":t.sell,
+  "#heroShop":t.shop,"#heroElectronics":t.shop,"#heroHome":t.shop,"#featureToys":t.shop,"#featureHome":t.shop,"#featureBeauty":t.shop,
+  "#clearFilters":t.clear
+ };
+ Object.entries(texts).forEach(([s,v])=>{const x=$(s);if(x)x.textContent=v});
+ $("#languageBtn").textContent=`🌐 ${t.name}`;
+}
+function customerService(){
+ modal(currentLang==="ar"?"خدمة العملاء":currentLang==="tr"?"Müşteri Hizmetleri":"Customer Service",`
+ <div class="support-box"><h3>🎧 ${currentLang==="ar"?"كيف يمكننا مساعدتك؟":currentLang==="tr"?"Size nasıl yardımcı olabiliriz?":"How can we help you?"}</h3>
+ <p>📞 +90 000 000 00 00 &nbsp; • &nbsp; 💬 الدعم عبر الرسائل</p>
+ <form id="supportForm" class="form">
+ <input id="supportName" required placeholder="${currentLang==="ar"?"الاسم":currentLang==="tr"?"Ad Soyad":"Name"}">
+ <input id="supportPhone" required placeholder="${currentLang==="ar"?"رقم الهاتف":currentLang==="tr"?"Telefon":"Phone"}">
+ <select id="supportTopic"><option>استفسار عن طلب</option><option>الدفع</option><option>التوصيل</option><option>الإرجاع والاسترداد</option><option>الحساب</option><option>اقتراح</option></select>
+ <textarea id="supportMsg" required placeholder="${currentLang==="ar"?"اكتب رسالتك":currentLang==="tr"?"Mesajınızı yazın":"Write your message"}"></textarea>
+ <button class="primary">${currentLang==="ar"?"إرسال":currentLang==="tr"?"Gönder":"Send"}</button></form></div>`,box=>{
+  $("#supportForm",box).onsubmit=e=>{e.preventDefault();let a=load("so_support_v6",[]);a.unshift({id:"CS"+Date.now().toString().slice(-8),name:$("#supportName").value,phone:$("#supportPhone").value,topic:$("#supportTopic").value,message:$("#supportMsg").value,date:new Date().toLocaleString(),status:"مفتوح"});save("so_support_v6",a);closeModal();toast(currentLang==="ar"?"تم إرسال طلب خدمة العملاء":currentLang==="tr"?"Talebiniz gönderildi":"Your support request was sent")}
+ })
+}
+function simpleInfo(title,body){modal(title,`<div class="info-page">${body}</div>`)}
+function brandModal(){
+ const brands=[...new Set(products.map(p=>p.brand))];
+ modal("العلامات التجارية",`<div class="brand-list">${brands.map(b=>`<button data-brand="${esc(b)}">${esc(b)}</button>`).join("")}</div>`,box=>$$("[data-brand]",box).forEach(b=>b.onclick=()=>{state.q=b.dataset.brand;$("#search").value=b.dataset.brand;closeModal();renderProducts();$("#catalogSection").scrollIntoView({behavior:"smooth"})}))
+}
+function giftModal(){simpleInfo("بطاقات الهدايا","<h3>🎁 بطاقات الهدايا</h3><p>يمكن تجهيز بطاقات هدايا بالقيمة المطلوبة وربطها بالدفع عند تفعيل بوابة الدفع.</p><button class='primary' id='giftSupport'>طلب بطاقة</button>");$("#giftSupport")?.addEventListener("click",customerService)}
+function sellModal(){simpleInfo("بيع معنا","<h3>🏪 افتح متجرك معنا</h3><p>أرسل بياناتك وبيانات المنتجات لفريق المتجر لبدء تجهيز حساب البائع.</p><button class='primary' id='sellSupport'>تواصل مع خدمة العملاء</button>");$("#sellSupport")?.addEventListener("click",customerService)}
+function activateV6(){
+ const on=(id,fn)=>$("#"+id)?.addEventListener("click",fn);
+ on("helpTop",customerService);on("serviceTop",customerService);on("trackTop",ordersModal);
+ on("navDeals",()=>{state.q="";state.cat="كل الأقسام";renderProducts();$("#deals")?.scrollIntoView({behavior:"smooth"})});
+ on("navNew",()=>{state.sort="new";renderProducts();$("#catalogSection").scrollIntoView({behavior:"smooth"})});
+ on("navBest",()=>{state.sort="featured";$("#best")?.scrollIntoView({behavior:"smooth"})});
+ on("navFeatured",()=>{$("#catalogSection")?.scrollIntoView({behavior:"smooth"})});
+ on("navBrands",brandModal);on("navGift",giftModal);on("navSell",sellModal);
+ on("showDeals",()=>$("#deals")?.scrollIntoView({behavior:"smooth"}));
+ on("showBest",()=>$("#best")?.scrollIntoView({behavior:"smooth"}));
+ on("heroShop",()=>{$("#catalogSection")?.scrollIntoView({behavior:"smooth"})});
+ on("heroElectronics",()=>{state.cat="إلكترونيات";state.sub="";renderProducts();$("#catalogSection").scrollIntoView({behavior:"smooth"})});
+ on("heroHome",()=>{state.cat="المنزل والمطبخ";state.sub="";renderProducts();$("#catalogSection").scrollIntoView({behavior:"smooth"})});
+ on("featureToys",()=>{state.cat="ألعاب وهدايا";state.sub="ألعاب أطفال";renderProducts();$("#catalogSection").scrollIntoView({behavior:"smooth"})});
+ on("featureHome",()=>{state.cat="المنزل والمطبخ";state.sub="";renderProducts();$("#catalogSection").scrollIntoView({behavior:"smooth"})});
+ on("featureBeauty",()=>{state.cat="عطور وجمال";state.sub="";renderProducts();$("#catalogSection").scrollIntoView({behavior:"smooth"})});
+ const quick={cat_offers:()=>$("#deals")?.scrollIntoView({behavior:"smooth"}),cat_women:()=>{state.cat="أزياء";state.sub="ملابس نسائية";renderProducts();$("#catalogSection").scrollIntoView({behavior:"smooth"})},cat_men:()=>{state.cat="أزياء";state.sub="ملابس رجالية";renderProducts();$("#catalogSection").scrollIntoView({behavior:"smooth"})},cat_kidswear:()=>{state.cat="أزياء";state.sub="ملابس أطفال";renderProducts();$("#catalogSection").scrollIntoView({behavior:"smooth"})},cat_electronics:()=>{state.cat="إلكترونيات";state.sub="";renderProducts();$("#catalogSection").scrollIntoView({behavior:"smooth"})},cat_home:()=>{state.cat="المنزل والمطبخ";state.sub="";renderProducts();$("#catalogSection").scrollIntoView({behavior:"smooth"})},cat_beauty:()=>{state.cat="عطور وجمال";state.sub="";renderProducts();$("#catalogSection").scrollIntoView({behavior:"smooth"})},cat_shoes:()=>{state.cat="أحذية وحقائب";state.sub="";renderProducts();$("#catalogSection").scrollIntoView({behavior:"smooth"})},cat_sport:()=>{state.cat="رياضة ولياقة";state.sub="";renderProducts();$("#catalogSection").scrollIntoView({behavior:"smooth"})},cat_toys:()=>{state.cat="ألعاب وهدايا";state.sub="";renderProducts();$("#catalogSection").scrollIntoView({behavior:"smooth"})}};
+ Object.entries(quick).forEach(([id,fn])=>on(id,fn));
+ on("footerContact",customerService);on("footerTrack",ordersModal);on("footerReturns",()=>accountSection("returns"));on("footerFaq",customerService);
+ on("footerOrders",ordersModal);on("footerFav",favModal);on("footerAddress",addressModal);on("footerPayments",paymentModal);
+ on("footerDeals",()=>$("#deals")?.scrollIntoView({behavior:"smooth"}));on("footerBest",()=>$("#best")?.scrollIntoView({behavior:"smooth"}));on("footerBrands",brandModal);on("footerSell",sellModal);
+ on("footerAbout",()=>simpleInfo("من نحن","<p>سوريا أونلاين متجر إلكتروني متعدد الأقسام يجمع المنتجات في مكان واحد.</p>"));
+ on("footerPrivacy",()=>simpleInfo("سياسة الخصوصية","<p>تُستخدم بيانات الحساب والعنوان لإتمام الطلب وخدمة العملاء. السلة والمفضلة محفوظتان محلياً في هذا الإصدار.</p>"));
+ on("footerTerms",()=>simpleInfo("شروط الاستخدام","<p>باستخدام المتجر توافق على شروط الشراء والدفع والتوصيل والإرجاع المعروضة في الموقع.</p>"));
+ on("footerShipping",()=>simpleInfo("سياسة الشحن","<p>مدة الشحن تختلف حسب المدينة والمنتج وتظهر أثناء إتمام الطلب.</p>"));
+ on("languageBtn",languageModal);
+ on("currencyTRY",()=>toast("العملة الحالية: الليرة التركية TRY"));on("currencySYP",()=>toast("العملة الحالية: الليرة السورية SYP"));
+ setLanguage(currentLang);
+}
+
 function initExtraUI(){
  const main=$("main");
  if(!$("#catalogSection")){
@@ -196,5 +278,5 @@ $("#sort")?.addEventListener("change",e=>{state.sort=e.target.value;renderProduc
 let t=6*3600+25*60+18;
 setInterval(()=>{t=Math.max(0,t-1);let h=Math.floor(t/3600),m=Math.floor(t%3600/60),s=t%60;let x=$("#timer");if(x)x.textContent=[h,m,s].map(n=>String(n).padStart(2,"0")).join(":")},1000);
 
-initExtraUI();renderProducts();renderCart();updateCounts();renderUser();
+initExtraUI();renderProducts();renderCart();updateCounts();renderUser();activateV6();
 })();
