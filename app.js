@@ -172,7 +172,7 @@ function setLang(next){
   document.documentElement.lang=lang;document.documentElement.dir=lang==="ar"?"rtl":"ltr";
   const s=$("#search"); if(s)s.placeholder=t("search");
   const sc=$("#searchCat"); if(sc && sc.options[0])sc.options[0].textContent=t("all");
-  const map={"footerContact":"contact","footerContact2":"contact","footerOrders":"orders","footerOrders2":"orders","footerReturns":"returns","footerReturns2":"returns","footerFaq":"contact","footerDeals":"deals","footerBest":"best","footerBrands":"brands","footerSell":"sell","footerAbout":"about","footerPrivacy":"privacy","footerTerms":"terms","footerShipping":"shipping"};
+  const map={"#dealsTitle":"deals","#newTitle":"new","#bestTitle":"best","#helpTitle":"help","#ordersTitle":"orders","#favTitle":"fav","#cartTitle":"cart"};
   Object.entries(map).forEach(([sel,key])=>{let x=$(sel);if(x)x.textContent=t(key)});
   let label=$("#langCurrent");if(label)label.textContent=t("name");
   toast(t("name"));
@@ -186,36 +186,6 @@ function customerService(){
  modal(t("supportTitle"),`<div class="support-head"><div>🎧</div><div><h3>${t("supportText")}</h3><p>📞 +90 000 000 00 00 &nbsp; • &nbsp; 💬 دردشة الدعم</p><small>نرد على طلبات العملاء ونتابع مشاكل الطلبات والدفع والتوصيل.</small></div></div><form id="supportForm" class="form"><input id="supportName" required placeholder="${t("name")}"><input id="supportPhone" required placeholder="${t("phone")}"><select id="supportTopic"><option>استفسار عن طلب</option><option>الدفع</option><option>التوصيل</option><option>الإرجاع والاسترداد</option><option>مشكلة في الحساب</option><option>اقتراح</option></select><textarea id="supportMsg" required placeholder="${t("message")}"></textarea><button class="primary">${t("send")}</button></form>`,box=>{
    $("#supportForm",box).onsubmit=e=>{e.preventDefault();let tickets=load("so_support_v7",[]);tickets.unshift({id:"CS"+Date.now().toString().slice(-7),name:$("#supportName").value,phone:$("#supportPhone").value,topic:$("#supportTopic").value,message:$("#supportMsg").value,date:new Date().toLocaleString(),status:"مفتوح"});save("so_support_v7",tickets);closeModal();toast(t("success"))}
  })
-}
-
-
-function footerPage(type){
- const pages={
-  contact:["تواصل معنا",`<div class="footer-page"><h3>🎧 خدمة العملاء</h3><p>نحن جاهزون لمساعدتك في الطلبات والدفع والتوصيل والإرجاع.</p><button class="primary" id="openSupport">فتح خدمة العملاء</button><div class="contact-box">📞 +90 000 000 00 00<br>💬 دعم عبر الرسائل<br>⏰ يومياً 09:00–22:00</div></div>`],
-  returns:["الإرجاع والاسترداد",`<div class="footer-page"><h3>↩️ طلب إرجاع</h3><p>يمكنك طلب الإرجاع من حسابك ثم اختيار الطلب والمنتج المطلوب إرجاعه.</p><button class="primary" id="openOrdersReturn">عرض طلباتي</button><h4>خطوات الإرجاع</h4><ol><li>افتح طلباتك.</li><li>اختر المنتج.</li><li>اختر سبب الإرجاع.</li><li>أرسل الطلب وانتظر تأكيد خدمة العملاء.</li></ol></div>`],
-  about:["من نحن",`<div class="footer-page"><h3>سوريا أونلاين</h3><p>متجر إلكتروني يجمع منتجات متعددة في مكان واحد مع تجربة شراء سهلة، تتبع للطلبات وخدمة عملاء.</p><p>هدفنا تقديم تجربة واضحة وسريعة للمتسوق.</p></div>`],
-  privacy:["سياسة الخصوصية",`<div class="footer-page"><h3>سياسة الخصوصية</h3><p>نستخدم بيانات الحساب والعنوان لإتمام الطلبات وخدمة العملاء. بيانات المتصفح المحلية مثل السلة والمفضلة تحفظ على جهازك في هذه النسخة.</p></div>`],
-  terms:["شروط الاستخدام",`<div class="footer-page"><h3>شروط الاستخدام</h3><p>باستخدام المتجر توافق على استخدامه للشراء والتواصل ومتابعة الطلبات وفق الشروط المعروضة لكل خدمة.</p></div>`],
-  shipping:["سياسة الشحن",`<div class="footer-page"><h3>🚚 سياسة الشحن</h3><p>مدة التوصيل تختلف حسب المدينة والمنتج. تظهر معلومات التوصيل في تفاصيل المنتج وعند إتمام الطلب.</p></div>`],
-  deals:["العروض",`<div class="footer-page"><h3>🔥 عروض اليوم</h3><div class="products">${products.filter(p=>p.sale).map(card).join("")}</div></div>`],
-  best:["الأكثر مبيعاً",`<div class="footer-page"><h3>🔥 الأكثر مبيعاً</h3><div class="products">${products.slice().sort((a,b)=>b.sold-a.sold).slice(0,10).map(card).join("")}</div></div>`],
-  brands:["العلامات التجارية",`<div class="footer-page"><h3>🏷️ العلامات التجارية</h3><div class="brand-list">${[...new Set(products.map(p=>p.brand))].map(b=>`<button data-brand="${esc(b)}">${esc(b)}</button>`).join("")}</div></div>`],
-  sell:["بيع معنا",`<div class="footer-page"><h3>🏪 بيع معنا</h3><p>يمكن للتاجر تجهيز بيانات المتجر والمنتجات ثم ربط لوحة البائع وقاعدة البيانات قبل الإطلاق الفعلي.</p><button class="primary" id="sellerSupport">تواصل مع خدمة العملاء</button></div>`]
- };
- const [title,body]=pages[type]||pages.about;
- modal(title,body,box=>{
-   $("#openSupport",box)?.addEventListener("click",customerService);
-   $("#openOrdersReturn",box)?.addEventListener("click",ordersModal);
-   $("#sellerSupport",box)?.addEventListener("click",customerService);
-   $$("[data-brand]",box).forEach(b=>b.onclick=()=>{closeModal();state.q=b.dataset.brand;$("#search").value=b.dataset.brand;searchRun()});
- });
-}
-function wireFooter(){
- const map={"footerContact":"contact","footerContact2":"contact","footerOrders":"orders","footerOrders2":"orders","footerReturns":"returns","footerReturns2":"returns","footerFaq":"contact","footerDeals":"deals","footerReturns":"returns","footerFaq":"contact","footerDeals":"deals","footerBest":"best","footerBrands":"brands","footerSell":"sell","footerAbout":"about","footerPrivacy":"privacy","footerTerms":"terms","footerShipping":"shipping"};
- Object.entries(map).forEach(([id,type])=>$("#"+id)?.addEventListener("click",()=>type==="orders"?ordersModal():footerPage(type)));
- $("#footerFav")?.addEventListener("click",favModal);
- $("#footerAddress")?.addEventListener("click",addressModal);
- $("#footerPayments")?.addEventListener("click",paymentModal);
 }
 
 function initExtraUI(){
@@ -281,5 +251,5 @@ $("#sort")?.addEventListener("change",e=>{state.sort=e.target.value;renderProduc
 let t=6*3600+25*60+18;
 setInterval(()=>{t=Math.max(0,t-1);let h=Math.floor(t/3600),m=Math.floor(t%3600/60),s=t%60;let x=$("#timer");if(x)x.textContent=[h,m,s].map(n=>String(n).padStart(2,"0")).join(":")},1000);
 
-initExtraUI();setLang(lang);renderProducts();renderCart();updateCounts();renderUser();wireFooter();
+initExtraUI();setLang(lang);renderProducts();renderCart();updateCounts();renderUser();
 })();
