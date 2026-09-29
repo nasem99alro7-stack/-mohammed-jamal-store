@@ -199,6 +199,21 @@ function brandModal(){
 }
 function giftModal(){simpleInfo("بطاقات الهدايا","<h3>🎁 بطاقات الهدايا</h3><p>يمكن تجهيز بطاقات هدايا بالقيمة المطلوبة وربطها بالدفع عند تفعيل بوابة الدفع.</p><button class='primary' id='giftSupport'>طلب بطاقة</button>");$("#giftSupport")?.addEventListener("click",customerService)}
 function sellModal(){simpleInfo("بيع معنا","<h3>🏪 افتح متجرك معنا</h3><p>أرسل بياناتك وبيانات المنتجات لفريق المتجر لبدء تجهيز حساب البائع.</p><button class='primary' id='sellSupport'>تواصل مع خدمة العملاء</button>");$("#sellSupport")?.addEventListener("click",customerService)}
+
+function activateServiceCardsV6(){
+ const box=$("#serviceCards");
+ if(!box) return;
+ const actions={
+  shipping:ordersModal,
+  payment:paymentModal,
+  returns:()=>accountSection("returns"),
+  support:customerService
+ };
+ box.querySelectorAll("[data-service]").forEach(card=>{
+  const fn=actions[card.dataset.service];
+  if(fn){card.style.cursor="pointer";card.addEventListener("click",fn)}
+ });
+}
 function activateV6(){
  const on=(id,fn)=>$("#"+id)?.addEventListener("click",fn);
  on("helpTop",customerService);on("serviceTop",customerService);on("trackTop",ordersModal);
@@ -227,6 +242,7 @@ function activateV6(){
  on("languageBtn",languageModal);
  on("currencyTRY",()=>toast("العملة الحالية: الليرة التركية TRY"));on("currencySYP",()=>toast("العملة الحالية: الليرة السورية SYP"));
  setLanguage(currentLang);
+ activateServiceCardsV6();
 }
 
 function initExtraUI(){
@@ -239,7 +255,7 @@ function initExtraUI(){
  const footer=$("footer");
  if(!$("#serviceCards")){
    const sec=document.createElement("section");sec.id="serviceCards";sec.className="wrap service-cards";
-   sec.innerHTML=`<div><b>🚚 توصيل سريع</b><small>تتبع شحنتك من حسابك</small></div><div><b>🔒 دفع آمن</b><small>اختر طريقة الدفع المناسبة</small></div><div><b>↩️ إرجاع</b><small>اطلب الإرجاع من طلباتك</small></div><div><b>🎧 خدمة العملاء</b><small>مساعدة ومتابعة للطلبات</small></div>`;
+   sec.innerHTML=`<div data-service="shipping"><b>🚚 توصيل سريع</b><small>تتبع شحنتك من حسابك</small></div><div data-service="payment"><b>🔒 دفع آمن</b><small>اختر طريقة الدفع المناسبة</small></div><div data-service="returns"><b>↩️ إرجاع</b><small>اطلب الإرجاع من طلباتك</small></div><div data-service="support"><b>🎧 خدمة العملاء</b><small>مساعدة ومتابعة للطلبات</small></div>`;
    footer.before(sec)
  }
 }
