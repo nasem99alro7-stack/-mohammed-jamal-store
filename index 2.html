@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0d6b43">
+<meta name="description" content="سوريا أونلاين — متجر إلكتروني سوري">
+<title>سوريا أونلاين | SYRIA ONLINE</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<style>
+/* Logo-only fix: keeps the current page/layout untouched. */
+.brand-logo{display:block!important;width:260px!important;height:auto!important;max-width:100%!important}
+.brand{min-width:0!important}
+.footer-brand-logo .brand-logo{width:250px!important}
+@media(max-width:900px){.brand-logo{width:190px!important}.brand{justify-self:center!important}}
+@media(max-width:520px){.brand-logo{width:165px!important}}
+</style>
+</head>
+<body>
+<div class="topbar"><div class="container topbar-inner"><span>🚚 توصيل سريع داخل سوريا</span><i></i><span>عروض أسبوعية</span><i></i><span>دفع آمن</span></div></div>
+
+<header class="header">
+  <div class="container header-inner">
+    <button class="icon-btn menu-btn" id="menuBtn" aria-label="القائمة">☰</button>
+    <a class="brand" href="#" aria-label="سوريا أونلاين">
+      <svg class="brand-logo" viewBox="0 0 420 110" role="img" aria-label="سوريا أونلاين">
+        <defs><linearGradient id="soG" x1="0" x2="1"><stop offset="0" stop-color="#1a8c5d"/><stop offset="1" stop-color="#0b5d39"/></linearGradient></defs>
+        <rect x="3" y="4" width="102" height="102" rx="28" fill="url(#soG)"/>
+        <path d="M29 73c3-15 15-29 31-35 12-5 24-6 34-3-3 15-13 27-27 35-14 8-27 9-38 3Z" fill="none" stroke="#fff" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M40 36c6 3 10 8 12 15" fill="none" stroke="#fff" stroke-width="7" stroke-linecap="round"/>
+        <circle cx="74" cy="34" r="5" fill="#fff"/>
+        <path d="M59 79h24" stroke="#fff" stroke-width="6" stroke-linecap="round"/>
+        <text x="124" y="63" font-family="Arial, sans-serif" font-size="39" font-weight="800" fill="#10231a">سوريا أونلاين</text>
+        <text x="126" y="89" font-family="Arial, sans-serif" font-size="12" letter-spacing="5" fill="#7b887f">SYRIA ONLINE</text>
+      </svg>
+    </a>
+    <div class="search"><button id="searchBtn" aria-label="بحث">⌕</button><input id="search" placeholder="ابحث عن منتج، قسم أو ماركة..." autocomplete="off"></div>
+    <div class="actions">
+      <button class="icon-btn" id="favBtn" aria-label="المفضلة">♡<em id="favCount">0</em></button>
+      <button class="icon-btn account-btn" id="accountBtn" aria-label="حسابي">♙</button>
+      <button class="cart" id="cartBtn" aria-label="السلة">🛒<b id="cartCount">0</b></button>
+    </div>
+  </div>
+</header>
+
+<nav class="category-strip"><div class="container category-scroll" id="categoryStrip"></div></nav>
+
+<aside class="drawer" id="drawer">
+  <div class="drawer-head"><strong>سوريا أونلاين</strong><button id="closeDrawer">×</button></div>
+  <div class="drawer-user" id="drawerUser"></div>
+  <div class="drawer-grid" id="drawerCats"></div>
+  <div class="drawer-links">
+    <button data-open="orders">📦 طلباتي</button><button data-open="addresses">🏠 عناويني</button>
+    <button data-open="favorites">❤️ المفضلة</button><button data-open="support">💬 خدمة العملاء</button>
+  </div>
+</aside>
+<div class="overlay" id="overlay"></div>
+
+<main>
+<section class="hero container">
+  <div class="hero-copy">
+    <span class="eyebrow">SYRIA ONLINE • NEW SEASON</span>
+    <h1>كل ما تحتاجه<br><em>بمكان واحد.</em></h1>
+    <p>تسوّق ملابس، أحذية، حقائب، عطور، إلكترونيات، منزل وغذائيات — بتجربة سورية عصرية.</p>
+    <div class="hero-buttons"><button class="primary" data-cat="all">تسوّق الآن</button><button class="secondary" id="openCategories">استكشف الأقسام</button></div>
+    <div class="hero-trust"><span>✓ منتجات مختارة</span><span>✓ توصيل داخل سوريا</span><span>✓ دعم سريع</span></div>
+  </div>
+  <div class="hero-art"><div class="art-card card-back">🛍️</div><div class="art-card card-front"><span>س</span><small>سوريا أونلاين</small></div><div class="art-orb"></div></div>
+</section>
+
+<section class="container quick-features">
+  <button data-open="support"><b>💬</b><span>خدمة العملاء</span><small>مساعدة سريعة</small></button>
+  <button data-open="payment"><b>🔐</b><span>دفع آمن</span><small>خيارات متعددة</small></button>
+  <button data-open="orders"><b>📦</b><span>تتبع الطلب</span><small>من صفحة طلباتك</small></button>
+  <button data-open="addresses"><b>🏠</b><span>عناويني</span><small>احفظ أكثر من عنوان</small></button>
+</section>
+
+<section class="section container" id="categories">
+  <div class="section-head"><div><span>SHOP BY CATEGORY</span><h2>تسوّق حسب القسم</h2></div></div>
+  <div class="cat-grid" id="catGrid"></div>
+</section>
+
+<section class="section container">
+  <div class="section-head">
+    <div><span>SYRIA ONLINE PICKS</span><h2 id="productsTitle">منتجات مميزة</h2></div>
+    <div class="sort-wrap"><button class="filter-btn" id="filterBtn">☷ فلترة وترتيب</button></div>
+  </div>
+  <div class="filter-panel" id="filterPanel">
+    <button data-sort="featured">مميزة</button><button data-sort="new">وصل حديثاً</button><button data-sort="best">الأكثر مبيعاً</button><button data-sort="low">السعر: الأقل</button><button data-sort="high">السعر: الأعلى</button>
+  </div>
+  <div class="product-grid" id="productGrid"></div>
+  <div class="empty" id="emptyState" hidden>ما لقينا منتجات مطابقة.</div>
+</section>
+
+<section class="section container promo-row">
+  <div class="promo-card hot"><span>🔥 عروض اليوم</span><strong>خصومات مختارة كل يوم</strong><button data-cat="sale">شاهد العروض</button></div>
+  <div class="promo-card new"><span>✨ وصل حديثاً</span><strong>منتجات جديدة باستمرار</strong><button data-sort="new">اكتشف الجديد</button></div>
+  <div class="promo-card best"><span>⭐ الأكثر مبيعاً</span><strong>اختيارات الزبائن</strong><button data-sort="best">شاهد الأكثر مبيعاً</button></div>
+</section>
+
+<section class="section container payment-section" id="payment">
+  <div class="section-head"><div><span>SAFE CHECKOUT</span><h2>طرق الدفع</h2></div></div>
+  <div class="pay-grid">
+    <div class="pay-card"><b>SC</b><strong>شام كاش</strong><small>دفع عبر حساب شام كاش</small></div>
+    <div class="pay-card"><b>₮</b><strong>USDT</strong><small>دفع بالعملات الرقمية</small></div>
+    <div class="pay-card"><b>VISA</b><strong>Visa</strong><small>بطاقات Visa</small></div>
+    <div class="pay-card"><b>MC</b><strong>Mastercard</strong><small>بطاقات Mastercard</small></div>
+  </div>
+  <p class="payment-note">واجهة الدفع جاهزة للربط مع بيانات وحسابات الدفع الخاصة بالمتجر.</p>
+</section>
+</main>
+
+<div class="cart-panel" id="cartPanel">
+  <div class="panel-head"><h3>سلة التسوق</h3><button id="closeCart">×</button></div>
+  <div id="cartItems" class="cart-items"></div>
+  <div class="cart-coupon"><input id="couponInput" placeholder="كود الخصم"><button id="couponBtn">تطبيق</button></div>
+  <div class="cart-foot"><div><span>الإجمالي</span><strong id="total">0 ل.س</strong></div><button class="primary" id="checkout">متابعة الشراء</button></div>
+</div>
+
+<footer>
+  <div class="container footer-inner">
+    <div>
+      <div class="footer-brand-logo">
+        <svg class="brand-logo" viewBox="0 0 420 110" role="img" aria-label="سوريا أونلاين">
+          <defs><linearGradient id="soGF" x1="0" x2="1"><stop offset="0" stop-color="#1a8c5d"/><stop offset="1" stop-color="#0b5d39"/></linearGradient></defs>
+          <rect x="3" y="4" width="102" height="102" rx="28" fill="url(#soGF)"/>
+          <path d="M29 73c3-15 15-29 31-35 12-5 24-6 34-3-3 15-13 27-27 35-14 8-27 9-38 3Z" fill="none" stroke="#fff" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M40 36c6 3 10 8 12 15" fill="none" stroke="#fff" stroke-width="7" stroke-linecap="round"/>
+          <circle cx="74" cy="34" r="5" fill="#fff"/>
+          <path d="M59 79h24" stroke="#fff" stroke-width="6" stroke-linecap="round"/>
+          <text x="124" y="63" font-family="Arial, sans-serif" font-size="39" font-weight="800" fill="#fff">سوريا أونلاين</text>
+          <text x="126" y="89" font-family="Arial, sans-serif" font-size="12" letter-spacing="5" fill="#b9cbc0">SYRIA ONLINE</text>
+        </svg>
+      </div>
+      <p>متجر إلكتروني سوري بتجربة عصرية.</p>
+    </div>
+    <div class="footer-links"><button data-open="support">خدمة العملاء</button><button data-open="orders">تتبع الطلب</button><button data-open="payment">طرق الدفع</button><button data-open="addresses">العناوين</button></div>
+    <div class="footer-pay"><span>SC</span><span>₮</span><span>VISA</span><span>MC</span></div>
+    <div class="copyright">© 2026 SYRIA ONLINE</div>
+  </div>
+</footer>
+
+<div class="bottom-nav">
+  <button data-open="account">♙<span>حسابي</span></button>
+  <button id="bottomCart">🛒<span>السلة</span><em id="bottomCartCount">0</em></button>
+  <button data-open="favorites">♡<span>المفضلة</span></button>
+  <button id="bottomCategories">▦<span>الأقسام</span></button>
+  <button data-cat="all">⌂<span>الرئيسية</span></button>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
