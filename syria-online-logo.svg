@@ -1,7 +1,1 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 110" role="img" aria-label="سوريا أونلاين">
-<defs><linearGradient id="g" x1="0" x2="1"><stop stop-color="#18a96b"/><stop offset="1" stop-color="#0b6b45"/></linearGradient></defs>
-<rect x="4" y="4" width="102" height="102" rx="28" fill="url(#g)"/>
-<path d="M31 71c18-20 40-28 64-27-7 11-19 22-35 29-11 5-20 4-29-2z" fill="#fff" opacity=".95"/>
-<circle cx="69" cy="38" r="7" fill="#fff"/>
-<text x="122" y="69" font-family="Arial,sans-serif" font-size="38" font-weight="800" fill="#0b6b45">سوريا أونلاين</text>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 150"><defs><linearGradient id="g" x1="0" x2="1"><stop stop-color="#0f7a4b"/><stop offset="1" stop-color="#075a37"/></linearGradient></defs><rect x="4" y="4" width="142" height="142" rx="38" fill="url(#g)"/><text x="75" y="94" text-anchor="middle" font-family="Arial,sans-serif" font-size="52" font-weight="800" fill="white">SO</text><path d="M40 114h70" stroke="#bde8d0" stroke-width="5" stroke-linecap="round"/><text x="500" y="73" text-anchor="end" direction="rtl" font-family="Cairo,Arial,sans-serif" font-size="43" font-weight="800" fill="#12241b">سوريا أونلاين</text><text x="500" y="112" text-anchor="end" font-family="Arial,sans-serif" font-size="18" letter-spacing="6" fill="#6b7972">SYRIA ONLINE</text></svg>
