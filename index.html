@@ -1,40 +1,13 @@
-<!doctype html>
-<html lang="ar" dir="rtl">
-<head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>سوريا أوتو | قطع وإكسسوارات السيارات</title>
-<meta name="description" content="متجر سوري لقطع وإكسسوارات السيارات مع طلب مباشر وتوصيل داخل سوريا">
-<link rel="stylesheet" href="styles.css">
-</head>
-<body>
-<header class="top"><div class="wrap nav">
-  <a class="brand" href="#"><span>🚗</span><b>سوريا أوتو</b></a>
-  <div class="search"><input id="search" placeholder="ابحث باسم القطعة، السيارة أو رقم القطعة"><button onclick="searchProducts()">بحث</button></div>
-  <div class="actions"><button class="ghost" onclick="openAccount()">👤 حسابي</button><button class="cartBtn" onclick="openCart()">🛒 السلة <b id="cartCount">0</b></button></div>
-</div></header>
-
-<section class="hero"><div class="wrap heroGrid">
-  <div><span class="pill">متجر سيارات سوري</span><h1>قطعتك المناسبة<br><em>بكل سهولة.</em></h1>
-  <p>ابحث حسب السيارة أو القطعة، اطلبها مباشرة، وننسّق مع المورد والتوصيل داخل سوريا.</p>
-  <div class="heroBtns"><button class="primary" onclick="document.getElementById('catalog').scrollIntoView()">تصفح المنتجات</button><button class="secondary" onclick="requestPart()">🔎 لم تجد القطعة؟ اطلبها</button></div>
-  <div class="trust"><span>✓ موردون محليون</span><span>✓ دعم واتساب</span><span>✓ تأكيد التوافق قبل الطلب</span></div></div>
-  <div class="heroCard"><div class="carIcon">🚘</div><b>ابحث برقم القطعة</b><span>OEM / Part Number</span><input id="oem" placeholder="مثال: 90915-YZZD1"><button onclick="searchOEM()">بحث عن القطعة</button></div>
-</div></section>
-
-<section class="wrap quick"><div class="quickTitle"><h2>تصفح حسب القسم</h2><span>كل ما تحتاجه لسيارتك</span></div>
-<div class="cats">
-<button onclick="filterCat('زيوت وفلاتر')">🛢️ زيوت وفلاتر</button><button onclick="filterCat('إكسسوارات')">✨ إكسسوارات</button><button onclick="filterCat('كهربائيات')">💡 كهربائيات</button><button onclick="filterCat('فرامل')">🛞 فرامل</button><button onclick="filterCat('محرك')">⚙️ محرك</button><button onclick="filterCat('تنظيف')">🧽 عناية وتنظيف</button>
-</div></section>
-
-<main id="catalog" class="wrap"><div class="catalogHead"><div><span class="eyebrow">المتجر</span><h2>منتجات مختارة</h2></div>
-<div class="filters"><select id="category" onchange="render()"><option value="">كل الأقسام</option><option>زيوت وفلاتر</option><option>إكسسوارات</option><option>كهربائيات</option><option>فرامل</option><option>محرك</option><option>تنظيف</option></select>
-<select id="sort" onchange="render()"><option value="featured">الأكثر طلباً</option><option value="low">السعر: الأقل</option><option value="high">السعر: الأعلى</option></select></div></div>
-<div id="products" class="products"></div></main>
-
-<section class="fit"><div class="wrap fitGrid"><div><span class="eyebrow">خدمة مجانية</span><h2>مو متأكد إذا القطعة تركب على سيارتك؟</h2><p>أرسل الماركة والموديل والسنة وصورة القطعة أو رقمها، ونراجع التوافق قبل تثبيت الطلب.</p><button class="primary" onclick="requestPart()">أرسل طلب قطعة</button></div><div class="fitBox"><b>أرسل:</b><span>ماركة السيارة</span><span>الموديل والسنة</span><span>رقم القطعة أو صورة</span></div></div></section>
-
-<footer><div class="wrap footerGrid"><div><b class="brand">🚗 سوريا أوتو</b><p>منصة بيع وطلب قطع وإكسسوارات السيارات في سوريا.</p></div><div><b>خدمة العملاء</b><span>واتساب للطلبات والاستفسارات</span><span>تأكيد السعر والتوفر قبل الدفع</span></div><div><b>للموردين</b><span>انضم كمورد محلي</span><span>تحديث الأسعار والمخزون</span></div></div><div class="copy">© 2026 سوريا أوتو — نسخة تجريبية قابلة للربط بقاعدة بيانات وموردين.</div></footer>
-
-<div id="modal" class="modal hidden"><div class="overlay" onclick="closeModal()"></div><div class="panel" id="panel"></div></div>
-<script src="app.js"></script>
-</body></html>
+<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>GoldTrade Demo</title><script src="https://cdn.jsdelivr.net/npm/chart.js"></script><style>
+*{box-sizing:border-box}body{margin:0;background:#0d1117;color:#e8edf3;font-family:Arial,Tahoma,sans-serif}.wrap{max-width:1200px;margin:auto;padding:18px}.top{background:#151b23;border-bottom:1px solid #27303c}.nav{display:flex;justify-content:space-between;align-items:center}.brand{font-size:22px;font-weight:800}.badge{background:#2b2410;color:#e6c65a;padding:7px 10px;border-radius:8px;font-size:12px}.grid{display:grid;grid-template-columns:1fr 330px;gap:16px;margin-top:16px}.card{background:#151b23;border:1px solid #27303c;border-radius:12px;padding:16px}.price{font-size:32px;font-weight:800}.muted{color:#8d99a8}.up{color:#38d39f}.down{color:#ff6b6b}.chart{height:420px}.form{display:grid;gap:10px}.form input,.form select{width:100%;padding:11px;border:1px solid #303b49;border-radius:8px;background:#0f141b;color:#fff}.btn{border:0;border-radius:8px;padding:12px;font-weight:800;cursor:pointer}.buy{background:#198754;color:white}.sell{background:#dc3545;color:white}.full{width:100%}.row{display:flex;gap:8px}.stat{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}.stat div{background:#0f141b;border-radius:8px;padding:12px}.table{width:100%;border-collapse:collapse;margin-top:12px}.table th,.table td{padding:10px;border-bottom:1px solid #27303c;text-align:right;font-size:13px}.empty{text-align:center;padding:25px;color:#8d99a8}@media(max-width:850px){.grid{grid-template-columns:1fr}.chart{height:330px}}
+</style></head><body><header class="top"><div class="wrap nav"><div class="brand">🟡 GoldTrade</div><span class="badge">تجريبي — بدون أموال حقيقية</span></div></header>
+<main class="wrap"><div class="grid"><section><div class="card"><div class="muted">XAU/USD — الذهب مقابل الدولار</div><div id="price" class="price">—</div><div id="change" class="up">—</div><div class="chart"><canvas id="chart"></canvas></div></div>
+<div class="card" style="margin-top:16px"><b>الصفقات</b><table class="table"><thead><tr><th>النوع</th><th>الدخول</th><th>الحجم</th><th>SL</th><th>TP</th><th>الحالة</th></tr></thead><tbody id="trades"><tr><td colspan="6" class="empty">لا توجد صفقات</td></tr></tbody></table></div></section>
+<aside class="card"><h2>تنفيذ صفقة</h2><div class="form"><label>الحجم (Lot)<input id="lot" type="number" value="0.01" min="0.01" step="0.01"></label><label>Stop Loss<input id="sl" type="number" placeholder="اختياري"></label><label>Take Profit<input id="tp" type="number" placeholder="اختياري"></label><div class="row"><button class="btn sell full" onclick="trade('بيع')">بيع</button><button class="btn buy full" onclick="trade('شراء')">شراء</button></div></div><div class="stat"><div><span class="muted">الرصيد</span><br><b id="balance">$10,000</b></div><div><span class="muted">الهامش</span><br><b id="margin">$0</b></div><div><span class="muted">صفقات</span><br><b id="count">0</b></div></div><p class="muted" style="font-size:12px;margin-top:18px">هذه نسخة محاكاة. السعر المعروض محلي/تجريبي ولا يمثل سعراً تنفيذياً حقيقياً.</p></aside></div></main>
+<script>
+let price=2650,prev=price, balance=10000,trades=[];const labels=[],data=[];for(let i=0;i<60;i++){price+=((Math.random()-.48)*5);labels.push(i);data.push(price)}
+const ctx=document.getElementById('chart');const chart=new Chart(ctx,{type:'line',data:{labels,data:{labels,data}},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{display:false},y:{grid:{color:'#27303c'},ticks:{color:'#8d99a8'}}}}});
+function tick(){prev=price;price+=((Math.random()-.48)*3);labels.push(labels.length);data.push(price);if(labels.length>80){labels.shift();data.shift()}chart.data.labels=labels;chart.data.datasets=[{data,borderColor:'#e6c65a',backgroundColor:'transparent',pointRadius:0,borderWidth:2}];chart.update();document.getElementById('price').textContent='$'+price.toFixed(2);let d=price-prev;let c=document.getElementById('change');c.textContent=(d>=0?'+':'')+d.toFixed(2);c.className=d>=0?'up':'down'};chart.data.datasets=[{data,borderColor:'#e6c65a',pointRadius:0,borderWidth:2}];tick();setInterval(tick,1500);
+function trade(type){let lot=+document.getElementById('lot').value||.01;let sl=document.getElementById('sl').value||'—',tp=document.getElementById('tp').value||'—';trades.unshift({type,entry:price,lot,sl,tp});document.getElementById('trades').innerHTML=trades.map((t,i)=>`<tr><td class="${t.type==='شراء'?'up':'down'}">${t.type}</td><td>$${t.entry.toFixed(2)}</td><td>${t.lot}</td><td>${t.sl}</td><td>${t.tp}</td><td><button class="btn" onclick="closeTrade(${i})">إغلاق</button></td></tr>`).join('');document.getElementById('count').textContent=trades.length}
+function closeTrade(i){trades.splice(i,1);document.getElementById('count').textContent=trades.length;document.getElementById('trades').innerHTML=trades.length?trades.map((t,i)=>`<tr><td class="${t.type==='شراء'?'up':'down'}">${t.type}</td><td>$${t.entry.toFixed(2)}</td><td>${t.lot}</td><td>${t.sl}</td><td>${t.tp}</td><td><button class="btn" onclick="closeTrade(${i})">إغلاق</button></td></tr>`).join(''):'<tr><td colspan="6" class="empty">لا توجد صفقات</td></tr>'}
+</script></body></html>
