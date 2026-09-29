@@ -22,6 +22,7 @@ const products=[
 {id:12,emoji:"🧒",name:"طقم أطفال قطني",cat:"أزياء",sub:"ملابس أطفال",brand:"Syria Kids",price:520,old:690,sale:"-25%",rating:4.6,reviews:75,sold:155,color:"أزرق",sizes:["2Y","4Y","6Y","8Y"],stock:25,desc:"طقم أطفال قطني ناعم للاستخدام اليومي واللعب.",specs:{الخامة:"قطن",العمر:"2-8 سنوات",الجنس:"أطفال",اللون:"أزرق"}}
 ];
 
+const categoryOrder=["إلكترونيات","أزياء","المنزل والمطبخ","عطور وجمال","أحذية وحقائب","رياضة ولياقة","ألعاب وهدايا","سيارات","مستلزمات مكتبية","سوبرماركت"];
 const subcats={
 "إلكترونيات":["موبايلات","آيفون","سامسونج","هواتف","أيبادات","تابلت","كمبيوترات","لابتوبات","شاشات","سماعات","ساعات ذكية","كاميرات","إكسسوارات"],
 "أزياء":["ملابس رجالية","ملابس نسائية","ملابس أطفال","فساتين","جاكيتات","بناطيل","حقائب نسائية","حقائب رجالية","إكسسوارات"],
@@ -267,9 +268,26 @@ function activateServiceCardsV6(){
   if(fn){card.style.cursor="pointer";card.addEventListener("click",fn)}
  });
 }
+function renderDrawerCategories(){
+ const box=$("#drawerCategories"); if(!box)return;
+ box.innerHTML=categoryOrder.map(cat=>`<div class="drawer-cat">
+  <button type="button" class="drawer-cat-main" data-drawer-cat="${esc(cat)}"><span>${esc(cat)}</span><span class="drawer-arrow">‹</span></button>
+  <div class="drawer-subs">${(subcats[cat]||[]).map(sub=>`<button type="button" data-drawer-sub="${esc(sub)}" data-drawer-parent="${esc(cat)}">${esc(sub)}</button>`).join("")}</div>
+ </div>`).join("");
+ box.querySelectorAll("[data-drawer-cat]").forEach(b=>b.onclick=()=>{
+   const parent=b.closest(".drawer-cat");
+   box.querySelectorAll(".drawer-cat.open").forEach(x=>{if(x!==parent)x.classList.remove("open")});
+   parent.classList.toggle("open");
+ });
+ box.querySelectorAll("[data-drawer-sub]").forEach(b=>b.onclick=()=>{
+   state.cat=b.dataset.drawerParent; state.sub=b.dataset.drawerSub; state.q="";
+   closeDrawer(); renderProducts(); $("#catalogSection")?.scrollIntoView({behavior:"smooth"});
+ });
+}
 function activateV6(){
  const on=(id,fn)=>$("#"+id)?.addEventListener("click",fn);
  on("helpTop",customerService);on("serviceTop",customerService);on("trackTop",ordersModal);
+ on("allBtn",()=>{renderDrawerCategories();openDrawer();});
  on("navDeals",()=>{state.q="";state.cat="كل الأقسام";renderProducts();$("#deals")?.scrollIntoView({behavior:"smooth"})});
  on("navNew",()=>{state.sort="new";renderProducts();$("#catalogSection").scrollIntoView({behavior:"smooth"})});
  on("navBest",()=>{state.sort="featured";$("#best")?.scrollIntoView({behavior:"smooth"})});
@@ -349,3 +367,5 @@ setInterval(()=>{t=Math.max(0,t-1);let h=Math.floor(t/3600),m=Math.floor(t%3600/
 
 initExtraUI();renderProducts();renderCart();updateCounts();renderUser();activateV6();
 })();
+
+window.addEventListener("DOMContentLoaded",renderDrawerCategories);
