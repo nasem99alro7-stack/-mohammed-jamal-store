@@ -78,3 +78,42 @@ button{font-family:inherit;cursor:pointer}
  .card-actions{flex-direction:column}
  .card-actions .quick{padding:7px}
 }
+
+.language-btn,.customer-service-btn{border:1px solid #d9e3dc;background:#fff;border-radius:8px;padding:7px 12px;color:#285d3b;font-weight:700}
+.lang-options{display:grid;gap:10px}
+.lang-options button{border:1px solid #dce5df;background:#fff;border-radius:10px;padding:14px;text-align:right;font-size:16px}
+.support-head{display:flex;gap:15px;align-items:center;background:#f1f8f2;border-radius:14px;padding:15px;margin-bottom:14px}
+.support-head>div:first-child{font-size:55px}
+.support-head h3{margin:0 0 4px}
+.support-head p,.support-head small{color:#69756e}
+.form textarea{min-height:120px;padding:12px;border:1px solid #d6dfd8;border-radius:8px;font-family:inherit;resize:vertical}
+@media(max-width:700px){
+ .language-btn{font-size:11px;padding:6px 8px}
+ .customer-service-btn{font-size:12px;padding:7px 9px}
+}
+
+/* V8 footer functionality */
+.footer-top{padding-top:28px;padding-bottom:28px}
+.footer-cards{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:30px}
+.footer-cards button{border:0;background:#f2faf3;border-radius:18px;padding:28px;text-align:center}
+.footer-cards b,.footer-cards small{display:block}
+.footer-cards b{font-size:23px;margin-bottom:9px}
+.footer-cards small{font-size:15px;color:#68756e}
+.footgrid a{cursor:pointer}
+.currency-row{display:flex;justify-content:center;gap:14px;border-top:1px solid #334138;padding:25px 0 10px}
+.currency-row button{border:0;background:transparent;color:inherit;font:inherit;cursor:pointer}
+.copyright{text-align:center;padding:18px 0 5px}
+.footer-page{line-height:1.9}
+.footer-page h3{font-size:25px}
+.contact-box{margin-top:16px;background:#f2f8f3;border-radius:12px;padding:15px}
+.brand-list{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}
+.brand-list button{border:1px solid #dde5df;background:#fff;border-radius:9px;padding:12px;text-align:right}
+@media(max-width:700px){
+ .footer-cards{gap:10px;margin-bottom:24px}
+ .footer-cards button{padding:22px 10px}
+ .footer-cards b{font-size:18px}
+ .footer-cards small{font-size:12px}
+ .footgrid{grid-template-columns:1fr 1fr}
+ .currency-row{font-size:12px;gap:8px}
+ .brand-list{grid-template-columns:1fr 1fr}
+}
