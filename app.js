@@ -101,6 +101,19 @@ function renderSubcats(){
  const arr=state.cat==="كل الأقسام"?Object.keys(subcats):subcats[state.cat]||[];
  box.innerHTML=`<button data-cat="كل الأقسام" class="${state.cat==="كل الأقسام"?"on":""}">الكل</button>`+arr.map(s=>`<button data-sub="${esc(s)}" class="${state.sub===s?"on":""}">${esc(s)}</button>`).join("");
 }
+async function refreshAdminVisibility(){
+ const section=$("#adminSection");
+ if(!section)return;
+ section.style.display="none";
+ try{
+   if(!db)return;
+   const {data:{session}}=await db.auth.getSession();
+   if(!session)return;
+   const {data,isAdmin,error}=await db.rpc("is_syria_admin");
+   if(!error && isAdmin===true) section.style.display="block";
+ }catch(e){ console.warn("Admin visibility check failed",e); }
+}
+
 function renderUser(){
  const u=state.user;
  $("#accountBtn").innerHTML=`👤 <small>${u?"مرحباً، "+esc(u.name):"مرحباً، سجل الدخول"}</small><b>${u?"حسابي ▾":"تسجيل الدخول ▾"}</b>`;
@@ -498,7 +511,11 @@ $("#sort")?.addEventListener("change",e=>{state.sort=e.target.value;renderProduc
 let t=6*3600+25*60+18;
 setInterval(()=>{t=Math.max(0,t-1);let h=Math.floor(t/3600),m=Math.floor(t%3600/60),s=t%60;let x=$("#timer");if(x)x.textContent=[h,m,s].map(n=>String(n).padStart(2,"0")).join(":")},1000);
 
-initExtraUI();renderProducts();renderCart();updateCounts();renderUser();activateV6();
+initExtraUI();renderProducts();renderCart();updateCounts();renderUser();refreshAdminVisibility();
+if(db){
+ db.auth.onAuthStateChange(()=>refreshAdminVisibility());
+}
+activateV6();
 })();
 
 window.addEventListener("DOMContentLoaded",renderDrawerCategories);
