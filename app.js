@@ -7,7 +7,7 @@ const save=(k,v)=>localStorage.setItem(k,JSON.stringify(v));
 const money=n=>`₺${Number(n).toLocaleString("tr-TR")}`;
 const esc=s=>String(s).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]));
 
-const products=[
+let products=[
 {id:1,emoji:"👟",name:"حذاء رياضي رجالي",cat:"أحذية وحقائب",sub:"أحذية رجالية",brand:"Syria Sport",price:1080,old:1800,sale:"-40%",rating:4.8,reviews:128,sold:320,color:"أسود",sizes:["40","41","42","43","44"],stock:18,desc:"حذاء رياضي مريح للاستخدام اليومي والمشي، ببطانة خفيفة ونعل مرن.",specs:{الخامة:"شبك + مطاط",الجنس:"رجالي",الاستخدام:"يومي ورياضة",اللون:"أسود"}},
 {id:2,emoji:"👜",name:"حقيبة نسائية أنيقة",cat:"أزياء",sub:"حقائب نسائية",brand:"Syria Fashion",price:840,old:1200,sale:"-30%",rating:4.7,reviews:95,sold:210,color:"وردي",sizes:["موحد"],stock:24,desc:"حقيبة عملية وأنيقة للاستخدام اليومي، بمساحة داخلية متعددة الجيوب.",specs:{الخامة:"جلد صناعي",الحجم:"متوسط",الإغلاق:"سحاب",اللون:"وردي"}},
 {id:3,emoji:"🎧",name:"سماعات لاسلكية Pro",cat:"إلكترونيات",sub:"سماعات",brand:"Syria Tech",price:710,old:950,sale:"-25%",rating:4.6,reviews:212,sold:540,color:"أبيض",sizes:["موحد"],stock:35,desc:"سماعات لاسلكية بصوت واضح، ميكروفون للمكالمات وعلبة شحن صغيرة.",specs:{الاتصال:"Bluetooth 5.3",البطارية:"حتى 24 ساعة مع العلبة",الشحن:"USB-C",اللون:"أبيض"}},
@@ -37,6 +37,38 @@ const subcats={
 };
 
 let state={cat:"كل الأقسام",sub:"",sort:"featured",q:"",user:load(KEY.user,null),cart:load(KEY.cart,[]),fav:load(KEY.fav,[]),orders:load(KEY.orders,[]),recent:load(KEY.recent,[])};
+const db=window.syriaSupabase;
+const dbCategoryById={};
+async function loadStoreFromDB(){
+ if(!db)return;
+ try{
+  const [{data:rows,error:pErr},{data:cats,error:cErr}]=await Promise.all([
+   db.from('products').select('id,name,description,category_id,price,old_price,currency,stock,image_url,brand,sale_label,active,featured,subcategory,emoji,sizes,color,specs,sold,rating,reviews').eq('active',true).order('created_at',{ascending:false}),
+   db.from('categories').select('id,name,active,sort_order').eq('active',true).order('sort_order')
+  ]);
+  if(pErr)throw pErr;
+  (cats||[]).forEach(c=>dbCategoryById[c.id]=c.name);
+  if(rows&&rows.length){
+   products=rows.map(p=>({id:p.id,emoji:p.emoji||'🛍️',name:p.name,cat:dbCategoryById[p.category_id]||'أقسام أخرى',sub:p.subcategory||'',brand:p.brand||'سوريا أونلاين',price:Number(p.price)||0,old:Number(p.old_price)||0,sale:p.sale_label||'',rating:Number(p.rating)||0,reviews:Number(p.reviews)||0,sold:Number(p.sold)||0,color:p.color||'',sizes:Array.isArray(p.sizes)?p.sizes:['موحد'],stock:Number(p.stock)||0,desc:p.description||'',specs:p.specs||{},image_url:p.image_url||'',active:p.active!==false}));
+   const validIds=new Set(products.map(p=>p.id));
+   state.cart=state.cart.filter(x=>validIds.has(x.id));
+   categoryOrder.splice(0,categoryOrder.length,...(cats||[]).map(c=>c.name));
+  }
+  renderProducts();updateCounts();renderCart();
+ }catch(err){console.warn('Supabase load failed',err)}
+}
+async function saveOrderToDB(order,address,items){
+ if(!db)return null;
+ const {data:customer,error:cErr}=await db.from('customers').insert({name:address.name,phone:address.phone,address:address.address,city:address.city}).select('id').single();
+ if(cErr)throw cErr;
+ const {data:created,error:oErr}=await db.from('orders').insert({order_number:order.no,customer_id:customer.id,customer_name:address.name,customer_phone:address.phone,shipping_address:address.address,city:address.city,total:order.total,currency:'TRY',payment_method:order.payment,payment_status:'pending',status:'new'}).select('id,order_number').single();
+ if(oErr)throw oErr;
+ const rows=items.map(x=>({order_id:created.id,product_id:x.id,product_name:x.name,quantity:x.qty,unit_price:x.price,currency:'TRY'}));
+ const {error:iErr}=await db.from('order_items').insert(rows);
+ if(iErr)throw iErr;
+ return created;
+}
+loadStoreFromDB();
 
 function persist(){save(KEY.cart,state.cart);save(KEY.fav,state.fav);save(KEY.orders,state.orders);save(KEY.recent,state.recent);save(KEY.user,state.user)}
 function cartQty(){return state.cart.reduce((s,x)=>s+x.qty,0)}
@@ -278,7 +310,7 @@ function checkout(){
  if(!state.cart.length)return toast("السلة فارغة");
  let addresses=load(KEY.addresses,[]);
  modal("إتمام الطلب",`<form id="checkoutForm" class="form"><h3>عنوان التوصيل</h3><select id="addr">${addresses.map((a,i)=>`<option value="${i}">${esc(a.name)} — ${esc(a.city)} — ${esc(a.address)}</option>`).join("")}</select>${addresses.length?"":"<p>لم تحفظ عنواناً بعد. أضف العنوان من حسابك أولاً.</p>"}<h3>طريقة الدفع</h3><select id="pay"><option>الدفع عند الاستلام</option><option>Visa / Mastercard</option><option>شام كاش</option><option>USDT</option></select><div class="checkout-summary">الإجمالي: <b>${money(state.cart.reduce((s,x)=>s+products.find(p=>p.id===x.id).price*x.qty,0))}</b></div><button class="primary" ${addresses.length?"":"disabled"}>تأكيد الطلب</button></form>`,box=>{
- $("#checkoutForm",box).onsubmit=e=>{e.preventDefault();let a=addresses[+$("#addr").value],items=state.cart.map(x=>{let p=products.find(p=>p.id===x.id);return {name:p.name,id:p.id,qty:x.qty,price:p.price}}),total=items.reduce((s,x)=>s+x.price*x.qty,0),no="SO"+Date.now().toString().slice(-8);state.orders.unshift({no,date:new Date().toLocaleString("ar"),items,total,payment:$("#pay").value,status:"تم استلام الطلب",address:a});state.cart=[];persist();updateCounts();renderCart();closeModal();toast("تم إنشاء الطلب #"+no);ordersModal()}
+ $("#checkoutForm",box).onsubmit=async e=>{e.preventDefault();let a=addresses[+$("#addr").value],items=state.cart.map(x=>{let p=products.find(p=>p.id===x.id);return {name:p.name,id:p.id,qty:x.qty,price:p.price}}),total=items.reduce((s,x)=>s+x.price*x.qty,0),no="SO"+Date.now().toString().slice(-8),payment=$("#pay").value;let order={no,date:new Date().toLocaleString("ar"),items,total,payment,status:"تم استلام الطلب",address:a};try{await saveOrderToDB(order,a,items);state.orders.unshift(order);state.cart=[];persist();updateCounts();renderCart();closeModal();toast("تم حفظ الطلب في قاعدة البيانات #"+no);ordersModal()}catch(err){console.error(err);toast("تعذر حفظ الطلب، حاول مرة ثانية")}}
  })
 }
 function searchRun(){
