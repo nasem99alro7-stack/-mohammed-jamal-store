@@ -98,7 +98,7 @@ function productModal(id){
 }
 function toggleFav(id){state.fav=state.fav.includes(id)?state.fav.filter(x=>x!==id):[...state.fav,id];persist();toast(state.fav.includes(id)?"تمت الإضافة للمفضلة":"تمت الإزالة من المفضلة");renderProducts()}
 function authModal(){
- modal(state.user?"حسابك":"حسابي 👤",state.user?`<div class="account-grid"><button data-account="orders">📦 طلباتك</button><button data-account="fav">♡ المفضلة (${state.fav.length})</button><button data-account="address">📍 عناوينك</button><button data-account="payments">💳 طرق الدفع</button><button data-account="recent">👁 شاهدته مؤخراً</button><button data-account="returns">↩️ الإرجاع والاسترداد</button><button data-logout>🚪 تسجيل الخروج</button></div>`:`<form id="loginForm" class="form"><input id="loginName" required placeholder="اسم المستخدم"><input id="loginPhone" required placeholder="رقم الهاتف"><input id="loginPass" type="password" required placeholder="كلمة المرور"><button class="primary">دخول / إنشاء الحساب</button></form>`,box=>{
+ modal(state.user?"حسابك":"تسجيل الدخول / إنشاء حساب",state.user?`<div class="account-grid"><button data-account="orders">📦 طلباتك</button><button data-account="fav">♡ المفضلة (${state.fav.length})</button><button data-account="address">📍 عناوينك</button><button data-account="payments">💳 طرق الدفع</button><button data-account="recent">👁 شاهدته مؤخراً</button><button data-account="returns">↩️ الإرجاع والاسترداد</button><button data-logout>🚪 تسجيل الخروج</button></div>`:`<form id="loginForm" class="form"><input id="loginName" required placeholder="اسم المستخدم"><input id="loginPhone" required placeholder="رقم الهاتف"><input id="loginPass" type="password" required placeholder="كلمة المرور"><button class="primary">دخول / إنشاء الحساب</button></form>`,box=>{
    $("#loginForm",box)?.addEventListener("submit",e=>{e.preventDefault();state.user={name:$("#loginName").value.trim(),phone:$("#loginPhone").value.trim()};persist();renderUser();closeModal();toast("تم إنشاء الحساب وتسجيل الدخول")});
    $$("[data-account]",box).forEach(b=>b.onclick=()=>accountSection(b.dataset.account));
    $("[data-logout]",box)?.addEventListener("click",()=>{state.user=null;persist();renderUser();closeModal();toast("تم تسجيل الخروج")})
@@ -268,34 +268,6 @@ function activateServiceCardsV6(){
   if(fn){card.style.cursor="pointer";card.addEventListener("click",fn)}
  });
 }
-
-function openRealAccount(){
-  closeDrawer();
-  if(typeof accountModal==="function"){ accountModal(); return; }
-  if(typeof openAccount==="function"){ openAccount(); return; }
-  const el=document.querySelector("#accountBtn,[data-account],#myAccount");
-  if(el) el.click();
-}
-function accountAction(action){
-  closeDrawer();
-  const map={
-    orders:["ordersModal","openOrders","showOrders"],
-    favorites:["favoritesModal","openFavorites","showFavorites"],
-    addresses:["addressesModal","openAddresses","showAddresses"],
-    payment:["paymentModal","openPayment","showPayment"]
-  };
-  for(const fn of (map[action]||[])){
-    if(typeof window[fn]==="function"){ window[fn](); return; }
-  }
-  const selectors={
-    orders:"#ordersBtn,[data-action='orders'],[data-page='orders']",
-    favorites:"#favoritesBtn,[data-action='favorites'],[data-page='favorites']",
-    addresses:"#addressesBtn,[data-action='addresses'],[data-page='addresses']",
-    payment:"#paymentBtn,[data-action='payment'],[data-page='payment']"
-  };
-  const el=document.querySelector(selectors[action]||"");
-  if(el) el.click();
-}
 function renderDrawerCategories(){
  const box=$("#drawerCategories"); if(!box)return;
  box.innerHTML=categoryOrder.map(cat=>`<div class="drawer-cat">
@@ -316,7 +288,6 @@ function activateV6(){
  const on=(id,fn)=>$("#"+id)?.addEventListener("click",fn);
  on("helpTop",customerService);on("serviceTop",customerService);on("trackTop",ordersModal);
  on("allBtn",()=>{renderDrawerCategories();openDrawer();});
- on("drawerAccount",()=>openRealAccount());
  on("navDeals",()=>{state.q="";state.cat="كل الأقسام";renderProducts();$("#deals")?.scrollIntoView({behavior:"smooth"})});
  on("navNew",()=>{state.sort="new";renderProducts();$("#catalogSection").scrollIntoView({behavior:"smooth"})});
  on("navBest",()=>{state.sort="featured";$("#best")?.scrollIntoView({behavior:"smooth"})});
@@ -398,10 +369,3 @@ initExtraUI();renderProducts();renderCart();updateCounts();renderUser();activate
 })();
 
 window.addEventListener("DOMContentLoaded",renderDrawerCategories);
-
-window.addEventListener("DOMContentLoaded",()=>{
-  window.drawerAccountLinksBound=true;
-  document.querySelectorAll("[data-account-action]").forEach(b=>{
-    b.addEventListener("click",()=>accountAction(b.dataset.accountAction));
-  });
-});
