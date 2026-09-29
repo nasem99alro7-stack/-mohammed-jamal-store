@@ -267,17 +267,6 @@ function activateServiceCardsV6(){
   if(fn){card.style.cursor="pointer";card.addEventListener("click",fn)}
  });
 }
-function activateProductCategories(){
- const sec=$("#allProductCategories"); if(!sec)return;
- sec.querySelectorAll("[data-main-cat]").forEach(b=>b.onclick=()=>{
-  state.cat=b.dataset.mainCat; state.sub=""; state.q="";
-  renderProducts(); $("#catalogSection")?.scrollIntoView({behavior:"smooth"});
- });
- sec.querySelectorAll("[data-cat][data-sub]").forEach(b=>b.onclick=()=>{
-  state.cat=b.dataset.cat; state.sub=b.dataset.sub; state.q="";
-  renderProducts(); $("#catalogSection")?.scrollIntoView({behavior:"smooth"});
- });
-}
 function activateV6(){
  const on=(id,fn)=>$("#"+id)?.addEventListener("click",fn);
  on("helpTop",customerService);on("serviceTop",customerService);on("trackTop",ordersModal);

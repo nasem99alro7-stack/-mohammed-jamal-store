@@ -96,12 +96,3 @@ button{font-family:inherit;cursor:pointer}
 .pay-options button small{margin-top:8px;color:#7b847f}
 .payment-entry-form{margin-top:16px;padding:16px;border:1px solid #dce5df;border-radius:14px;background:#f8fcf9}
 .form-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-
-.all-categories-section{margin-top:18px}
-.category-groups{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
-.category-group{background:#fff;border:1px solid #e2ebe3;border-radius:14px;padding:12px;box-shadow:0 3px 12px rgba(30,80,40,.05)}
-.category-group>[data-main-cat]{width:100%;border:0;background:#eef8ee;border-radius:10px;padding:12px;text-align:right;font:700 17px Cairo,Tahoma,sans-serif;cursor:pointer}
-.category-subs{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
-.category-subs button{border:1px solid #dbe9dc;background:#fff;border-radius:8px;padding:7px 9px;font:500 12px Cairo,Tahoma,sans-serif;cursor:pointer}
-.category-subs button:hover{background:#eef8ee}
-@media(max-width:650px){.category-groups{grid-template-columns:1fr}}
