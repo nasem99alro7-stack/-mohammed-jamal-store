@@ -1,135 +1,200 @@
-const CATS=[
-["all","الكل","🛍️"],["electronics","إلكترونيات","📱"],["women","أزياء نسائية","👗"],["men","أزياء رجالية","👔"],["shoes","أحذية","👟"],["bags","حقائب","👜"],["beauty","عطور وتجميل","✨"],["home","منزل ومطبخ","🏠"],["kids","أطفال وألعاب","🧸"],["food","غذائيات","🥫"],["accessories","إكسسوارات","⌚"],["cars","سيارات وإكسسوارات","🚗"],["sports","رياضة","⚽"],["office","مكتب وقرطاسية","📚"],["sale","العروض","🔥"]];
-const PRODUCTS=[
-{id:1,cat:"men",name:"قميص رجالي كلاسيك",price:185000,old:215000,emoji:"👔",rating:4.8,sold:98,new:false,sale:true,brand:"Syria Style",seller:"متجر الشام"},
-{id:2,cat:"women",name:"فستان نسائي أنيق",price:295000,old:340000,emoji:"👗",rating:4.9,sold:124,new:true,sale:true,brand:"Syria Fashion",seller:"بوتيك دمشق"},
-{id:3,cat:"shoes",name:"حذاء رياضي Premium",price:420000,old:470000,emoji:"👟",rating:4.7,sold:87,new:false,sale:true,brand:"Urban Step",seller:"ستيب ستور"},
-{id:4,cat:"bags",name:"حقيبة يومية فاخرة",price:260000,old:0,emoji:"👜",rating:4.8,sold:73,new:true,sale:false,brand:"SO Collection",seller:"سوريا أونلاين"},
-{id:5,cat:"beauty",name:"عطر شرقي فاخر",price:350000,old:390000,emoji:"🧴",rating:4.9,sold:156,new:false,sale:true,brand:"Orient",seller:"عطور الياسمين"},
-{id:6,cat:"electronics",name:"سماعات لاسلكية",price:275000,old:320000,emoji:"🎧",rating:4.6,sold:210,new:true,sale:true,brand:"SoundX",seller:"تك سوريا"},
-{id:7,cat:"kids",name:"طقم أطفال مميز",price:175000,old:0,emoji:"🧸",rating:4.8,sold:66,new:false,sale:false,brand:"Little",seller:"عالم الطفل"},
-{id:8,cat:"home",name:"طقم منزلي عصري",price:220000,old:260000,emoji:"🏠",rating:4.7,sold:55,new:false,sale:true,brand:"Home",seller:"بيت وذوق"},
-{id:9,cat:"electronics",name:"ساعة ذكية",price:490000,old:560000,emoji:"⌚",rating:4.8,sold:132,new:true,sale:true,brand:"SmartPro",seller:"تك سوريا"},
-{id:10,cat:"food",name:"سلة غذائيات سورية",price:180000,old:205000,emoji:"🧺",rating:4.9,sold:190,new:false,sale:true,brand:"Syrian Box",seller:"مونة الشام"},
-{id:11,cat:"accessories",name:"نظارة شمسية",price:145000,old:170000,emoji:"🕶️",rating:4.6,sold:91,new:true,sale:true,brand:"Vision",seller:"إكسسوارات SO"},
-{id:12,cat:"cars",name:"إكسسوار سيارة عملي",price:95000,old:120000,emoji:"🚗",rating:4.5,sold:44,new:true,sale:true,brand:"Auto",seller:"كار ستور"},
-{id:13,cat:"sports",name:"حقيبة رياضية",price:165000,old:0,emoji:"🎒",rating:4.7,sold:61,new:true,sale:false,brand:"Sport",seller:"سبورت سوريا"},
-{id:14,cat:"office",name:"طقم قرطاسية مكتبي",price:75000,old:90000,emoji:"📚",rating:4.6,sold:38,new:false,sale:true,brand:"Office",seller:"المكتبة الحديثة"}];
-const KEY={cart:"soCartV6",fav:"soFavV6",user:"soUserV6",orders:"soOrdersV6",addresses:"soAddressesV6",coupon:"soCouponV6",reviews:"soReviewsV6",recent:"soRecentV6"};
-let cart=load(KEY.cart,[]),fav=load(KEY.fav,[]),current="all",sort="featured",discount=0;
-const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
-const fmt=n=>Number(n||0).toLocaleString("ar-SY")+" ل.س";
-function load(k,d){try{return JSON.parse(localStorage.getItem(k))??d}catch{return d}}
-function save(k,v){localStorage.setItem(k,JSON.stringify(v))}
-function esc(s){return String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
-function toast(msg){let t=$(".toast");if(!t){t=document.createElement("div");t.className="toast";document.body.appendChild(t)}t.textContent=msg;t.classList.add("show");clearTimeout(t.x);t.x=setTimeout(()=>t.classList.remove("show"),1900)}
-function modal(title,body,after){const b=document.createElement("div");b.className="modal-bg";b.innerHTML=`<div class="modal"><div class="modal-head"><h2>${title}</h2><button data-x>×</button></div>${body}</div>`;document.body.appendChild(b);b.onclick=e=>{if(e.target===b||e.target.closest("[data-x]"))b.remove()};after?.(b);return b}
-function renderCats(){
- const nav=$("#navCats"),grid=$("#catGrid"),drawer=$("#drawerCats");
- nav.innerHTML=CATS.map(c=>`<button class="${current===c[0]?"active":""}" data-cat="${c[0]}">${c[2]} ${c[1]}</button>`).join("");
- grid.innerHTML=CATS.filter(c=>c[0]!=="all"&&c[0]!=="sale").map(c=>`<button data-cat="${c[0]}"><b>${c[2]}</b><strong>${c[1]}</strong><small>اكتشف المنتجات</small></button>`).join("");
- drawer.innerHTML=CATS.map(c=>`<button data-cat="${c[0]}">${c[2]} ${c[1]}</button>`).join("");
+
+(() => {
+const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
+const KEY={user:"so_user_v6",cart:"so_cart_v6",fav:"so_fav_v6",orders:"so_orders_v6",recent:"so_recent_v6",addresses:"so_addresses_v6",payments:"so_payments_v6"};
+const load=(k,d)=>{try{return JSON.parse(localStorage.getItem(k))??d}catch{return d}};
+const save=(k,v)=>localStorage.setItem(k,JSON.stringify(v));
+const money=n=>`₺${Number(n).toLocaleString("tr-TR")}`;
+const esc=s=>String(s).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]));
+
+const products=[
+{id:1,emoji:"👟",name:"حذاء رياضي رجالي",cat:"أحذية وحقائب",sub:"أحذية رجالية",brand:"Syria Sport",price:1080,old:1800,sale:"-40%",rating:4.8,reviews:128,sold:320,color:"أسود",sizes:["40","41","42","43","44"],stock:18,desc:"حذاء رياضي مريح للاستخدام اليومي والمشي، ببطانة خفيفة ونعل مرن.",specs:{الخامة:"شبك + مطاط",الجنس:"رجالي",الاستخدام:"يومي ورياضة",اللون:"أسود"}},
+{id:2,emoji:"👜",name:"حقيبة نسائية أنيقة",cat:"أزياء",sub:"حقائب نسائية",brand:"Syria Fashion",price:840,old:1200,sale:"-30%",rating:4.7,reviews:95,sold:210,color:"وردي",sizes:["موحد"],stock:24,desc:"حقيبة عملية وأنيقة للاستخدام اليومي، بمساحة داخلية متعددة الجيوب.",specs:{الخامة:"جلد صناعي",الحجم:"متوسط",الإغلاق:"سحاب",اللون:"وردي"}},
+{id:3,emoji:"🎧",name:"سماعات لاسلكية Pro",cat:"إلكترونيات",sub:"سماعات",brand:"Syria Tech",price:710,old:950,sale:"-25%",rating:4.6,reviews:212,sold:540,color:"أبيض",sizes:["موحد"],stock:35,desc:"سماعات لاسلكية بصوت واضح، ميكروفون للمكالمات وعلبة شحن صغيرة.",specs:{الاتصال:"Bluetooth 5.3",البطارية:"حتى 24 ساعة مع العلبة",الشحن:"USB-C",اللون:"أبيض"}},
+{id:4,emoji:"🧥",name:"سترة رجالية شتوية",cat:"أزياء",sub:"ملابس رجالية",brand:"Syria Fashion",price:1040,old:1600,sale:"-35%",rating:4.7,reviews:87,sold:180,color:"أسود",sizes:["M","L","XL","XXL"],stock:15,desc:"سترة شتوية دافئة بقصة عملية مناسبة للمدينة والسفر.",specs:{الخامة:"قماش مبطن",الموسم:"شتاء",الجنس:"رجالي",اللون:"أسود"}},
+{id:5,emoji:"🌹",name:"عطر نسائي فاخر",cat:"عطور وجمال",sub:"عطور نسائية",brand:"Syria Beauty",price:1120,old:1400,sale:"-20%",rating:4.9,reviews:176,sold:390,color:"ذهبي",sizes:["50ml"],stock:20,desc:"عطر نسائي بتركيبة زهرية ناعمة وثبات مناسب للاستخدام اليومي والمناسبات.",specs:{الحجم:"50ml",النوع:"Eau de Parfum",العائلة:"زهرية",الجنس:"نسائي"}},
+{id:6,emoji:"⌚",name:"ساعة ذكية Fit X",cat:"إلكترونيات",sub:"ساعات ذكية",brand:"Syria Tech",price:1250,old:1500,sale:"",rating:4.5,reviews:280,sold:460,color:"أسود",sizes:["موحد"],stock:22,desc:"ساعة ذكية لمتابعة النشاط والإشعارات ومعدل الحركة اليومية.",specs:{الشاشة:"1.8 بوصة",الاتصال:"Bluetooth",البطارية:"حتى 7 أيام",مقاومة:"رذاذ الماء"}},
+{id:7,emoji:"🧥",name:"هودي رجالي",cat:"أزياء",sub:"ملابس رجالية",brand:"Syria Fashion",price:890,old:1100,sale:"",rating:4.6,reviews:190,sold:310,color:"بيج",sizes:["M","L","XL","XXL"],stock:27,desc:"هودي قطني ناعم بقصة مريحة مناسب للشتاء والخروج اليومي.",specs:{الخامة:"قطن",الموسم:"خريف وشتاء",الجنس:"رجالي",اللون:"بيج"}},
+{id:8,emoji:"🍳",name:"طقم أواني طبخ 8 قطع",cat:"المنزل والمطبخ",sub:"أدوات المطبخ",brand:"Syria Home",price:1300,old:1650,sale:"",rating:4.8,reviews:150,sold:260,color:"فضي",sizes:["8 قطع"],stock:11,desc:"طقم أواني عملي للمطبخ المنزلي مع مقابض مريحة وسطح سهل التنظيف.",specs:{القطع:"8",الخامة:"ستانلس ستيل",الاستخدام:"غاز وكهرباء",اللون:"فضي"}},
+{id:9,emoji:"💄",name:"مجموعة مكياج كاملة",cat:"عطور وجمال",sub:"مكياج",brand:"Syria Beauty",price:980,old:1250,sale:"",rating:4.5,reviews:410,sold:620,color:"متعدد",sizes:["مجموعة"],stock:30,desc:"مجموعة مختارة للاستخدام اليومي تشمل مستحضرات أساسية للوجه والعينين.",specs:{النوع:"مجموعة",الاستخدام:"يومي",العدد:"عدة منتجات",الجنس:"نسائي"}},
+{id:10,emoji:"🚙",name:"سيارة أطفال كهربائية",cat:"ألعاب وهدايا",sub:"ألعاب أطفال",brand:"Syria Kids",price:670,old:850,sale:"",rating:4.4,reviews:230,sold:190,color:"أزرق",sizes:["موحد"],stock:9,desc:"سيارة أطفال بتصميم ممتع، مناسبة للعب المنزلي مع إشراف الأهل.",specs:{العمر:"3+ سنوات",الطاقة:"بطارية",اللون:"أزرق",الاستخدام:"ألعاب"}},
+{id:11,emoji:"📱",name:"هاتف ذكي Nova 5G",cat:"إلكترونيات",sub:"هواتف",brand:"Syria Tech",price:6850,old:7200,sale:"",rating:4.7,reviews:92,sold:120,color:"أزرق",sizes:["128GB","256GB"],stock:7,desc:"هاتف ذكي بشاشة كبيرة واتصال 5G وكاميرا متعددة الاستخدامات.",specs:{الشبكة:"5G",التخزين:"128/256GB",الشاشة:"6.6 بوصة",الشحن:"سريع"}},
+{id:12,emoji:"🧒",name:"طقم أطفال قطني",cat:"أزياء",sub:"ملابس أطفال",brand:"Syria Kids",price:520,old:690,sale:"-25%",rating:4.6,reviews:75,sold:155,color:"أزرق",sizes:["2Y","4Y","6Y","8Y"],stock:25,desc:"طقم أطفال قطني ناعم للاستخدام اليومي واللعب.",specs:{الخامة:"قطن",العمر:"2-8 سنوات",الجنس:"أطفال",اللون:"أزرق"}}
+];
+
+const subcats={
+"إلكترونيات":["هواتف","سماعات","ساعات ذكية","إكسسوارات"],
+"أزياء":["ملابس رجالية","ملابس نسائية","ملابس أطفال","حقائب نسائية"],
+"المنزل والمطبخ":["أدوات المطبخ","أثاث","ديكور","أجهزة منزلية"],
+"عطور وجمال":["عطور نسائية","عطور رجالية","مكياج","عناية"],
+"ألعاب وهدايا":["ألعاب أطفال","هدايا","ألعاب تعليمية"],
+"أحذية وحقائب":["أحذية رجالية","أحذية نسائية","حقائب"],
+"رياضة ولياقة":["ملابس رياضية","معدات رياضية"]
+};
+
+let state={cat:"كل الأقسام",sub:"",sort:"featured",q:"",user:load(KEY.user,null),cart:load(KEY.cart,[]),fav:load(KEY.fav,[]),orders:load(KEY.orders,[]),recent:load(KEY.recent,[])};
+
+function persist(){save(KEY.cart,state.cart);save(KEY.fav,state.fav);save(KEY.orders,state.orders);save(KEY.recent,state.recent);save(KEY.user,state.user)}
+function cartQty(){return state.cart.reduce((s,x)=>s+x.qty,0)}
+function toast(msg){let x=document.createElement("div");x.className="toast";x.textContent=msg;document.body.appendChild(x);setTimeout(()=>x.remove(),2200)}
+function modal(title,body,after){$("#modalContent").innerHTML=`<h2>${title}</h2>${body}`;$("#modal").classList.add("show");after?.($("#modalContent"))}
+function closeModal(){$("#modal").classList.remove("show")}
+function card(p){
+ const fav=state.fav.includes(p.id);
+ return `<article class="card" data-id="${p.id}"><button class="heart ${fav?"active":""}" data-fav="${p.id}">${fav?"♥":"♡"}</button>${p.sale?`<span class="sale">${p.sale}</span>`:""}<div class="pic" data-open="${p.id}">${p.emoji}</div><div class="stars">★★★★★ <small>(${p.reviews})</small></div><h3 data-open="${p.id}">${esc(p.name)}</h3><div class="price"><strong>${money(p.price)}</strong> <del>${money(p.old)}</del></div><small class="seller">يباع بواسطة ${esc(p.brand)}</small><div class="card-actions"><button class="add" data-add="${p.id}">أضف للسلة 🛒</button><button class="quick" data-open="${p.id}">التفاصيل</button></div></article>`
 }
 function filtered(){
- let a=PRODUCTS.filter(p=>current==="all"||current==="sale"?true:p.cat===current);
- if(current==="sale")a=a.filter(p=>p.sale);
- const q=($("#search")?.value||"").trim().toLocaleLowerCase("ar");
- if(q)a=a.filter(p=>(p.name+" "+p.brand+" "+p.seller+" "+(CATS.find(c=>c[0]===p.cat)?.[1]||"")).toLocaleLowerCase("ar").includes(q));
- const min=Number($("#minPrice")?.value||0),max=Number($("#maxPrice")?.value||0);
- if(min)a=a.filter(p=>p.price>=min);if(max)a=a.filter(p=>p.price<=max);
- if($("#onlyNew")?.checked)a=a.filter(p=>p.new);if($("#onlySale")?.checked)a=a.filter(p=>p.sale);
- if(sort==="best")a.sort((x,y)=>y.sold-x.sold);if(sort==="new")a.sort((x,y)=>Number(y.new)-Number(x.new));
- if(sort==="low")a.sort((x,y)=>x.price-y.price);if(sort==="high")a.sort((x,y)=>y.price-x.price);if(sort==="rating")a.sort((x,y)=>y.rating-x.rating);
- return a;
+ let a=products.filter(p=>(state.cat==="كل الأقسام"||p.cat===state.cat)&&(state.sub===""||p.sub===state.sub));
+ if(state.q){let q=state.q.toLowerCase();a=a.filter(p=>(p.name+p.brand+p.cat+p.sub).toLowerCase().includes(q))}
+ if(state.sort==="priceUp")a.sort((a,b)=>a.price-b.price);
+ if(state.sort==="priceDown")a.sort((a,b)=>b.price-a.price);
+ if(state.sort==="rating")a.sort((a,b)=>b.rating-a.rating);
+ if(state.sort==="new")a.sort((a,b)=>b.id-a.id);
+ return a
 }
-function card(p){
- const favOn=fav.includes(p.id),reviews=load(KEY.reviews,{})[p.id]||[];
- return `<article class="product" data-product="${p.id}"><div class="pic" data-product="${p.id}">${p.emoji}<button class="heart ${favOn?"on":""}" data-fav="${p.id}">${favOn?"♥":"♡"}</button>${p.sale?`<label class="sale">-${Math.round((1-p.price/p.old)*100)}%</label>`:""}</div><div class="pinfo"><small class="tag">${p.new?"وصل حديثاً":p.brand}</small><h3>${p.name}</h3><div class="stars">★★★★★ <span>${p.rating} (${reviews.length+Math.max(2,Math.round(p.sold/25))})</span></div><div class="prices"><strong>${fmt(p.price)}</strong>${p.old?`<del>${fmt(p.old)}</del>`:""}<button class="add" data-add="${p.id}">+</button><button class="buy-now" data-buy="${p.id}">شراء</button></div><small class="seller">يباع بواسطة ${esc(p.seller)}</small></div></article>`
+function renderProducts(){
+ let a=filtered();
+ $("#deals").innerHTML=products.filter(p=>p.sale).slice(0,5).map(card).join("");
+ $("#best").innerHTML=products.slice().sort((a,b)=>b.sold-a.sold).slice(0,6).map(card).join("");
+ let grid=$("#allProducts"); if(grid)grid.innerHTML=a.map(card).join("")||`<div class="empty">لا توجد منتجات مطابقة.</div>`;
+ $("#resultTitle").textContent=state.q?`نتائج البحث عن "${state.q}"`:state.cat==="كل الأقسام"?"كل المنتجات":state.cat+(state.sub?" — "+state.sub:"");
+ renderSubcats();
 }
-function render(){
- const a=filtered(),q=($("#search")?.value||"").trim();
- $("#productsTitle").textContent=q?`نتائج البحث عن «${esc(q)}»`:current==="all"?"منتجات مميزة":(CATS.find(c=>c[0]===current)?.[1]||"المنتجات");
- $("#productGrid").innerHTML=a.map(card).join("");$("#empty").hidden=a.length>0;updateCounts()
+function renderSubcats(){
+ let box=$("#subcats"); if(!box)return;
+ const arr=state.cat==="كل الأقسام"?Object.keys(subcats):subcats[state.cat]||[];
+ box.innerHTML=`<button data-cat="كل الأقسام" class="${state.cat==="كل الأقسام"?"on":""}">الكل</button>`+arr.map(s=>`<button data-sub="${esc(s)}" class="${state.sub===s?"on":""}">${esc(s)}</button>`).join("");
 }
-function setCat(c){current=c;renderCats();render();document.getElementById("products").scrollIntoView({behavior:"smooth",block:"start"})}
-function updateCounts(){const n=cart.reduce((s,x)=>s+x.qty,0);$("#cartCount").textContent=n;$("#bottomCartCount").textContent=n;$("#favCount").textContent=fav.length}
-function rememberRecent(id){
- let a=load(KEY.recent,[]).filter(x=>x!==id);
- a.unshift(id); a=a.slice(0,8); save(KEY.recent,a); renderRecent();
+function renderUser(){
+ const u=state.user;
+ $("#accountBtn").innerHTML=`👤 <small>${u?"مرحباً، "+esc(u.name):"مرحباً، سجل الدخول"}</small><b>${u?"حسابي ▾":"تسجيل الدخول ▾"}</b>`;
 }
-function renderRecent(){
- const ids=load(KEY.recent,[]);
- const a=ids.map(id=>PRODUCTS.find(p=>p.id===id)).filter(Boolean);
- $("#recentGrid").innerHTML=a.map(card).join("");
- $("#recentEmpty").style.display=a.length?"none":"block";
+function updateCounts(){$("#cartCount").textContent=cartQty()}
+function add(id,qty=1,opts={}){
+ const p=products.find(x=>x.id===id); if(!p)return;
+ const found=state.cart.find(x=>x.id===id&&x.size===opts.size&&x.color===opts.color);
+ if(found)found.qty+=qty;else state.cart.push({id,qty,size:opts.size||p.sizes[0],color:opts.color||p.color});
+ persist();updateCounts();renderCart();toast("تمت إضافة المنتج إلى السلة 🛒")
 }
-function renderRecommendations(){
- const base=new Set(cart.map(x=>x.id));
- let a=PRODUCTS.filter(p=>!base.has(p.id)).sort((x,y)=>y.rating-x.rating || y.sold-x.sold).slice(0,4);
- $("#recommendGrid").innerHTML=a.map(card).join("");
-}
-
-function add(id){const x=cart.find(r=>r.id===id);x?x.qty++:cart.push({id,qty:1});save(KEY.cart,cart);renderCart();updateCounts();renderRecommendations();toast("تمت إضافة المنتج للسلة 🛒")}
-function change(id,d){const x=cart.find(r=>r.id===id);if(!x)return;x.qty+=d;if(x.qty<=0)cart=cart.filter(r=>r.id!==id);save(KEY.cart,cart);renderCart();updateCounts()}
-function total(){return cart.reduce((s,x)=>s+(PRODUCTS.find(p=>p.id===x.id)?.price||0)*x.qty,0)}
+function removeCart(i){state.cart.splice(i,1);persist();renderCart();updateCounts()}
 function renderCart(){
- const el=$("#cartItems");if(!cart.length){el.innerHTML='<div class="empty">السلة فارغة حالياً 🛒</div>';$("#total").textContent="0 ل.س";return}
- el.innerHTML=cart.map(x=>{const p=PRODUCTS.find(p=>p.id===x.id);return `<div class="cart-row"><div class="mini">${p.emoji}</div><div><b>${p.name}</b><small>${fmt(p.price)}</small><div class="qty"><button data-minus="${p.id}">−</button><b>${x.qty}</b><button data-plus="${p.id}">+</button></div></div><button class="remove" data-remove="${p.id}">حذف</button></div>`}).join("");
- $("#total").textContent=fmt(Math.max(0,total()-discount));
+ let rows=state.cart.map((x,i)=>{let p=products.find(p=>p.id===x.id);return `<div class="cartrow"><span class="mini">${p.emoji}</span><div class="grow"><b>${esc(p.name)}</b><small>${x.size||""} ${x.color||""}</small><strong>${money(p.price*x.qty)}</strong><div class="qty"><button data-dec="${i}">−</button><b>${x.qty}</b><button data-inc="${i}">+</button><button class="remove" data-rem="${i}">حذف</button></div></div></div>`}).join("");
+ $("#cartItems").innerHTML=rows||"<p class='empty'>السلة فارغة حالياً.</p>";
+ $("#total").textContent=money(state.cart.reduce((s,x)=>s+products.find(p=>p.id===x.id).price*x.qty,0))
 }
-function authModal(){
- let signupMode=false;
- const b=modal("تسجيل الدخول / إنشاء حساب",`<div class="tabs"><button id="loginTab" class="active">دخول</button><button id="signupTab">إنشاء حساب</button></div><div id="authBody"></div>`,box=>{
-  const draw=()=>{$("#authBody",box).innerHTML=signupMode?`<div class="form"><label>الاسم الكامل<input id="regName"></label><label>الإيميل<input id="regEmail" type="email"></label><label>رقم الهاتف<input id="regPhone" inputmode="tel"></label><label class="full">كلمة السر<input id="regPass" type="password"></label><label class="full">تأكيد كلمة السر<input id="regPass2" type="password"></label><button class="primary full" id="signup">إنشاء الحساب</button></div><small class="hint">كلمة السر لا تُحفظ كنص؛ تُحفظ بصمة SHA-256 محلياً.</small>`:`<div class="form"><label class="full">الإيميل أو رقم الهاتف<input id="loginId"></label><label class="full">كلمة السر<input id="loginPass" type="password"></label><button class="primary full" id="login">دخول</button></div>`;
-  if(signupMode)$("#signup",box).onclick=async()=>{const n=$("#regName",box).value.trim(),e=$("#regEmail",box).value.trim(),ph=$("#regPhone",box).value.trim(),p=$("#regPass",box).value,p2=$("#regPass2",box).value;if(!n||(!e&&!ph)||!p||p!==p2)return toast("تأكد من البيانات وكلمة السر");save(KEY.user,{name:n,email:e,phone:ph,passwordHash:await sha(p)});b.remove();updateUser();toast("تم إنشاء الحساب بنجاح 🎉")};
-  else $("#login",box).onclick=async()=>{const id=$("#loginId",box).value.trim(),p=$("#loginPass",box).value,u=load(KEY.user,null);if(!u||(u.email!==id&&u.phone!==id))return toast("الحساب غير موجود على هذا الجهاز");if(await sha(p)!==u.passwordHash)return toast("كلمة السر غير صحيحة");b.remove();updateUser();toast("أهلاً بك في سوريا أونلاين")};
- };
- draw();$("#loginTab",b).onclick=()=>{signupMode=false;$("#loginTab",b).classList.add("active");$("#signupTab",b).classList.remove("active");draw()};$("#signupTab",b).onclick=()=>{signupMode=true;$("#signupTab",b).classList.add("active");$("#loginTab",b).classList.remove("active");draw()}
- })
-}
-async function sha(t){const h=await crypto.subtle.digest("SHA-256",new TextEncoder().encode(t));return [...new Uint8Array(h)].map(x=>x.toString(16).padStart(2,"0")).join("")}
-function accountModal(){const u=load(KEY.user,null);if(!u)return authModal();modal("حسابي",`<div class="account"><b>${esc(u.name)}</b><span>${esc(u.email||u.phone)}</span></div><div class="account-grid"><button id="edit">تعديل البيانات</button><button data-open="orders">طلباتي</button><button data-open="addresses">عناويني</button><button id="logout">تسجيل خروج</button></div>`,b=>{$("#logout",b).onclick=()=>{localStorage.removeItem(KEY.user);b.remove();updateUser();toast("تم تسجيل الخروج")};$("#edit",b).onclick=()=>{b.remove();editAccount()}})}
-function editAccount(){const u=load(KEY.user,null);modal("تعديل الحساب",`<div class="form"><label>الاسم الكامل<input id="en" value="${esc(u.name)}"></label><label>الإيميل<input id="ee" value="${esc(u.email||"")}"></label><label>رقم الهاتف<input id="ep" value="${esc(u.phone||"")}"></label><button class="primary full" id="save">حفظ</button></div>`,b=>{$("#save",b).onclick=()=>{u.name=$("#en",b).value.trim();u.email=$("#ee",b).value.trim();u.phone=$("#ep",b).value.trim();save(KEY.user,u);b.remove();updateUser();toast("تم حفظ البيانات")}})}
-function updateUser(){const u=load(KEY.user,null);$("#drawerUser").innerHTML=u?`<div class="account"><b>${esc(u.name)}</b><span>${esc(u.email||u.phone)}</span></div>`:`<button class="primary wide" id="drawerLogin">تسجيل الدخول / إنشاء حساب</button>`;$("#drawerLogin")?.addEventListener("click",authModal)}
-function favoritesModal(){const a=PRODUCTS.filter(p=>fav.includes(p.id));modal("المفضلة",a.length?`<div class="mini-grid">${a.map(card).join("")}</div>`:"لا توجد منتجات في المفضلة بعد.",b=>bindModalCards(b))}
-function ordersModal(){const a=load(KEY.orders,[]);modal("طلباتي",a.length?a.map(o=>`<div class="order"><b>${o.id}</b><span>${o.status}</span><small>${new Date(o.date).toLocaleString("ar-SY")}</small><div>${esc(o.city)} — ${esc(o.address)}</div><strong>${fmt(o.total)}</strong></div>`).join(""):"<div class='empty'>لا توجد طلبات بعد.</div>")}
-function addressesModal(){const a=load(KEY.addresses,[]);modal("عناويني",`${a.map((x,i)=>`<div class="address"><b>${esc(x.title)}</b><span>${esc(x.city)} — ${esc(x.address)}</span><button data-del="${i}">حذف</button></div>`).join("")}<button class="primary wide" id="addAddr">+ إضافة عنوان</button>`,b=>{$("#addAddr",b).onclick=()=>{b.remove();addAddress()};$$( "[data-del]",b).forEach(x=>x.onclick=()=>{a.splice(+x.dataset.del,1);save(KEY.addresses,a);b.remove();addressesModal()})})}
-function addAddress(){modal("إضافة عنوان",`<div class="form"><label>اسم العنوان<input id="at" placeholder="المنزل"></label><label>المحافظة / المدينة<input id="ac"></label><label class="full">العنوان بالتفصيل<textarea id="aa"></textarea></label><button class="primary full" id="sa">حفظ العنوان</button></div>`,b=>{$("#sa",b).onclick=()=>{const x={title:$("#at",b).value.trim(),city:$("#ac",b).value.trim(),address:$("#aa",b).value.trim()};if(!x.title||!x.city||!x.address)return toast("كمّل بيانات العنوان");const a=load(KEY.addresses,[]);a.push(x);save(KEY.addresses,a);b.remove();addressesModal()}})}
-function couponsModal(){modal("كوبونات وخصومات",`<div class="coupon-card"><b>SYRIA10</b><span>خصم 10% على السلة</span><button data-copy="SYRIA10">نسخ</button></div><div class="coupon-card"><b>NEW15</b><span>خصم 15% للعملاء الجدد</span><button data-copy="NEW15">نسخ</button></div><div class="coupon-card"><b>WELCOME5</b><span>خصم 5% ترحيبي</span><button data-copy="WELCOME5">نسخ</button></div>`)}
-function supportModal(){modal("خدمة العملاء",`<div class="support"><button onclick="location.href='tel:+963000000000'">📞 <b>اتصل بنا</b><small>ضع رقم المتجر الحقيقي هنا</small></button><button onclick="location.href='mailto:support@syria-online.store'">✉️ <b>البريد الإلكتروني</b><small>support@syria-online.store</small></button><button data-open="orders">📦 <b>تتبع الطلب</b><small>من صفحة طلباتي</small></button><div class="notice">أرقام التواصل والدفع تحتاج بيانات المتجر الحقيقية قبل الإطلاق.</div></div>`)}
+function remember(id){state.recent=[id,...state.recent.filter(x=>x!==id)].slice(0,10);persist()}
 function productModal(id){
- const p=PRODUCTS.find(x=>x.id===id),rs=load(KEY.reviews,{})[id]||[];
- rememberRecent(id);
- modal(p.name,`<div class="detail"><div class="detail-pic">${p.emoji}</div><div><span class="tag">${p.brand}</span><div class="stars">★★★★★ ${p.rating}</div><h3>${fmt(p.price)} ${p.old?`<del>${fmt(p.old)}</del>`:""}</h3><p>يباع بواسطة <b>${esc(p.seller)}</b>. منتج متاح للطلب مع خيارات توصيل حسب المنطقة.</p><div class="delivery-box">🚚 <b>تقدير التوصيل:</b> 1–4 أيام عمل<br><small>يظهر الموعد النهائي حسب المدينة والعنوان عند إتمام الطلب.</small></div><div class="detail-actions"><button class="primary" id="addDetail">أضف للسلة</button><button class="primary buy-detail" id="buyDetail">اشترِ الآن</button><button class="secondary" id="favDetail">${fav.includes(p.id)?"♥":"♡"} المفضلة</button></div><button class="share-product" id="shareProduct">↗ مشاركة المنتج</button></div></div><hr><h3>تقييمات العملاء</h3><div>${rs.length?rs.map(r=>`<div class="review"><b>${esc(r.name)}</b><span>★★★★★</span><p>${esc(r.text)}</p></div>`).join(""):"لا توجد تقييمات مكتوبة بعد."}</div><button class="secondary wide" id="writeReview">اكتب تقييماً</button>`,b=>{
-   $("#addDetail",b).onclick=()=>{add(p.id);b.remove()};
-   $("#buyDetail",b).onclick=()=>{add(p.id);b.remove();setTimeout(checkoutModal,100)};
-   $("#favDetail",b).onclick=()=>{if(fav.includes(p.id))fav=fav.filter(x=>x!==p.id);else fav.push(p.id);save(KEY.fav,fav);render();b.remove();productModal(id)};
-   $("#shareProduct",b).onclick=async()=>{const text=`${p.name} — سوريا أونلاين`;try{await navigator.share?.({title:p.name,text})}catch{navigator.clipboard?.writeText(text);toast("تم نسخ اسم المنتج للمشاركة")}};
-   $("#writeReview",b).onclick=()=>writeReview(id,b)
+ const p=products.find(x=>x.id===id); if(!p)return; remember(id);
+ const related=products.filter(x=>x.cat===p.cat&&x.id!==p.id).slice(0,4);
+ modal(p.name,`<div class="product-detail"><div class="detail-image">${p.emoji}</div><div class="detail-info"><div class="stars">★★★★★ ${p.rating} (${p.reviews} تقييم)</div><span class="tag">${esc(p.brand)} • ${esc(p.cat)} • ${esc(p.sub)}</span><h1>${esc(p.name)}</h1><div class="detail-price">${money(p.price)} ${p.old?`<del>${money(p.old)}</del>`:""}</div><p>${esc(p.desc)}</p><div class="detail-meta"><b>متوفر: ${p.stock} قطعة</b><span>🚚 توصيل متوقع 1–4 أيام</span><span>↩️ إرجاع حسب سياسة المنتج</span></div><label>المقاس/الخيار<select id="sizeSel">${p.sizes.map(s=>`<option>${esc(s)}</option>`).join("")}</select></label><label>اللون<select id="colorSel"><option>${esc(p.color)}</option></select></label><div class="detail-actions"><button class="primary" id="addDetail">أضف إلى السلة</button><button class="primary buyDetail">اشترِ الآن</button><button class="secondary" id="favDetail">${state.fav.includes(p.id)?"♥ إزالة من المفضلة":"♡ أضف للمفضلة"}</button></div></div></div><div class="specs"><h3>تفاصيل المنتج</h3><table>${Object.entries(p.specs).map(([k,v])=>`<tr><th>${esc(k)}</th><td>${esc(v)}</td></tr>`).join("")}</table></div><div class="related"><h3>منتجات مشابهة</h3><div class="products">${related.map(card).join("")}</div></div>`,box=>{
+  $("#addDetail",box).onclick=()=>{add(p.id,1,{size:$("#sizeSel").value,color:$("#colorSel").value});closeModal()};
+  $(".buyDetail",box).onclick=()=>{add(p.id,1,{size:$("#sizeSel").value,color:$("#colorSel").value});closeModal();checkout()};
+  $("#favDetail",box).onclick=()=>{toggleFav(p.id);closeModal();productModal(p.id)};
+ });
+}
+function toggleFav(id){state.fav=state.fav.includes(id)?state.fav.filter(x=>x!==id):[...state.fav,id];persist();toast(state.fav.includes(id)?"تمت الإضافة للمفضلة":"تمت الإزالة من المفضلة");renderProducts()}
+function authModal(){
+ modal(state.user?"حسابك":"تسجيل الدخول / إنشاء حساب",state.user?`<div class="account-grid"><button data-account="orders">📦 طلباتك</button><button data-account="fav">♡ المفضلة (${state.fav.length})</button><button data-account="address">📍 عناوينك</button><button data-account="payments">💳 طرق الدفع</button><button data-account="recent">👁 شاهدته مؤخراً</button><button data-account="returns">↩️ الإرجاع والاسترداد</button><button data-logout>🚪 تسجيل الخروج</button></div>`:`<form id="loginForm" class="form"><input id="loginName" required placeholder="اسم المستخدم"><input id="loginPhone" required placeholder="رقم الهاتف"><input id="loginPass" type="password" required placeholder="كلمة المرور"><button class="primary">دخول / إنشاء الحساب</button></form>`,box=>{
+   $("#loginForm",box)?.addEventListener("submit",e=>{e.preventDefault();state.user={name:$("#loginName").value.trim(),phone:$("#loginPhone").value.trim()};persist();renderUser();closeModal();toast("تم إنشاء الحساب وتسجيل الدخول")});
+   $$("[data-account]",box).forEach(b=>b.onclick=()=>accountSection(b.dataset.account));
+   $("[data-logout]",box)?.addEventListener("click",()=>{state.user=null;persist();renderUser();closeModal();toast("تم تسجيل الخروج")})
+ });
+}
+function accountSection(type){
+ if(type==="orders")return ordersModal();
+ if(type==="fav")return favModal();
+ if(type==="address")return addressModal();
+ if(type==="payments")return paymentModal();
+ if(type==="recent")return recentModal();
+ if(type==="returns")return modal("الإرجاع والاسترداد",`<p>يمكنك طلب الإرجاع من تفاصيل أي طلب خلال المدة المحددة للمنتج.</p><p>للدعم: استخدم صفحة خدمة العملاء وأرسل رقم الطلب.</p>`);
+}
+function ordersModal(){
+ let o=state.orders;
+ modal("طلباتك",o.length?o.map(x=>`<div class="order"><div><b>طلب #${x.no}</b><span>${x.status}</span></div><small>${x.date} • ${money(x.total)}</small><p>${x.items.map(i=>esc(i.name)).join("، ")}</p><button class="secondary" data-track="${x.no}">تتبع الطلب</button></div>`).join(""):`<div class="empty">لا توجد طلبات بعد. أضف منتجات وأكمل الدفع لتظهر هنا.</div>`,box=>{$$("[data-track]",box).forEach(b=>b.onclick=()=>trackModal(b.dataset.track))})
+}
+function trackModal(no){
+ const o=state.orders.find(x=>x.no===no);
+ modal(`تتبع الطلب #${no}`,`<div class="timeline"><div class="done">✓ تم استلام الطلب</div><div class="done">✓ جاري تجهيز الطلب</div><div class="${o?.status==="في الطريق"||o?.status==="تم التسليم"?"done":""}">🚚 الشحنة في الطريق</div><div class="${o?.status==="تم التسليم"?"done":""}">🏠 تم التسليم</div></div>`)
+}
+function favModal(){
+ let a=products.filter(p=>state.fav.includes(p.id));
+ modal("قائمة المفضلة",a.length?`<div class="products">${a.map(card).join("")}</div>`:`<div class="empty">لم تضف أي منتج للمفضلة بعد.</div>`)
+}
+function recentModal(){
+ let a=state.recent.map(id=>products.find(p=>p.id===id)).filter(Boolean);
+ modal("المنتجات التي شاهدتها مؤخراً",a.length?`<div class="products">${a.map(card).join("")}</div>`:`<div class="empty">لا توجد منتجات شاهدتها مؤخراً.</div>`)
+}
+function addressModal(){
+ let a=load(KEY.addresses,[]);
+ modal("عناوينك",`<div id="addressList">${a.map((x,i)=>`<div class="address"><b>${esc(x.name)}</b><p>${esc(x.city)} — ${esc(x.address)}<br>${esc(x.phone)}</p><button data-deladdr="${i}">حذف</button></div>`).join("")||"<p>لا توجد عناوين محفوظة.</p>"}</div><form id="addressForm" class="form"><input name="name" required placeholder="اسم المستلم"><input name="phone" required placeholder="الهاتف"><input name="city" required placeholder="المدينة"><input name="address" required placeholder="العنوان التفصيلي"><button class="primary">حفظ العنوان</button></form>`,box=>{
+ $("#addressForm",box).onsubmit=e=>{e.preventDefault();let f=new FormData(e.target),a=load(KEY.addresses,[]);a.push(Object.fromEntries(f));save(KEY.addresses,a);addressModal();toast("تم حفظ العنوان")};
+ $$("[data-deladdr]",box).forEach(b=>b.onclick=()=>{let a=load(KEY.addresses,[]);a.splice(+b.dataset.deladdr,1);save(KEY.addresses,a);addressModal()})
  })
 }
-function writeReview(id,parent){parent.remove();modal("تقييم المنتج",`<div class="form"><label>اسمك<input id="rn"></label><label class="full">رأيك<textarea id="rt"></textarea></label><button class="primary full" id="sendReview">إرسال التقييم</button></div>`,b=>{$("#sendReview",b).onclick=()=>{const n=$("#rn",b).value.trim(),t=$("#rt",b).value.trim();if(!n||!t)return toast("اكتب الاسم والتقييم");const all=load(KEY.reviews,{});all[id]=all[id]||[];all[id].push({name:n,text:t});save(KEY.reviews,all);b.remove();toast("تم إرسال التقييم ⭐");productModal(id)}})}
-function checkoutModal(){if(!cart.length)return toast("السلة فارغة");if(!load(KEY.user,null)){authModal();return}const u=load(KEY.user,null),as=load(KEY.addresses,[]);modal("إتمام الشراء",`<div class="form"><label>الاسم الكامل<input id="cn" value="${esc(u.name)}"></label><label>رقم الهاتف<input id="cp" value="${esc(u.phone||"")}"></label><label>المحافظة / المدينة<input id="cc"></label><label class="full">عنوان محفوظ<select id="cs"><option value="">عنوان جديد</option>${as.map((a,i)=>`<option value="${i}">${esc(a.title)} — ${esc(a.city)}</option>`).join("")}</select></label><label class="full">العنوان بالتفصيل<textarea id="ca"></textarea></label><label class="full">ملاحظات الطلب<textarea id="cnote"></textarea></label><label class="full">طريقة الدفع<select id="pay"><option>الدفع عند الاستلام</option><option>شام كاش</option><option>USDT</option><option>Visa</option><option>Mastercard</option></select></label><div class="notice full">الإجمالي: <b>${fmt(Math.max(0,total()-discount))}</b></div><button class="primary full" id="confirm">تأكيد الطلب</button></div>`,b=>{$("#cs",b).onchange=()=>{const a=as[+$("#cs",b).value];if(a){$("#cc",b).value=a.city;$("#ca",b).value=a.address}};$("#confirm",b).onclick=()=>{const o={id:"SO-"+Date.now().toString().slice(-8),date:new Date().toISOString(),name:$("#cn",b).value.trim(),phone:$("#cp",b).value.trim(),city:$("#cc",b).value.trim(),address:$("#ca",b).value.trim(),notes:$("#cnote",b).value.trim(),payment:$("#pay",b).value,status:"جديد",total:Math.max(0,total()-discount),items:cart};if(!o.name||!o.phone||!o.city||!o.address)return toast("كمّل بيانات التوصيل");const os=load(KEY.orders,[]);os.unshift(o);save(KEY.orders,os);cart=[];save(KEY.cart,cart);discount=0;b.remove();renderCart();updateCounts();toast("تم تسجيل الطلب 🎉");setTimeout(ordersModal,400)}})}
-function applyCoupon(){const c=$("#couponInput").value.trim().toUpperCase(),valid={SYRIA10:.10,NEW15:.15,WELCOME5:.05};if(valid[c]){discount=Math.round(total()*valid[c]);save(KEY.coupon,c);renderCart();toast("تم تطبيق الخصم "+valid[c]*100+"%")}else toast("الكوبون غير صحيح")}
-function bindModalCards(b){$$("[data-product]",b).forEach(x=>x.onclick=e=>{if(e.target.closest("[data-fav]")||e.target.closest("[data-add]"))return;productModal(+x.dataset.product)});$$("[data-add]",b).forEach(x=>x.onclick=()=>add(+x.dataset.add));$$("[data-fav]",b).forEach(x=>x.onclick=()=>{const id=+x.dataset.fav;fav=fav.includes(id)?fav.filter(n=>n!==id):[...fav,id];save(KEY.fav,fav);render();b.remove();favoritesModal()})}
+function paymentModal(){
+ let a=load(KEY.payments,[]);
+ modal("طرق الدفع",`<div class="pay-options"><div>💳 بطاقة Visa / Mastercard <small>يتم تأكيد الدفع عند ربط بوابة الدفع</small></div><div>💚 شام كاش <small>الدفع اليدوي مع تأكيد التحويل</small></div><div>₮ USDT <small>الدفع عبر عنوان المحفظة عند تفعيله</small></div><div>💵 الدفع عند الاستلام <small>متاح حسب المدينة والمنتج</small></div></div><p>طرق الدفع المعروضة هنا جاهزة كواجهة. التحصيل الإلكتروني الحقيقي يحتاج مفاتيح وربط مزود دفع.</p>`)
+}
+function checkout(){
+ if(!state.user)return authModal();
+ if(!state.cart.length)return toast("السلة فارغة");
+ let addresses=load(KEY.addresses,[]);
+ modal("إتمام الطلب",`<form id="checkoutForm" class="form"><h3>عنوان التوصيل</h3><select id="addr">${addresses.map((a,i)=>`<option value="${i}">${esc(a.name)} — ${esc(a.city)} — ${esc(a.address)}</option>`).join("")}</select>${addresses.length?"":"<p>لم تحفظ عنواناً بعد. أضف العنوان من حسابك أولاً.</p>"}<h3>طريقة الدفع</h3><select id="pay"><option>الدفع عند الاستلام</option><option>Visa / Mastercard</option><option>شام كاش</option><option>USDT</option></select><div class="checkout-summary">الإجمالي: <b>${money(state.cart.reduce((s,x)=>s+products.find(p=>p.id===x.id).price*x.qty,0))}</b></div><button class="primary" ${addresses.length?"":"disabled"}>تأكيد الطلب</button></form>`,box=>{
+ $("#checkoutForm",box).onsubmit=e=>{e.preventDefault();let a=addresses[+$("#addr").value],items=state.cart.map(x=>{let p=products.find(p=>p.id===x.id);return {name:p.name,id:p.id,qty:x.qty,price:p.price}}),total=items.reduce((s,x)=>s+x.price*x.qty,0),no="SO"+Date.now().toString().slice(-8);state.orders.unshift({no,date:new Date().toLocaleString("ar"),items,total,payment:$("#pay").value,status:"تم استلام الطلب",address:a});state.cart=[];persist();updateCounts();renderCart();closeModal();toast("تم إنشاء الطلب #"+no);ordersModal()}
+ })
+}
+function searchRun(){
+ state.q=$("#search").value.trim();state.cat=$("#searchCat").value||"كل الأقسام";state.sub="";renderProducts();
+ $("#suggestions").innerHTML="";$("#allProducts")?.scrollIntoView({behavior:"smooth"})
+}
+function initExtraUI(){
+ const main=$("main");
+ if(!$("#catalogSection")){
+   const sec=document.createElement("section");sec.id="catalogSection";sec.className="section catalog section";
+   sec.innerHTML=`<div class="sectitle"><div><h2 id="resultTitle">كل المنتجات</h2><a id="clearFilters">مسح الفلاتر</a></div><select id="sort"><option value="featured">الأكثر صلة</option><option value="new">وصل حديثاً</option><option value="rating">الأعلى تقييماً</option><option value="priceUp">السعر: من الأقل</option><option value="priceDown">السعر: من الأعلى</option></select></div><div id="subcats" class="subcats"></div><div id="allProducts" class="products catalog-grid"></div>`;
+   main.appendChild(sec);
+ }
+ const footer=$("footer");
+ if(!$("#serviceCards")){
+   const sec=document.createElement("section");sec.id="serviceCards";sec.className="wrap service-cards";
+   sec.innerHTML=`<div><b>🚚 توصيل سريع</b><small>تتبع شحنتك من حسابك</small></div><div><b>🔒 دفع آمن</b><small>اختر طريقة الدفع المناسبة</small></div><div><b>↩️ إرجاع</b><small>اطلب الإرجاع من طلباتك</small></div><div><b>🎧 خدمة العملاء</b><small>مساعدة ومتابعة للطلبات</small></div>`;
+   footer.before(sec)
+ }
+}
 document.addEventListener("click",e=>{
- const cat=e.target.closest("[data-cat]");if(cat){e.preventDefault();setCat(cat.dataset.cat);return}
- const open=e.target.closest("[data-open]");if(open){const n=open.dataset.open;if(n==="account")accountModal();if(n==="favorites")favoritesModal();if(n==="orders")ordersModal();if(n==="addresses")addressesModal();if(n==="coupons")couponsModal();if(n==="support")supportModal();return}
- const scr=e.target.closest("[data-scroll]");if(scr){if(scr.dataset.scroll==="home")window.scrollTo({top:0,behavior:"smooth"});else document.getElementById(scr.dataset.scroll)?.scrollIntoView({behavior:"smooth"});return}
- const buyBtn=e.target.closest("[data-buy]");if(buyBtn){add(+buyBtn.dataset.buy);setTimeout(checkoutModal,100);return}
-const addBtn=e.target.closest("[data-add]");if(addBtn){add(+addBtn.dataset.add);return}
- const favBtn=e.target.closest("[data-fav]");if(favBtn){const id=+favBtn.dataset.fav;fav=fav.includes(id)?fav.filter(n=>n!==id):[...fav,id];save(KEY.fav,fav);render();return}
- const prod=e.target.closest("[data-product]");if(prod)productModal(+prod.dataset.product)
- const plus=e.target.closest("[data-plus]");if(plus){change(+plus.dataset.plus,1);renderCart()}
- const minus=e.target.closest("[data-minus]");if(minus){change(+minus.dataset.minus,-1);renderCart()}
- const rem=e.target.closest("[data-remove]");if(rem){cart=cart.filter(x=>x.id!==+rem.dataset.remove);save(KEY.cart,cart);renderCart();updateCounts()}
- const cp=e.target.closest("[data-copy]");if(cp){navigator.clipboard?.writeText(cp.dataset.copy);toast("تم نسخ الكود "+cp.dataset.copy)}
+ const open=e.target.closest("[data-open]"); if(open){productModal(+open.dataset.open);return}
+ const addBtn=e.target.closest("[data-add]");if(addBtn){add(+addBtn.dataset.add);return}
+ const fav=e.target.closest("[data-fav]");if(fav){toggleFav(+fav.dataset.fav);return}
+ const inc=e.target.closest("[data-inc]");if(inc){state.cart[+inc.dataset.inc].qty++;persist();renderCart();updateCounts();return}
+ const dec=e.target.closest("[data-dec]");if(dec){let x=state.cart[+dec.dataset.dec];x.qty--;if(x.qty<1)state.cart.splice(+dec.dataset.dec,1);persist();renderCart();updateCounts();return}
+ const rem=e.target.closest("[data-rem]");if(rem){removeCart(+rem.dataset.rem);return}
+ const sub=e.target.closest("[data-sub]");if(sub){state.sub=sub.dataset.sub;renderProducts();return}
+ const cat=e.target.closest("[data-cat]");if(cat){state.cat=cat.dataset.cat;state.sub="";renderProducts();return}
+ const ac=e.target.closest("[data-account]");if(ac){accountSection(ac.dataset.account);return}
+ if(e.target.closest("#cartBtn")){$("#cartPanel").classList.add("open");return}
+ if(e.target.closest("#ordersBtn")){ordersModal();return}
+ if(e.target.closest("#favBtn")){favModal();return}
+ if(e.target.closest("#accountBtn")){authModal();return}
+ if(e.target.closest("#allBtn")){openDrawer();return}
+ if(e.target.closest(".checkout")){checkout();return}
+ if(e.target.closest("#clearFilters")){state={...state,cat:"كل الأقسام",sub:"",q:""};$("#search").value="";renderProducts();return}
+ if(e.target.closest(".heroMain button")||e.target.closest(".side button")){$("#catalogSection").scrollIntoView({behavior:"smooth"});return}
 });
-$("#searchBtn").onclick=()=>{current="all";renderCats();render();$("#products").scrollIntoView({behavior:"smooth"})};
-$("#search").oninput=render;$("#search").onkeydown=e=>{if(e.key==="Enter")$("#searchBtn").click()};
-$$("#sort,[data-sort]").forEach(x=>x.addEventListener("click",e=>{const v=x.dataset.sort||x.value;if(v){sort=v;$("#sort").value=v;render();document.getElementById("products")?.scrollIntoView({behavior:"smooth"})}}));$("#filterBtn").onclick=()=>$("#filterPanel").classList.toggle("open");$("#applyFilters").onclick=render;
-$("#cartBtn").onclick=()=>{$("#cartPanel").classList.add("open");renderCart()};$("#bottomCart").onclick=()=>{$("#cartPanel").classList.add("open");renderCart()};$$("[data-close-panel]").forEach(b=>b.onclick=()=>$("#cartPanel").classList.remove("open"));
-$("#clearRecent").onclick=()=>{localStorage.removeItem(KEY.recent);renderRecent();};$("#checkout").onclick=checkoutModal;$("#couponBtn").onclick=applyCoupon;$("#accountBtn").onclick=accountModal;$("#favBtn").onclick=favoritesModal;
-$("#menuBtn").onclick=()=>{$("#drawer").classList.add("open");$("#overlay").classList.add("show");updateUser()};$("#closeDrawer").onclick=()=>{$("#drawer").classList.remove("open");$("#overlay").classList.remove("show")};$("#overlay").onclick=()=>{$("#drawer").classList.remove("open");$("#overlay").classList.remove("show")};
-let end=Date.now()+((7*24+3)*60*60*1000);setInterval(()=>{let d=Math.max(0,end-Date.now()),h=Math.floor(d/36e5),m=Math.floor(d%36e5/6e4),s=Math.floor(d%6e4/1e3);$("#timer").textContent=[h,m,s].map(x=>String(x).padStart(2,"0")).join(":")},1000);
-renderCats();render();renderCart();updateUser();updateCounts();renderRecent();renderRecommendations();
+const drawer=$("#drawer"),shade=$("#shade");
+function openDrawer(){drawer?.classList.add("open");shade?.classList.add("show")}
+function closeDrawer(){drawer?.classList.remove("open");shade?.classList.remove("show")}
+$("#menuBtn")?.addEventListener("click",openDrawer);$("#closeMenu")?.addEventListener("click",closeDrawer);shade?.addEventListener("click",closeDrawer);
+$("#modal .x")?.addEventListener("click",closeModal);
+$("#cartPanel .panelhead button")?.addEventListener("click",()=>$("#cartPanel").classList.remove("open"));
+$("#cartBtn")?.addEventListener("click",()=>$("#cartPanel").classList.add("open"));
+$("#search")?.addEventListener("input",e=>{let q=e.target.value.trim().toLowerCase();let hits=products.filter(p=>(p.name+p.brand+p.cat+p.sub).toLowerCase().includes(q)).slice(0,6);$("#suggestions").innerHTML=q?hits.map(p=>`<div data-open="${p.id}">${p.emoji} ${esc(p.name)} <small>${esc(p.cat)}</small></div>`).join(""):""});
+$("#search")?.addEventListener("keydown",e=>{if(e.key==="Enter")searchRun()});
+$(".searchbox>button")?.addEventListener("click",searchRun);
+$("#searchCat")?.addEventListener("change",e=>{state.cat=e.target.value==="كل الأقسام"?"كل الأقسام":e.target.value;state.q="";renderProducts()});
+$("#sort")?.addEventListener("change",e=>{state.sort=e.target.value;renderProducts()});
+
+let t=6*3600+25*60+18;
+setInterval(()=>{t=Math.max(0,t-1);let h=Math.floor(t/3600),m=Math.floor(t%3600/60),s=t%60;let x=$("#timer");if(x)x.textContent=[h,m,s].map(n=>String(n).padStart(2,"0")).join(":")},1000);
+
+initExtraUI();renderProducts();renderCart();updateCounts();renderUser();
+})();
