@@ -172,7 +172,7 @@ function signupModal(){
    <button class="primary" type="submit">إنشاء الحساب</button>
  </form><p class="login-hint">لديك حساب مسبقاً؟ <a href="#" id="switchToLogin">تسجيل الدخول</a></p>`,box=>{
    $("#switchToLogin",box).onclick=e=>{e.preventDefault();loginModal()};
-   $("#signupForm",box).addEventListener("submit",e=>{
+   $("#signupForm",box).addEventListener("submit",async e=>{
      e.preventDefault();
      const first=$("#signupFirst",box).value.trim(), last=$("#signupLast",box).value.trim();
      const email=$("#signupEmail",box).value.trim(), phone=$("#signupPhone",box).value.trim(), pass=$("#signupPass",box).value;
