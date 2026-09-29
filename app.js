@@ -109,8 +109,9 @@ async function refreshAdminVisibility(){
    if(!db)return;
    const {data:{session}}=await db.auth.getSession();
    if(!session)return;
-   const {data:isAdmin,error}=await db.rpc("is_syria_admin");
-   if(!error && isAdmin===true) section.style.display="block";
+   const {data,error}=await db.rpc("is_syria_admin");
+   const isAdmin = data === true || data?.isAdmin === true || data?.is_admin === true;
+   if(!error && isAdmin) section.style.display="block";
  }catch(e){ console.warn("Admin visibility check failed",e); }
 }
 
@@ -184,23 +185,36 @@ function signupModal(){
  });
 }
 function loginModal(){
- modal("تسجيل الدخول",`<div class="signup-note">سجّل الدخول باستخدام البريد الإلكتروني أو رقم الهاتف وكلمة المرور.</div><form id="loginForm" class="form signup-form">
-   <label>البريد الإلكتروني أو رقم الهاتف<input id="loginId" required placeholder="example@email.com أو رقم الهاتف"></label>
-   <label>كلمة المرور<input id="loginPass" type="password" required placeholder="كلمة المرور"></label>
+ modal("تسجيل الدخول",`<div class="signup-note">تسجيل دخول واحد للموقع ولوحة التحكم. استخدم بريد حسابك وكلمة المرور.</div><form id="loginForm" class="form signup-form">
+   <label>البريد الإلكتروني<input id="loginId" type="email" required placeholder="example@email.com" autocomplete="email"></label>
+   <label>كلمة المرور<input id="loginPass" type="password" required placeholder="كلمة المرور" autocomplete="current-password"></label>
    <button class="primary" type="submit">تسجيل الدخول</button>
  </form><p class="login-hint">ما عندك حساب؟ <a href="#" id="switchToSignup">إنشاء حساب جديد</a></p>`,box=>{
    $("#switchToSignup",box).onclick=e=>{e.preventDefault();signupModal()};
-   $("#loginForm",box).addEventListener("submit",e=>{
+   $("#loginForm",box).addEventListener("submit",async e=>{
      e.preventDefault();
-     const id=$("#loginId",box).value.trim().toLowerCase(), pass=$("#loginPass",box).value;
-     const account=load(KEY.account,null);
-     if(!account){toast("لا يوجد حساب محفوظ. أنشئ حساباً جديداً أولاً");return}
-     const matches=id===String(account.email||"").toLowerCase() || id===String(account.phone||"").toLowerCase() || id===String((account.countryCode||"")+String(account.phone||"")).toLowerCase();
-     if(!matches || pass!==account.password){toast("بيانات تسجيل الدخول غير صحيحة");return}
-     state.user={...account}; delete state.user.password;
-     persist();renderUser();closeModal();toast("تم تسجيل الدخول بنجاح 👋");
+     if(!db){toast("خدمة تسجيل الدخول غير متاحة حالياً");return}
+     const email=$("#loginId",box).value.trim(), pass=$("#loginPass",box).value;
+     const {data,error}=await db.auth.signInWithPassword({email,password:pass});
+     if(error){toast(error.message||"بيانات تسجيل الدخول غير صحيحة");return}
+     const u=data.user;
+     state.user={id:u.id,email:u.email,name:u.user_metadata?.name||u.user_metadata?.full_name||u.email?.split("@")[0]||"المستخدم",firstName:u.user_metadata?.firstName||"",lastName:u.user_metadata?.lastName||""};
+     persist();renderUser();await refreshAdminVisibility();closeModal();toast("تم تسجيل الدخول بنجاح 👋");
    });
  });
+}
+
+async function syncStoreAuthUser(){
+ if(!db)return;
+ const {data:{session}}=await db.auth.getSession();
+ if(session?.user){
+   const u=session.user;
+   state.user={id:u.id,email:u.email,name:u.user_metadata?.name||u.user_metadata?.full_name||u.email?.split("@")[0]||"المستخدم",firstName:u.user_metadata?.firstName||"",lastName:u.user_metadata?.lastName||""};
+ }else{
+   state.user=null;
+ }
+ persist();renderUser();
+ await refreshAdminVisibility();
 }
 
 function profileModal(){
@@ -513,7 +527,8 @@ setInterval(()=>{t=Math.max(0,t-1);let h=Math.floor(t/3600),m=Math.floor(t%3600/
 
 initExtraUI();renderProducts();renderCart();updateCounts();renderUser();refreshAdminVisibility();
 if(db){
- db.auth.onAuthStateChange(()=>refreshAdminVisibility());
+ syncStoreAuthUser();
+ db.auth.onAuthStateChange(()=>{setTimeout(syncStoreAuthUser,0)});
 }
 activateV6();
 })();

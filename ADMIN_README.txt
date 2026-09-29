@@ -1,10 +1,18 @@
-Syria Online V17 — Admin menu + owner-only protection + login fix
+Syria Online — V18
 
-1) The admin shortcut is removed from the storefront header and kept only inside the side menu.
-2) /admin.html is protected by Supabase Auth and a database-side owner policy.
-3) Only the owner account configured in Supabase can read/change products, categories, orders and customers through the admin panel.
-4) Public storefront access and public order creation remain available.
-5) Do not put a Supabase service_role key in the website.
+تسجيل دخول موحّد:
+- حساب المتجر وحساب لوحة التحكم يستخدمان نفس جلسة Supabase.
+- الحساب الإداري المعتمد: nasem99alro7@gmail.com
+- بعد تسجيل الدخول بهذا الحساب من المتجر، يظهر رابط لوحة التحكم تلقائياً داخل القائمة.
+- لا يحتاج الأدمن إلى تسجيل الدخول مرة ثانية عند فتح admin.html.
+- الحسابات العادية لا يظهر لها رابط لوحة التحكم.
 
-6) Fixed the Supabase RPC response handling so admin login correctly reads the boolean returned by is_syria_admin().
-7) Fixed the storefront admin-visibility check to use the same RPC response handling.
+لوحة التحكم:
+- إضافة المنتجات
+- تعديل الأسعار والبيانات والمخزون
+- حذف المنتجات
+- متابعة الطلبات وتغيير حالتها
+- عرض الأقسام
+
+مهم:
+لا تضع كلمة مرور أو مفتاح Service Role داخل ملفات الموقع. مفتاح Supabase الموجود في supabase-config.js هو مفتاح publishable فقط.
