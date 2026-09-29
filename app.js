@@ -247,6 +247,24 @@ function customerService(){
  })
 }
 function simpleInfo(title,body){modal(title,`<div class="info-page">${body}</div>`)}
+const SETTINGS_NOTIF_KEY="so_notifications_v6";
+const SETTINGS_CURRENCY_KEY="so_currency_v6";
+function settingsModal(){
+ const notif=localStorage.getItem(SETTINGS_NOTIF_KEY)!=="0";
+ const currency=localStorage.getItem(SETTINGS_CURRENCY_KEY)||"TRY";
+ modal("⚙️ الإعدادات العامة",`<div class="settings-list">
+  <div class="settings-item"><div class="settings-info"><b>🌐 اللغة</b><small>لغة واجهة المتجر</small></div><button id="settingsLanguage">${LANG[currentLang].name}</button></div>
+  <div class="settings-item"><div class="settings-info"><b>💱 العملة</b><small>العملة المفضلة لعرض الأسعار</small></div><select id="settingsCurrency"><option value="TRY">الليرة التركية TRY</option><option value="SYP">الليرة السورية SYP</option></select></div>
+  <div class="settings-item"><div class="settings-info"><b>🔔 إشعارات الطلبات</b><small>تنبيهات حالة الطلب وخدمة العملاء</small></div><button id="settingsNotif" class="settings-toggle ${notif?"on":""}" aria-label="الإشعارات"></button></div>
+  <div class="settings-item"><div class="settings-info"><b>🔒 الخصوصية</b><small>إدارة بيانات الحساب المحفوظة على هذا الجهاز</small></div><button id="settingsPrivacy">عرض</button></div>
+ </div>`,box=>{
+  $("#settingsCurrency",box).value=currency;
+  $("#settingsLanguage",box).onclick=()=>{closeModal();languageModal()};
+  $("#settingsCurrency",box).onchange=e=>{localStorage.setItem(SETTINGS_CURRENCY_KEY,e.target.value);toast(e.target.value==="TRY"?"تم اختيار الليرة التركية":"تم اختيار الليرة السورية")};
+  $("#settingsNotif",box).onclick=e=>{const on=!e.currentTarget.classList.contains("on");e.currentTarget.classList.toggle("on",on);localStorage.setItem(SETTINGS_NOTIF_KEY,on?"1":"0");toast(on?"تم تفعيل الإشعارات":"تم إيقاف الإشعارات")};
+  $("#settingsPrivacy",box).onclick=()=>simpleInfo("الخصوصية","<p>بيانات السلة والمفضلة وبعض إعدادات الموقع تُحفظ محلياً على هذا الجهاز في هذا الإصدار.</p>");
+ });
+}
 function brandModal(){
  const brands=[...new Set(products.map(p=>p.brand))];
  modal("العلامات التجارية",`<div class="brand-list">${brands.map(b=>`<button data-brand="${esc(b)}">${esc(b)}</button>`).join("")}</div>`,box=>$$("[data-brand]",box).forEach(b=>b.onclick=()=>{state.q=b.dataset.brand;$("#search").value=b.dataset.brand;closeModal();renderProducts();$("#catalogSection").scrollIntoView({behavior:"smooth"})}))
@@ -310,7 +328,7 @@ function activateV6(){
  on("footerPrivacy",()=>simpleInfo("سياسة الخصوصية","<p>تُستخدم بيانات الحساب والعنوان لإتمام الطلب وخدمة العملاء. السلة والمفضلة محفوظتان محلياً في هذا الإصدار.</p>"));
  on("footerTerms",()=>simpleInfo("شروط الاستخدام","<p>باستخدام المتجر توافق على شروط الشراء والدفع والتوصيل والإرجاع المعروضة في الموقع.</p>"));
  on("footerShipping",()=>simpleInfo("سياسة الشحن","<p>مدة الشحن تختلف حسب المدينة والمنتج وتظهر أثناء إتمام الطلب.</p>"));
- on("languageBtn",languageModal);
+ on("languageBtn",languageModal);on("drawerSettings",settingsModal);
  on("currencyTRY",()=>toast("العملة الحالية: الليرة التركية TRY"));on("currencySYP",()=>toast("العملة الحالية: الليرة السورية SYP"));
  setLanguage(currentLang);
  activateServiceCardsV6();

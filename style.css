@@ -105,3 +105,15 @@ button{font-family:inherit;cursor:pointer}
 .drawer-subs{display:none;background:#f7fbf6;padding:5px 18px 11px}
 .drawer-cat.open .drawer-subs{display:grid;grid-template-columns:1fr 1fr;gap:6px}
 .drawer-subs button{border:1px solid #e0e9df;background:#fff;border-radius:8px;padding:9px 7px;color:#273029;text-align:right;font:500 12px Cairo,Tahoma,sans-serif;cursor:pointer}
+
+.drawer-settings{display:block;border-bottom:1px solid #ececec;padding:15px 18px;color:#18201b;text-decoration:none;font:600 16px Cairo,Tahoma,sans-serif;cursor:pointer;background:#fff}
+.drawer-settings:active{background:#f5faf5}
+.settings-list{display:grid;gap:10px}
+.settings-item{display:flex;align-items:center;justify-content:space-between;gap:12px;border:1px solid #dfe7e1;border-radius:12px;background:#fff;padding:13px 14px}
+.settings-item .settings-info{display:grid;gap:3px}
+.settings-item small{color:#718078}
+.settings-item button,.settings-item select{border:1px solid #d6dfd8;background:#f7faf8;border-radius:9px;padding:8px 10px;font:inherit;cursor:pointer}
+.settings-toggle{position:relative;width:48px;height:26px;border-radius:20px;background:#cfd8d1;border:0;cursor:pointer}
+.settings-toggle.on{background:#48a847}
+.settings-toggle:after{content:"";position:absolute;top:4px;right:25px;width:18px;height:18px;background:#fff;border-radius:50%;transition:.2s}
+.settings-toggle.on:after{right:5px}
