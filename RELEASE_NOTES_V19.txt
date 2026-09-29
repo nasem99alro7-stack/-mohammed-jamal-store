@@ -1,0 +1,11 @@
+Syria Online V19
+
+- Unified Supabase login: store login is the single login used by the admin.
+- Admin account: nasem99alro7@gmail.com (password is not stored in the site files).
+- Admin link appears only after the current Supabase session is verified as admin.
+- Admin dashboard can add/edit/delete products and update order status.
+- Products created/edited in the dashboard are stored in Supabase and are read automatically by the public store.
+- Customer signup now uses Supabase Auth instead of a browser-only local account.
+- Customer logout signs out of Supabase so the admin session/link is removed correctly.
+- Added simple category creation in the admin dashboard.
+- No secrets or admin password are embedded in the archive.

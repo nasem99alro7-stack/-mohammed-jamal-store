@@ -151,7 +151,7 @@ function authModal(){
  if(state.user){
    modal("حسابي",`<div class="profile-summary"><div class="profile-avatar">👤</div><div><h3>${esc(state.user.name)}</h3><p>${esc(state.user.email||state.user.phone||"")}</p></div></div><div class="account-grid"><button data-account="profile">👤 ملفي الشخصي</button><button data-account="orders">📦 طلباتك</button><button data-account="fav">♡ المفضلة (${state.fav.length})</button><button data-account="address">📍 عناوينك</button><button data-account="payments">💳 طرق الدفع</button><button data-account="recent">👁 شاهدته مؤخراً</button><button data-account="returns">↩️ الإرجاع والاسترداد</button><button data-logout>🚪 تسجيل الخروج</button></div>`,box=>{
      $$('[data-account]',box).forEach(b=>b.onclick=()=>accountSection(b.dataset.account));
-     $(`[data-logout]`,box)?.addEventListener("click",()=>{state.user=null;persist();renderUser();closeModal();toast("تم تسجيل الخروج")});
+     $(`[data-logout]`,box)?.addEventListener("click",async()=>{await db?.auth.signOut();state.user=null;persist();renderUser();await refreshAdminVisibility();closeModal();toast("تم تسجيل الخروج")});
    });
    return;
  }
@@ -176,11 +176,18 @@ function signupModal(){
      e.preventDefault();
      const first=$("#signupFirst",box).value.trim(), last=$("#signupLast",box).value.trim();
      const email=$("#signupEmail",box).value.trim(), phone=$("#signupPhone",box).value.trim(), pass=$("#signupPass",box).value;
-     const account={name:`${first} ${last}`.trim(),firstName:first,lastName:last,gender:$("#signupGender",box).value,birthDate:$("#signupBirth",box).value,email,countryCode:$("#signupCode",box).value,phone,marketing:$("#signupMarketing",box).checked,password:pass};
-     save(KEY.account,account);
-     state.user={...account}; delete state.user.password;
-     persist();renderUser();closeModal();toast("تم إنشاء حسابك بنجاح 🎉");
-     setTimeout(profileModal,180);
+     const account={name:`${first} ${last}`.trim(),firstName:first,lastName:last,gender:$("#signupGender",box).value,birthDate:$("#signupBirth",box).value,email,countryCode:$("#signupCode",box).value,phone,marketing:$("#signupMarketing",box).checked};
+     if(!db){toast("خدمة الحسابات غير متاحة حالياً");return}
+     const {data,error}=await db.auth.signUp({email,password:pass,options:{data:{name:account.name,firstName:first,lastName:last,gender:account.gender,birthDate:account.birthDate,countryCode:account.countryCode,phone:account.phone,marketing:account.marketing}}});
+     if(error){toast(error.message||"تعذر إنشاء الحساب");return}
+     if(data.session?.user){
+       const u=data.session.user;
+       state.user={id:u.id,email:u.email,name:u.user_metadata?.name||account.name,firstName:u.user_metadata?.firstName||first,lastName:u.user_metadata?.lastName||last,gender:u.user_metadata?.gender||account.gender,birthDate:u.user_metadata?.birthDate||account.birthDate,countryCode:u.user_metadata?.countryCode||account.countryCode,phone:u.user_metadata?.phone||account.phone,marketing:!!u.user_metadata?.marketing};
+       save(KEY.account,account); persist(); renderUser(); await refreshAdminVisibility(); closeModal(); toast("تم إنشاء حسابك وتسجيل دخولك بنجاح 🎉"); setTimeout(profileModal,180);
+     }else{
+       toast("تم إنشاء الحساب. افتح بريدك لتأكيد الحساب ثم سجّل الدخول.");
+       closeModal();
+     }
    });
  });
 }
@@ -470,7 +477,7 @@ function activateV6(){
  on("footerShipping",()=>simpleInfo("سياسة الشحن","<p>مدة الشحن تختلف حسب المدينة والمنتج وتظهر أثناء إتمام الطلب.</p>"));
  on("languageBtn",languageModal);on("drawerSettings",()=>{closeDrawer();settingsModal();});
  on("drawerLogin",()=>{closeDrawer();loginModal();}); on("drawerSignup",()=>{closeDrawer();signupModal();});
- on("drawerLogout",()=>{if(!state.user)return;state.user=null;persist();renderUser();closeDrawer();closeModal();toast("تم تسجيل الخروج بنجاح");});
+ on("drawerLogout",async()=>{if(!state.user)return;await db?.auth.signOut();state.user=null;persist();renderUser();await refreshAdminVisibility();closeDrawer();closeModal();toast("تم تسجيل الخروج بنجاح");});
  on("currencyTRY",()=>toast("العملة الحالية: الليرة التركية TRY"));on("currencySYP",()=>toast("العملة الحالية: الليرة السورية SYP"));
  setLanguage(currentLang);
  activateServiceCardsV6();
