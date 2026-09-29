@@ -105,3 +105,12 @@ button{font-family:inherit;cursor:pointer}
 .drawer-subs{display:none;background:#f7fbf6;padding:5px 18px 11px}
 .drawer-cat.open .drawer-subs{display:grid;grid-template-columns:1fr 1fr;gap:6px}
 .drawer-subs button{border:1px solid #e0e9df;background:#fff;border-radius:8px;padding:9px 7px;color:#273029;text-align:right;font:500 12px Cairo,Tahoma,sans-serif;cursor:pointer}
+
+.drawer-account{width:100%;border:0;background:#eef7ec;padding:22px 18px;text-align:right;color:#18201b;font:700 20px Cairo,Tahoma,sans-serif;cursor:pointer}
+.drawer-account:hover{background:#e4f2e0}
+
+.drawer-account-panel{background:#eef7ec;border-bottom:1px solid #e2ece0}
+.drawer-account{width:100%;border:0;background:transparent;padding:18px 18px 10px;text-align:right;color:#18201b;font:700 20px Cairo,Tahoma,sans-serif;cursor:pointer}
+.drawer-account-links{display:grid;grid-template-columns:1fr 1fr;border-top:1px solid #dfe9dd}
+.drawer-account-links button{border:0;border-left:1px solid #dfe9dd;border-bottom:1px solid #dfe9dd;background:#fff;padding:13px 10px;color:#273029;text-align:right;font:500 14px Cairo,Tahoma,sans-serif;cursor:pointer}
+.drawer-account-links button:hover{background:#f4faf2}
