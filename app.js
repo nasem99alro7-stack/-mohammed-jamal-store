@@ -505,6 +505,8 @@ document.addEventListener("click",e=>{
  const rem=e.target.closest("[data-rem]");if(rem){removeCart(+rem.dataset.rem);return}
  const sub=e.target.closest("[data-sub]");if(sub){state.sub=sub.dataset.sub;renderProducts();return}
  const cat=e.target.closest("[data-cat]");if(cat){state.cat=cat.dataset.cat;state.sub="";renderProducts();return}
+ if(e.target.closest("#drawerLogin")){closeDrawer();loginModal();return}
+ if(e.target.closest("#drawerSignup")){closeDrawer();signupModal();return}
  const ac=e.target.closest("[data-account]");if(ac){accountSection(ac.dataset.account);return}
  if(e.target.closest("#cartBtn")){$("#cartPanel").classList.add("open");return}
  if(e.target.closest("#ordersBtn")){ordersModal();return}
