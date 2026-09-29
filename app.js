@@ -22,6 +22,23 @@ const products=[
 {id:12,emoji:"🧒",name:"طقم أطفال قطني",cat:"أزياء",sub:"ملابس أطفال",brand:"Syria Kids",price:520,old:690,sale:"-25%",rating:4.6,reviews:75,sold:155,color:"أزرق",sizes:["2Y","4Y","6Y","8Y"],stock:25,desc:"طقم أطفال قطني ناعم للاستخدام اليومي واللعب.",specs:{الخامة:"قطن",العمر:"2-8 سنوات",الجنس:"أطفال",اللون:"أزرق"}}
 ];
 
+// Admin-managed catalog overlay: products created/edited from /admin.html
+// are merged into the storefront without removing the built-in demo catalog.
+const ADMIN_PRODUCTS_KEY="so_admin_products_v1";
+function applyAdminCatalog(){
+  const custom=load(ADMIN_PRODUCTS_KEY,[]);
+  if(!Array.isArray(custom)) return;
+  const byId=new Map(products.map(p=>[Number(p.id),p]));
+  custom.forEach(p=>{
+    const id=Number(p.id);
+    if(!id)return;
+    if(p.active===false){byId.delete(id);return;}
+    byId.set(id,{...p,id,price:Number(p.price||0),old:Number(p.old||p.price||0),rating:Number(p.rating||5),reviews:Number(p.reviews||0),sold:Number(p.sold||0),stock:Number(p.stock||0),sizes:Array.isArray(p.sizes)&&p.sizes.length?p.sizes:["موحد"],specs:p.specs||{}});
+  });
+  products.splice(0,products.length,...byId.values());
+}
+applyAdminCatalog();
+
 const categoryOrder=["إلكترونيات","أزياء","المنزل والمطبخ","عطور وجمال","أحذية وحقائب","رياضة ولياقة","ألعاب وهدايا","سيارات","مستلزمات مكتبية","سوبرماركت"];
 const subcats={
 "إلكترونيات":["موبايلات","آيفون","سامسونج","هواتف","أيبادات","تابلت","كمبيوترات","لابتوبات","شاشات","سماعات","ساعات ذكية","كاميرات","إكسسوارات"],
