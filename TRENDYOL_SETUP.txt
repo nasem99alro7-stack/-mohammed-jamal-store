@@ -1,0 +1,19 @@
+Syria Online — Trendyol V2 setup
+
+The project includes a server-side Vercel function at /api/trendyol.js.
+Do NOT put Trendyol credentials in HTML, JavaScript, GitHub, or Supabase public keys.
+
+Set these Vercel Environment Variables:
+TRENDYOL_SELLER_ID
+TRENDYOL_API_KEY
+TRENDYOL_API_SECRET
+TRENDYOL_USER_AGENT (optional)
+
+The function supports:
+GET /api/trendyol?action=brands
+GET /api/trendyol?action=categories
+GET /api/trendyol?action=attributes&categoryId=...
+POST /api/trendyol?action=create
+POST /api/trendyol?action=inventory
+
+Product V2 is asynchronous; store the returned batchRequestId and check the batch result before treating the transfer as complete.

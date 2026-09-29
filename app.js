@@ -308,8 +308,7 @@ function paymentModal(){
      if(type==="card") fields=`
        <input name="name" required placeholder="${labels.name}">
        <input name="phone" required inputmode="tel" placeholder="${labels.phone}">
-       <input name="cardNo" required inputmode="numeric" maxlength="19" placeholder="${labels.cardNo}">
-       <div class="form-row"><input name="expiry" required placeholder="${labels.expiry}"><input name="cvv" required inputmode="numeric" maxlength="4" placeholder="${labels.cvv}"></div>`;
+       <p class="payment-note">سيتم تحويلك إلى بوابة دفع آمنة عند تفعيل مزود الدفع. لا ندخل أو نخزن رقم البطاقة أو CVV داخل المتجر.</p>`;
      if(type==="cash") fields=`
        <input name="name" required placeholder="${labels.name}">
        <input name="phone" required inputmode="tel" placeholder="${labels.phone}">
@@ -332,7 +331,7 @@ function paymentModal(){
        e.preventDefault();
        const data=Object.fromEntries(new FormData(e.currentTarget).entries());
        data.type=type; data.updatedAt=new Date().toISOString();
-       save("so_payment_profile_v6",data);
+       save("so_payment_profile_v6",{type:data.type,name:data.name,phone:data.phone,ref:data.ref,wallet:data.wallet,network:data.network,address:data.address,updatedAt:data.updatedAt});
        toast(labels.saved);
      };
      area.scrollIntoView({behavior:"smooth",block:"nearest"});

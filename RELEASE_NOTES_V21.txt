@@ -1,0 +1,18 @@
+Syria Online V21 — Finalized foundation
+
+- Preserves V19/V20 store design and unified Supabase admin session.
+- Adds bulk CSV product import; all imported products start as drafts.
+- Adds Trendyol V2 server-side integration bridge under /api/trendyol.js.
+- Trendyol credentials are server-only environment variables; never stored in the frontend.
+- Adds admin integration status screen.
+- Removes raw card number / CVV collection from the frontend payment form.
+- Keeps manual payment methods available as order/payment-method placeholders until a real licensed gateway is connected.
+- Keeps product lifecycle: draft / published / hidden.
+- Keeps product source, source URL, cost price and profit fields.
+- Adds setup documentation for Trendyol V2 and Vercel environment variables.
+
+Not falsely claimed as live until configured:
+- Trendyol API credentials
+- Licensed card payment gateway
+- Final production domain/DNS
+- Native App Store / Google Play publishing accounts

@@ -1,0 +1,15 @@
+Syria Online V21 — Final setup checklist
+
+1) Keep V19 FIXED as your rollback copy.
+2) Upload this V21 archive to the same Vercel project when ready.
+3) In Vercel Environment Variables, add Trendyol credentials only if you have a Trendyol Seller account:
+   TRENDYOL_SELLER_ID
+   TRENDYOL_API_KEY
+   TRENDYOL_API_SECRET
+   TRENDYOL_USER_AGENT (optional)
+4) Redeploy.
+5) Sign in to the store with the admin account; open the admin panel from the store.
+6) Products can be added manually or by CSV as drafts.
+7) Trendyol API product creation requires valid brand/category/attribute data and returns an asynchronous batch request; check the batch result before considering the transfer complete.
+8) Card payments are intentionally not implemented by collecting card data in the site. Connect a licensed payment provider before advertising card checkout.
+9) Final domain, shipping provider, legal pages, and mobile-store publication still require your real provider/account details.
