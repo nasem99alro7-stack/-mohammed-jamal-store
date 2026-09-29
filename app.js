@@ -44,8 +44,23 @@ function modal(title,body,after){$("#modalContent").innerHTML=`<h2>${title}</h2>
 function closeModal(){$("#modal").classList.remove("show")}
 function card(p){
  const fav=state.fav.includes(p.id);
- return `<article class="card" data-id="${p.id}"><button class="heart ${fav?"active":""}" data-fav="${p.id}">${fav?"♥":"♡"}</button>${p.sale?`<span class="sale">${p.sale}</span>`:""}<div class="pic" data-open="${p.id}">${p.emoji}</div><div class="stars">★★★★★ <small>(${p.reviews})</small></div><h3 data-open="${p.id}">${esc(p.name)}</h3><div class="price"><strong>${money(p.price)}</strong> <del>${money(p.old)}</del></div><small class="seller">يباع بواسطة ${esc(p.brand)}</small><div class="card-actions"><button class="add" data-add="${p.id}">أضف للسلة 🛒</button><button class="quick" data-open="${p.id}">التفاصيل</button></div></article>`
+ return `<article class="card" data-id="${p.id}"><button class="heart ${fav?"active":""}" data-fav="${p.id}">${fav?"♥":"♡"}</button>${p.sale?`<span class="sale">${p.sale}</span>`:""}<div class="pic" data-open="${p.id}">${p.emoji}</div><div class="stars">★★★★★ <small>(${p.reviews})</small></div><h3 data-open="${p.id}">${esc(lang==="ar"?p.name:p.name)}</h3><div class="price"><strong>${money(p.price)}</strong> <del>${money(p.old)}</del></div><small class="seller">${tr("seller")} ${esc(p.brand)}</small><div class="card-actions"><button class="add" data-add="${p.id}">${tr("add")}</button><button class="quick" data-open="${p.id}">${tr("details")}</button></div></article>`
 }
+
+const catalogI18n={
+"إلكترونيات":{en:"Electronics",tr:"Elektronik"},
+"موبايلات":{en:"Mobile Phones",tr:"Cep Telefonları"},"آيفون":{en:"iPhone",tr:"iPhone"},"سامسونج":{en:"Samsung",tr:"Samsung"},
+"أيبادات":{en:"iPads",tr:"iPad"},"تابلت":{en:"Tablets",tr:"Tabletler"},"كمبيوترات":{en:"Computers",tr:"Bilgisayarlar"},"لابتوبات":{en:"Laptops",tr:"Dizüstü Bilgisayarlar"},
+"شاشات":{en:"Monitors",tr:"Monitörler"},"سماعات":{en:"Headphones",tr:"Kulaklıklar"},"ساعات ذكية":{en:"Smart Watches",tr:"Akıllı Saatler"},"كاميرات":{en:"Cameras",tr:"Kameralar"},"إكسسوارات":{en:"Accessories",tr:"Aksesuarlar"},
+"أزياء":{en:"Fashion",tr:"Moda"},"ملابس رجالية":{en:"Men's Clothing",tr:"Erkek Giyim"},"ملابس نسائية":{en:"Women's Clothing",tr:"Kadın Giyim"},"ملابس أطفال":{en:"Kids' Clothing",tr:"Çocuk Giyim"},"حقائب نسائية":{en:"Women's Bags",tr:"Kadın Çantaları"},
+"المنزل والمطبخ":{en:"Home & Kitchen",tr:"Ev ve Mutfak"},"أدوات المطبخ":{en:"Kitchen Tools",tr:"Mutfak Gereçleri"},"أواني الطبخ":{en:"Cookware",tr:"Pişirme Gereçleri"},"أجهزة منزلية":{en:"Home Appliances",tr:"Ev Aletleri"},
+"عطور وجمال":{en:"Beauty & Fragrance",tr:"Güzellik ve Parfüm"},"عطور نسائية":{en:"Women's Fragrances",tr:"Kadın Parfümleri"},"عطور رجالية":{en:"Men's Fragrances",tr:"Erkek Parfümleri"},"مكياج":{en:"Makeup",tr:"Makyaj"},
+"ألعاب وهدايا":{en:"Toys & Gifts",tr:"Oyuncak ve Hediyeler"},"ألعاب أطفال":{en:"Kids' Toys",tr:"Çocuk Oyuncakları"},"هدايا":{en:"Gifts",tr:"Hediyeler"},
+"أحذية وحقائب":{en:"Shoes & Bags",tr:"Ayakkabı ve Çantalar"},"أحذية رجالية":{en:"Men's Shoes",tr:"Erkek Ayakkabıları"},"أحذية نسائية":{en:"Women's Shoes",tr:"Kadın Ayakkabıları"},
+"رياضة ولياقة":{en:"Sports & Fitness",tr:"Spor ve Fitness"},"سيارات":{en:"Automotive",tr:"Otomotiv"},"مستلزمات مكتبية":{en:"Office Supplies",tr:"Ofis Malzemeleri"},"سوبرماركت":{en:"Supermarket",tr:"Süpermarket"}
+};
+function ct(s){return lang==="ar"?s:(catalogI18n[s]?.[lang]||s)}
+
 function filtered(){
  let a=products.filter(p=>(state.cat==="كل الأقسام"||p.cat===state.cat)&&(state.sub===""||p.sub===state.sub));
  if(state.q){let q=state.q.toLowerCase();a=a.filter(p=>(p.name+p.brand+p.cat+p.sub).toLowerCase().includes(q))}
@@ -60,13 +75,13 @@ function renderProducts(){
  $("#deals").innerHTML=products.filter(p=>p.sale).slice(0,5).map(card).join("");
  $("#best").innerHTML=products.slice().sort((a,b)=>b.sold-a.sold).slice(0,6).map(card).join("");
  let grid=$("#allProducts"); if(grid)grid.innerHTML=a.map(card).join("")||`<div class="empty">لا توجد منتجات مطابقة.</div>`;
- $("#resultTitle").textContent=state.q?`نتائج البحث عن "${state.q}"`:state.cat==="كل الأقسام"?"كل المنتجات":state.cat+(state.sub?" — "+state.sub:"");
+ $("#resultTitle").textContent=state.q?`نتائج البحث عن "${state.q}"`:state.cat==="كل الأقسام"?"كل المنتجات":ct(state.cat)+(state.sub?" — "+ct(state.sub):"");
  renderSubcats();
 }
 function renderSubcats(){
  let box=$("#subcats"); if(!box)return;
  const arr=state.cat==="كل الأقسام"?Object.keys(subcats):subcats[state.cat]||[];
- box.innerHTML=`<button data-cat="كل الأقسام" class="${state.cat==="كل الأقسام"?"on":""}">الكل</button>`+arr.map(s=>`<button data-sub="${esc(s)}" class="${state.sub===s?"on":""}">${esc(s)}</button>`).join("");
+ box.innerHTML=`<button data-cat="كل الأقسام" class="${state.cat==="كل الأقسام"?"on":""}">الكل</button>`+arr.map(s=>`<button data-sub="${esc(s)}" class="${state.sub===s?"on":""}">${esc(ct(s))}</button>`).join("");
 }
 function renderUser(){
  const u=state.user;
@@ -81,15 +96,15 @@ function add(id,qty=1,opts={}){
 }
 function removeCart(i){state.cart.splice(i,1);persist();renderCart();updateCounts()}
 function renderCart(){
- let rows=state.cart.map((x,i)=>{let p=products.find(p=>p.id===x.id);return `<div class="cartrow"><span class="mini">${p.emoji}</span><div class="grow"><b>${esc(p.name)}</b><small>${x.size||""} ${x.color||""}</small><strong>${money(p.price*x.qty)}</strong><div class="qty"><button data-dec="${i}">−</button><b>${x.qty}</b><button data-inc="${i}">+</button><button class="remove" data-rem="${i}">حذف</button></div></div></div>`}).join("");
- $("#cartItems").innerHTML=rows||"<p class='empty'>السلة فارغة حالياً.</p>";
+ let rows=state.cart.map((x,i)=>{let p=products.find(p=>p.id===x.id);return `<div class="cartrow"><span class="mini">${p.emoji}</span><div class="grow"><b>${esc(p.name)}</b><small>${x.size||""} ${x.color||""}</small><strong>${money(p.price*x.qty)}</strong><div class="qty"><button data-dec="${i}">−</button><b>${x.qty}</b><button data-inc="${i}">+</button><button class="remove" data-rem="${i}">${tr("delete")}</button></div></div></div>`}).join("");
+ $("#cartItems").innerHTML=rows||`<p class="empty">${tr("emptyCart")}</p>`;
  $("#total").textContent=money(state.cart.reduce((s,x)=>s+products.find(p=>p.id===x.id).price*x.qty,0))
 }
 function remember(id){state.recent=[id,...state.recent.filter(x=>x!==id)].slice(0,10);persist()}
 function productModal(id){
  const p=products.find(x=>x.id===id); if(!p)return; remember(id);
  const related=products.filter(x=>x.cat===p.cat&&x.id!==p.id).slice(0,4);
- modal(p.name,`<div class="product-detail"><div class="detail-image">${p.emoji}</div><div class="detail-info"><div class="stars">★★★★★ ${p.rating} (${p.reviews} تقييم)</div><span class="tag">${esc(p.brand)} • ${esc(p.cat)} • ${esc(p.sub)}</span><h1>${esc(p.name)}</h1><div class="detail-price">${money(p.price)} ${p.old?`<del>${money(p.old)}</del>`:""}</div><p>${esc(p.desc)}</p><div class="detail-meta"><b>متوفر: ${p.stock} قطعة</b><span>🚚 توصيل متوقع 1–4 أيام</span><span>↩️ إرجاع حسب سياسة المنتج</span></div><label>المقاس/الخيار<select id="sizeSel">${p.sizes.map(s=>`<option>${esc(s)}</option>`).join("")}</select></label><label>اللون<select id="colorSel"><option>${esc(p.color)}</option></select></label><div class="detail-actions"><button class="primary" id="addDetail">أضف إلى السلة</button><button class="primary buyDetail">اشترِ الآن</button><button class="secondary" id="favDetail">${state.fav.includes(p.id)?"♥ إزالة من المفضلة":"♡ أضف للمفضلة"}</button></div></div></div><div class="specs"><h3>تفاصيل المنتج</h3><table>${Object.entries(p.specs).map(([k,v])=>`<tr><th>${esc(k)}</th><td>${esc(v)}</td></tr>`).join("")}</table></div><div class="related"><h3>منتجات مشابهة</h3><div class="products">${related.map(card).join("")}</div></div>`,box=>{
+ modal(p.name,`<div class="product-detail"><div class="detail-image">${p.emoji}</div><div class="detail-info"><div class="stars">★★★★★ ${p.rating} (${p.reviews} تقييم)</div><span class="tag">${esc(p.brand)} • ${esc(ct(p.cat))} • ${esc(ct(p.sub))}</span><h1>${esc(p.name)}</h1><div class="detail-price">${money(p.price)} ${p.old?`<del>${money(p.old)}</del>`:""}</div><p>${esc(p.desc)}</p><div class="detail-meta"><b>${tr("available")}: ${p.stock}</b><span>🚚 ${tr("delivery")}</span><span>↩️ ${tr("returns")}</span></div><label>${tr("selectOption")}<select id="sizeSel">${p.sizes.map(s=>`<option>${esc(s)}</option>`).join("")}</select></label><label>${tr("color")}<select id="colorSel"><option>${esc(p.color)}</option></select></label><div class="detail-actions"><button class="primary" id="addDetail">${tr("add")}</button><button class="primary buyDetail">${tr("buy")}</button><button class="secondary" id="favDetail">${state.fav.includes(p.id)?"♥ إزالة من المفضلة":"♡ أضف للمفضلة"}</button></div></div></div><div class="specs"><h3>${tr("specs")}</h3><table>${Object.entries(p.specs).map(([k,v])=>`<tr><th>${esc(k)}</th><td>${esc(v)}</td></tr>`).join("")}</table></div><div class="related"><h3>${tr("similar")}</h3><div class="products">${related.map(card).join("")}</div></div>`,box=>{
   $("#addDetail",box).onclick=()=>{add(p.id,1,{size:$("#sizeSel").value,color:$("#colorSel").value});closeModal()};
   $(".buyDetail",box).onclick=()=>{add(p.id,1,{size:$("#sizeSel").value,color:$("#colorSel").value});closeModal();checkout()};
   $("#favDetail",box).onclick=()=>{toggleFav(p.id);closeModal();productModal(p.id)};
@@ -179,6 +194,46 @@ function setLanguage(lang){
  Object.entries(texts).forEach(([s,v])=>{const x=$(s);if(x)x.textContent=v});
  $("#languageBtn").textContent=`🌐 ${t.name}`;
 }
+
+function activateServiceCards(){
+  const cards=[...document.querySelectorAll("a,button,.service-card,.feature-card,.info-card,.benefit-card")];
+  cards.forEach(el=>{
+    const text=(el.textContent||"").replace(/\s+/g," ").trim();
+    if(!text || el.dataset.serviceBound==="1") return;
+    let action=null;
+    if(text.includes("توصيل سريع")||/Fast Delivery|Hızlı Teslimat/i.test(text)) action=()=>openOrdersPage("shipping");
+    else if(text.includes("دفع آمن")||/Secure Payment|Güvenli Ödeme/i.test(text)) action=()=>openPaymentPage();
+    else if(text==="إرجاع"||text.includes("إرجاع")) action=()=>openReturnsPage();
+    else if(text.includes("خدمة العملاء")||/Customer Service|Müşteri Hizmetleri/i.test(text)) action=()=>customerService();
+    if(action){
+      el.dataset.serviceBound="1";
+      el.style.cursor="pointer";
+      el.addEventListener("click",e=>{
+        if(el.tagName==="A" && el.getAttribute("href") && el.getAttribute("href")!=="#") return;
+        e.preventDefault(); action();
+      });
+    }
+  });
+}
+
+function openOrdersPage(tab){
+  const orders=load("so_orders_v6",[]);
+  modal(tr("orders"),`<div class="info-page"><h3>📦 ${tr("orders")}</h3>
+  <p>${orders.length?orders.map(o=>`<div class="support-box"><b>#${esc(o.id||"SO-"+Math.random().toString(36).slice(2,8).toUpperCase())}</b><p>${esc(o.status||"Processing")}</p></div>`).join(""):`<p>${tr("noProducts")}</p>`}</div>`);
+}
+function openPaymentPage(){
+  modal(tr("payments"),`<div class="info-page"><h3>🔒 ${tr("payments")}</h3>
+  <div class="support-box"><p>💳 Visa / Mastercard</p><p>📱 ${lang==="ar"?"شام كاش":lang==="tr"?"Sham Cash":"Sham Cash"}</p><p>₿ USDT</p><p>🔐 ${tr("available")}</p></div></div>`);
+}
+function openReturnsPage(){
+  const orders=load("so_orders_v6",[]);
+  modal(tr("return"),`<div class="info-page"><h3>↩️ ${tr("return")}</h3>
+  <p>${tr("returns")}</p><p>${tr("orders")}: ${orders.length}</p>
+  <button class="primary" id="startReturn">${lang==="ar"?"طلب إرجاع":lang==="tr"?"İade Talebi":"Request a Return"}</button></div>`,box=>{
+    $("#startReturn",box)?.addEventListener("click",()=>customerService());
+  });
+}
+
 function customerService(){
  modal(currentLang==="ar"?"خدمة العملاء":currentLang==="tr"?"Müşteri Hizmetleri":"Customer Service",`
  <div class="support-box"><h3>🎧 ${currentLang==="ar"?"كيف يمكننا مساعدتك؟":currentLang==="tr"?"Size nasıl yardımcı olabiliriz?":"How can we help you?"}</h3>
@@ -278,5 +333,5 @@ $("#sort")?.addEventListener("change",e=>{state.sort=e.target.value;renderProduc
 let t=6*3600+25*60+18;
 setInterval(()=>{t=Math.max(0,t-1);let h=Math.floor(t/3600),m=Math.floor(t%3600/60),s=t%60;let x=$("#timer");if(x)x.textContent=[h,m,s].map(n=>String(n).padStart(2,"0")).join(":")},1000);
 
-initExtraUI();renderProducts();renderCart();updateCounts();renderUser();activateV6();
+initExtraUI();translateStatic();renderProducts();renderCart();updateCounts();renderUser();activateServiceCards();activateV6();
 })();
