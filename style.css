@@ -137,3 +137,9 @@ button{font-family:inherit;cursor:pointer}
 .drawer-logout{color:#b42323!important;font-weight:700!important}
 
 .auth-choice p{font-size:14px;line-height:1.9;text-align:center;color:#58635a}.auth-choice-buttons{display:grid;gap:10px}.auth-choice-buttons button{width:100%;padding:13px;border-radius:8px;cursor:pointer}.auth-drawer-actions{display:flex;gap:7px;margin-top:10px}.auth-drawer-actions button{flex:1;border:1px solid #d5e0d3;background:#fff;color:#1e6d2d;border-radius:7px;padding:9px;font-family:inherit;font-weight:700;cursor:pointer}.auth-drawer-actions button:first-child{background:#1e6d2d;color:#fff}
+
+/* Admin shortcut */
+.admin-link{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;text-decoration:none;color:inherit;min-width:86px;padding:5px 8px;border:1px solid #dce7de;border-radius:10px;background:#fff}
+.admin-link small{font-size:11px;color:#68736c}.admin-link b{font-size:13px}.admin-link:hover{border-color:#39a548;color:#238b31}
+.drawer-admin-link{display:block!important;background:#eef8ef;border:1px solid #cfe7d2;border-radius:10px;color:#238b31!important;font-weight:800!important}
+@media(max-width:800px){.admin-link{min-width:70px}.admin-link small{display:none}.admin-link b{font-size:11px}}
