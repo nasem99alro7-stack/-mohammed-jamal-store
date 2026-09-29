@@ -30,16 +30,7 @@ const db=window.syriaSupabase;let products=[],orders=[],categories=[],editId=nul
 const $=id=>document.getElementById(id);const statusLabel=s=>({new:'جديد',processing:'قيد التجهيز',shipped:'تم الشحن',delivered:'تم التسليم',cancelled:'ملغي'}[s]||s||'—');const esc=s=>String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));const money=n=>new Intl.NumberFormat('tr-TR').format(Number(n)||0)+' ₺';
 function msg(t,ok=false){$('authMsg').className='msg '+(ok?'ok':'');$('authMsg').textContent=t}
 async function boot(){const {data:{session}}=await db.auth.getSession();if(session){await guard(session)}else{$('authGate').classList.remove('hidden')};db.auth.onAuthStateChange(async (_e,s)=>{if(s)await guard(s);else{ $('app').classList.add('hidden');$('authGate').classList.remove('hidden')}})}
-async function guard(session){
-  msg('جاري التحقق من صلاحية الإدارة...');
-  const {data,isAdmin,error}=await db.rpc('is_syria_admin');
-  if(error||!isAdmin){
-    await db.auth.signOut();
-    msg('هذا الحساب ليس مخولاً للوصول إلى لوحة التحكم.');
-    return
-  }
-  showApp()
-}
+async function guard(session){msg('جاري التحقق من صلاحية الإدارة...');const {data:isAdmin,error}=await db.rpc('is_syria_admin');if(error||!isAdmin){await db.auth.signOut();msg('هذا الحساب ليس مخولاً للوصول إلى لوحة التحكم.');return}showApp()}
 function showApp(){$('authGate').classList.add('hidden');$('app').classList.remove('hidden');loadAll()}
 $('loginForm').onsubmit=async e=>{e.preventDefault();msg('جاري تسجيل الدخول...');const {error}=await db.auth.signInWithPassword({email:$('email').value.trim(),password:$('password').value});if(error)msg(error.message);else msg('تم تسجيل الدخول',true)};
 $('resetBtn').onclick=async()=>{if(!$('email').value)return msg('اكتب بريدك الإلكتروني أولاً');const {error}=await db.auth.resetPasswordForEmail($('email').value.trim(),{redirectTo:location.href});msg(error?error.message:'تم إرسال رابط إعادة تعيين كلمة المرور.',!error)};

@@ -109,7 +109,7 @@ async function refreshAdminVisibility(){
    if(!db)return;
    const {data:{session}}=await db.auth.getSession();
    if(!session)return;
-   const {data,isAdmin,error}=await db.rpc("is_syria_admin");
+   const {data:isAdmin,error}=await db.rpc("is_syria_admin");
    if(!error && isAdmin===true) section.style.display="block";
  }catch(e){ console.warn("Admin visibility check failed",e); }
 }
