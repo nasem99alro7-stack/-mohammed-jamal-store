@@ -1,9 +1,7 @@
-Syria Online V12 — Supabase Connected
+Syria Online V15 — Admin menu + owner-only protection
 
-1) Deploy all files in this folder to the existing Vercel project.
-2) Open /admin.html.
-3) Create your admin account with your email + password, then sign in.
-4) Products, categories and orders are stored in Supabase project SURIA ONLINE.
-5) Public storefront reads active products from Supabase; checkout writes customers, orders and order_items.
-
-Do not put a Supabase service_role key in the website. This build uses the publishable key and authenticated admin access.
+1) The admin shortcut is removed from the storefront header and kept only inside the side menu.
+2) /admin.html is protected by Supabase Auth and a database-side owner policy.
+3) Only the owner account configured in Supabase can read/change products, categories, orders and customers through the admin panel.
+4) Public storefront access and public order creation remain available.
+5) Do not put a Supabase service_role key in the website.
