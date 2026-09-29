@@ -74,6 +74,8 @@ function renderUser(){
  $("#accountBtn").innerHTML=`👤 <small>${u?"مرحباً، "+esc(u.name):"مرحباً، سجل الدخول"}</small><b>${u?"حسابي ▾":"تسجيل الدخول ▾"}</b>`;
  const ub=$("#drawerUserBox");
  if(ub) ub.innerHTML=u?`👤 <b>مرحباً، ${esc(u.name)}</b><small>ملفك الشخصي جاهز</small>`:`👤 <b>مرحباً! تسجيل الدخول / إنشاء حساب</b>`;
+ const logout=$("#drawerLogout");
+ if(logout){ logout.style.display=u?"block":"none"; }
 }
 function updateCounts(){$("#cartCount").textContent=cartQty()}
 function add(id,qty=1,opts={}){
@@ -377,6 +379,7 @@ function activateV6(){
  on("footerTerms",()=>simpleInfo("شروط الاستخدام","<p>باستخدام المتجر توافق على شروط الشراء والدفع والتوصيل والإرجاع المعروضة في الموقع.</p>"));
  on("footerShipping",()=>simpleInfo("سياسة الشحن","<p>مدة الشحن تختلف حسب المدينة والمنتج وتظهر أثناء إتمام الطلب.</p>"));
  on("languageBtn",languageModal);on("drawerSettings",settingsModal);
+ on("drawerLogout",()=>{if(!state.user)return;state.user=null;persist();renderUser();closeDrawer();closeModal();toast("تم تسجيل الخروج بنجاح");});
  on("currencyTRY",()=>toast("العملة الحالية: الليرة التركية TRY"));on("currencySYP",()=>toast("العملة الحالية: الليرة السورية SYP"));
  setLanguage(currentLang);
  activateServiceCardsV6();
