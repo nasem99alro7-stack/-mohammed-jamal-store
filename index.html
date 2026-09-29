@@ -72,6 +72,8 @@
   <div class="products" id="best"></div>
 </section>
 
+<section class="section recently" id="recentlySection"><div class="sectitle"><div><h2>👁 شاهدته مؤخراً</h2></div><a id="clearRecent">مسح</a></div><div class="products" id="recentProducts"></div></section>
+
 <section class="featuregrid">
   <article><span>🧸</span><div><h3>ألعاب الأطفال</h3><p>عالم من المرح والإبداع</p><button id="featureToys">تسوق الآن</button></div></article>
   <article><span>🛋️</span><div><h3>مستلزمات المنزل</h3><p>لمنزل أذكى وأناقة</p><button id="featureHome">تسوق الآن</button></div></article>
@@ -96,7 +98,7 @@
  <div class="bottom"><button id="languageBtn">🌐 العربية / English / Türkçe</button><button id="currencyTRY">🇹🇷 ليرة تركية TRY</button><button id="currencySYP">🇸🇾 الليرة السورية SYP</button><span>© 2026 سوريا أونلاين</span></div>
 </footer>
 
-<div id="cartPanel" class="panel"><div class="panelhead"><h2>سلة التسوق</h2><button>×</button></div><div id="cartItems"></div><div class="carttotal">المجموع: <b id="total">₺0</b></div><button class="checkout">المتابعة إلى الدفع</button></div>
+<div id="cartPanel" class="panel"><div class="panelhead"><h2>سلة التسوق</h2><button>×</button></div><div id="cartItems"></div><div class="coupon"><input id="couponCode" placeholder="رمز الخصم"><button id="applyCoupon">تطبيق</button></div><div id="couponMsg" class="coupon-msg"></div><div class="shipping-progress" id="shippingProgress"></div><div class="carttotal"><span>المجموع: <b id="total">₺0</b></span><small id="discountTotal"></small></div><button class="checkout">المتابعة إلى الدفع</button></div>
 <div id="modal" class="modal"><div class="modalbox"><button class="x">×</button><div id="modalContent"></div></div></div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="supabase-config.js"></script>

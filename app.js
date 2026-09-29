@@ -36,7 +36,7 @@ const subcats={
 "سوبرماركت":["مواد غذائية","مشروبات","منظفات","مستلزمات منزلية"]
 };
 
-let state={cat:"كل الأقسام",sub:"",sort:"featured",q:"",user:load(KEY.user,null),cart:load(KEY.cart,[]),fav:load(KEY.fav,[]),orders:load(KEY.orders,[]),recent:load(KEY.recent,[])};
+let state={cat:"كل الأقسام",sub:"",sort:"featured",q:"",minPrice:0,maxPrice:0,minRating:0,inStock:false,limit:10,compare:load("so_compare_v1",[]),coupon:load("so_coupon_v1",null),user:load(KEY.user,null),cart:load(KEY.cart,[]),fav:load(KEY.fav,[]),orders:load(KEY.orders,[]),recent:load(KEY.recent,[])};
 const db=window.syriaSupabase;
 const dbCategoryById={};
 async function loadStoreFromDB(){
@@ -70,32 +70,46 @@ async function saveOrderToDB(order,address,items){
 }
 loadStoreFromDB();
 
-function persist(){save(KEY.cart,state.cart);save(KEY.fav,state.fav);save(KEY.orders,state.orders);save(KEY.recent,state.recent);save(KEY.user,state.user)}
+function persist(){save(KEY.cart,state.cart);save(KEY.fav,state.fav);save(KEY.orders,state.orders);save(KEY.recent,state.recent);save(KEY.user,state.user);save("so_compare_v1",state.compare);save("so_coupon_v1",state.coupon)}
 function cartQty(){return state.cart.reduce((s,x)=>s+x.qty,0)}
 function toast(msg){let x=document.createElement("div");x.className="toast";x.textContent=msg;document.body.appendChild(x);setTimeout(()=>x.remove(),2200)}
 function modal(title,body,after){$("#modalContent").innerHTML=`<h2>${title}</h2>${body}`;$("#modal").classList.add("show");after?.($("#modalContent"))}
 function closeModal(){$("#modal").classList.remove("show")}
 function card(p){
- const fav=state.fav.includes(p.id);
- return `<article class="card" data-id="${p.id}"><button class="heart ${fav?"active":""}" data-fav="${p.id}">${fav?"♥":"♡"}</button>${p.sale?`<span class="sale">${p.sale}</span>`:""}<div class="pic" data-open="${p.id}">${p.emoji}</div><div class="stars">★★★★★ <small>(${p.reviews})</small></div><h3 data-open="${p.id}">${esc(p.name)}</h3><div class="price"><strong>${money(p.price)}</strong> <del>${money(p.old)}</del></div><small class="seller">يباع بواسطة ${esc(p.brand)}</small><div class="card-actions"><button class="add" data-add="${p.id}">أضف للسلة 🛒</button><button class="quick" data-open="${p.id}">التفاصيل</button></div></article>`
+ const fav=state.fav.includes(p.id), cmp=state.compare.includes(p.id);
+ const discount=p.old&&p.old>p.price?Math.round((1-p.price/p.old)*100):0;
+ const image=p.image_url?`<img src="${esc(p.image_url)}" alt="${esc(p.name)}" loading="lazy">`:p.emoji;
+ return `<article class="card" data-id="${p.id}"><button class="heart ${fav?"active":""}" data-fav="${p.id}">${fav?"♥":"♡"}</button>${p.sale||discount?`<span class="sale">${esc(p.sale||`-${discount}%`)}</span>`:""}<button class="compare-check ${cmp?"on":""}" data-compare="${p.id}" title="إضافة للمقارنة">${cmp?"✓":"⚖️"}</button><div class="pic" data-open="${p.id}">${image}</div><div class="stars">★★★★★ <small>${Number(p.rating||0).toFixed(1)} (${p.reviews||0})</small></div><h3 data-open="${p.id}">${esc(p.name)}</h3><div class="price"><strong>${money(p.price)}</strong> ${p.old?`<del>${money(p.old)}</del>`:""}</div><small class="seller">يباع بواسطة ${esc(p.brand)}</small><div class="card-actions"><button class="add" data-add="${p.id}">أضف للسلة 🛒</button><button class="quick" data-open="${p.id}">التفاصيل</button></div></article>`
 }
 function filtered(){
  let a=products.filter(p=>(state.cat==="كل الأقسام"||p.cat===state.cat)&&(state.sub===""||p.sub===state.sub));
- if(state.q){let q=state.q.toLowerCase();a=a.filter(p=>(p.name+p.brand+p.cat+p.sub).toLowerCase().includes(q))}
+ if(state.q){let q=state.q.toLowerCase();a=a.filter(p=>(p.name+p.brand+p.cat+p.sub+p.desc).toLowerCase().includes(q))}
+ if(state.minPrice)a=a.filter(p=>p.price>=state.minPrice);
+ if(state.maxPrice)a=a.filter(p=>p.price<=state.maxPrice);
+ if(state.minRating)a=a.filter(p=>Number(p.rating||0)>=Number(state.minRating));
+ if(state.inStock)a=a.filter(p=>Number(p.stock||0)>0);
  if(state.sort==="priceUp")a.sort((a,b)=>a.price-b.price);
  if(state.sort==="priceDown")a.sort((a,b)=>b.price-a.price);
  if(state.sort==="rating")a.sort((a,b)=>b.rating-a.rating);
- if(state.sort==="new")a.sort((a,b)=>b.id-a.id);
+ if(state.sort==="new")a.sort((a,b)=>String(b.id).localeCompare(String(a.id)));
+ if(state.sort==="bestseller")a.sort((a,b)=>(b.sold||0)-(a.sold||0));
  return a
 }
 function renderProducts(){
- let a=filtered();
- $("#deals").innerHTML=products.filter(p=>p.sale).slice(0,5).map(card).join("");
- $("#best").innerHTML=products.slice().sort((a,b)=>b.sold-a.sold).slice(0,6).map(card).join("");
- let grid=$("#allProducts"); if(grid)grid.innerHTML=a.map(card).join("")||`<div class="empty">لا توجد منتجات مطابقة.</div>`;
- $("#resultTitle").textContent=state.q?`نتائج البحث عن "${state.q}"`:state.cat==="كل الأقسام"?"كل المنتجات":state.cat+(state.sub?" — "+state.sub:"");
- renderSubcats();
+ let a=filtered(), shown=a.slice(0,state.limit);
+ $("#deals").innerHTML=products.filter(p=>p.sale||p.old>p.price).slice(0,5).map(card).join("");
+ $("#best").innerHTML=products.slice().sort((a,b)=>(b.sold||0)-(a.sold||0)).slice(0,6).map(card).join("");
+ let grid=$("#allProducts"); if(grid)grid.innerHTML=shown.map(card).join("")||`<div class="empty">لا توجد منتجات مطابقة. جرّب تغيير الفلاتر.</div>`;
+ $("#productCount").textContent=`${a.length} منتج`;
+ const more=$("#loadMore"); if(more){more.style.display=a.length>shown.length?"block":"none"}
+ $("#resultTitle").textContent=state.q?`نتائج البحث عن "${esc(state.q)}"`:state.cat==="كل الأقسام"?"كل المنتجات":state.cat+(state.sub?" — "+state.sub:"");
+ $("#compareCount").textContent=state.compare.length;
+ renderSubcats(); renderRecent();
 }
+function renderRecent(){const box=$("#recentProducts");if(!box)return;const items=state.recent.map(id=>products.find(p=>p.id===id)).filter(Boolean).slice(0,6);box.innerHTML=items.map(card).join("")||`<div class="empty">ستظهر هنا المنتجات التي تتصفحها.</div>`}
+function toggleCompare(id){state.compare=state.compare.includes(id)?state.compare.filter(x=>x!==id):state.compare.length<4?[...state.compare,id]:state.compare;persist();renderProducts();toast(state.compare.includes(id)?"تمت إضافة المنتج للمقارنة":"تمت إزالة المنتج من المقارنة")}
+function compareModal(){const items=state.compare.map(id=>products.find(p=>p.id===id)).filter(Boolean);if(items.length<2)return toast("اختر منتجين على الأقل للمقارنة");modal("مقارنة المنتجات",`<div class="compare-table"><table><thead><tr><th>الميزة</th>${items.map(p=>`<th>${esc(p.name)}</th>`).join("")}</tr></thead><tbody><tr><th>السعر</th>${items.map(p=>`<td>${money(p.price)}</td>`).join("")}</tr><tr><th>التقييم</th>${items.map(p=>`<td>★ ${Number(p.rating||0).toFixed(1)}</td>`).join("")}</tr><tr><th>الماركة</th>${items.map(p=>`<td>${esc(p.brand)}</td>`).join("")}</tr><tr><th>المخزون</th>${items.map(p=>`<td>${p.stock>0?"متوفر":"نفد"}</td>`).join("")}</tr></tbody></table></div>`)}
+
 function renderSubcats(){
  let box=$("#subcats"); if(!box)return;
  const arr=state.cat==="كل الأقسام"?Object.keys(subcats):subcats[state.cat]||[];
@@ -132,9 +146,13 @@ function add(id,qty=1,opts={}){
 }
 function removeCart(i){state.cart.splice(i,1);persist();renderCart();updateCounts()}
 function renderCart(){
- let rows=state.cart.map((x,i)=>{let p=products.find(p=>p.id===x.id);return `<div class="cartrow"><span class="mini">${p.emoji}</span><div class="grow"><b>${esc(p.name)}</b><small>${x.size||""} ${x.color||""}</small><strong>${money(p.price*x.qty)}</strong><div class="qty"><button data-dec="${i}">−</button><b>${x.qty}</b><button data-inc="${i}">+</button><button class="remove" data-rem="${i}">حذف</button></div></div></div>`}).join("");
+ let rows=state.cart.map((x,i)=>{let p=products.find(p=>p.id===x.id);if(!p)return "";return `<div class="cartrow"><span class="mini">${p.emoji}</span><div class="grow"><b>${esc(p.name)}</b><small>${x.size||""} ${x.color||""}</small><strong>${money(p.price*x.qty)}</strong><div class="qty"><button data-dec="${i}">−</button><b>${x.qty}</b><button data-inc="${i}">+</button><button class="remove" data-rem="${i}">حذف</button></div></div></div>`}).join("");
  $("#cartItems").innerHTML=rows||"<p class='empty'>السلة فارغة حالياً.</p>";
- $("#total").textContent=money(state.cart.reduce((s,x)=>s+products.find(p=>p.id===x.id).price*x.qty,0))
+ const subtotal=state.cart.reduce((s,x)=>{const p=products.find(p=>p.id===x.id);return s+(p?p.price*x.qty:0)},0);
+ const discount=state.coupon?.code?Math.round(subtotal*0.1):0; const shipping=subtotal>=1500||!subtotal?0:75;
+ $("#total").textContent=money(Math.max(0,subtotal-discount+shipping));
+ $("#discountTotal").textContent=discount?`خصم ${money(discount)} + شحن ${money(shipping)}`:`الشحن: ${shipping?money(shipping):"مجاني"}`;
+ const sp=$("#shippingProgress"); if(sp)sp.innerHTML=subtotal>=1500?"🎉 مبروك! حصلت على الشحن المجاني":"أضف "+money(Math.max(0,1500-subtotal))+" لتحصل على شحن مجاني";
 }
 function remember(id){state.recent=[id,...state.recent.filter(x=>x!==id)].slice(0,10);persist()}
 function productModal(id){
@@ -144,6 +162,7 @@ function productModal(id){
   $("#addDetail",box).onclick=()=>{add(p.id,1,{size:$("#sizeSel").value,color:$("#colorSel").value});closeModal()};
   $(".buyDetail",box).onclick=()=>{add(p.id,1,{size:$("#sizeSel").value,color:$("#colorSel").value});closeModal();checkout()};
   $("#favDetail",box).onclick=()=>{toggleFav(p.id);closeModal();productModal(p.id)};
+  $("#shareDetail",box)?.addEventListener("click",async()=>{try{await navigator.clipboard.writeText(location.href.split("#")[0]+"#product-"+p.id);toast("تم نسخ رابط المنتج")}catch{toast("يمكنك مشاركة الصفحة من زر المشاركة في جهازك")}});
  });
 }
 function toggleFav(id){state.fav=state.fav.includes(id)?state.fav.filter(x=>x!==id):[...state.fav,id];persist();toast(state.fav.includes(id)?"تمت الإضافة للمفضلة":"تمت الإزالة من المفضلة");renderProducts()}
@@ -343,7 +362,7 @@ function checkout(){
  if(!state.cart.length)return toast("السلة فارغة");
  let addresses=load(KEY.addresses,[]);
  modal("إتمام الطلب",`<form id="checkoutForm" class="form"><h3>عنوان التوصيل</h3><select id="addr">${addresses.map((a,i)=>`<option value="${i}">${esc(a.name)} — ${esc(a.city)} — ${esc(a.address)}</option>`).join("")}</select>${addresses.length?"":"<p>لم تحفظ عنواناً بعد. أضف العنوان من حسابك أولاً.</p>"}<h3>طريقة الدفع</h3><select id="pay"><option>الدفع عند الاستلام</option><option>Visa / Mastercard</option><option>شام كاش</option><option>USDT</option></select><div class="checkout-summary">الإجمالي: <b>${money(state.cart.reduce((s,x)=>s+products.find(p=>p.id===x.id).price*x.qty,0))}</b></div><button class="primary" ${addresses.length?"":"disabled"}>تأكيد الطلب</button></form>`,box=>{
- $("#checkoutForm",box).onsubmit=async e=>{e.preventDefault();let a=addresses[+$("#addr").value],items=state.cart.map(x=>{let p=products.find(p=>p.id===x.id);return {name:p.name,id:p.id,qty:x.qty,price:p.price}}),total=items.reduce((s,x)=>s+x.price*x.qty,0),no="SO"+Date.now().toString().slice(-8),payment=$("#pay").value;let order={no,date:new Date().toLocaleString("ar"),items,total,payment,status:"تم استلام الطلب",address:a};try{await saveOrderToDB(order,a,items);state.orders.unshift(order);state.cart=[];persist();updateCounts();renderCart();closeModal();toast("تم حفظ الطلب في قاعدة البيانات #"+no);ordersModal()}catch(err){console.error(err);toast("تعذر حفظ الطلب، حاول مرة ثانية")}}
+ $("#checkoutForm",box).onsubmit=async e=>{e.preventDefault();let a=addresses[+$("#addr").value],items=state.cart.map(x=>{let p=products.find(p=>p.id===x.id);return {name:p.name,id:p.id,qty:x.qty,price:p.price}}),total=items.reduce((s,x)=>s+x.price*x.qty,0),no="SO"+Date.now().toString().slice(-8),payment=$("#pay").value;const discount=state.coupon?.code?Math.round(total*0.1):0; const shipping=total>=1500?0:75; total=Math.max(0,total-discount+shipping); let order={no,date:new Date().toLocaleString("ar"),items,total,payment,status:"تم استلام الطلب",address:a,discount,shipping};try{await saveOrderToDB(order,a,items);state.orders.unshift(order);state.cart=[];persist();updateCounts();renderCart();closeModal();toast("تم حفظ الطلب في قاعدة البيانات #"+no);ordersModal()}catch(err){console.error(err);toast("تعذر حفظ الطلب، حاول مرة ثانية")}}
  })
 }
 function searchRun(){
@@ -500,13 +519,12 @@ document.addEventListener("click",e=>{
  const open=e.target.closest("[data-open]"); if(open){productModal(+open.dataset.open);return}
  const addBtn=e.target.closest("[data-add]");if(addBtn){add(+addBtn.dataset.add);return}
  const fav=e.target.closest("[data-fav]");if(fav){toggleFav(+fav.dataset.fav);return}
+ const cmp=e.target.closest("[data-compare]");if(cmp){toggleCompare(+cmp.dataset.compare);return}
  const inc=e.target.closest("[data-inc]");if(inc){state.cart[+inc.dataset.inc].qty++;persist();renderCart();updateCounts();return}
  const dec=e.target.closest("[data-dec]");if(dec){let x=state.cart[+dec.dataset.dec];x.qty--;if(x.qty<1)state.cart.splice(+dec.dataset.dec,1);persist();renderCart();updateCounts();return}
  const rem=e.target.closest("[data-rem]");if(rem){removeCart(+rem.dataset.rem);return}
  const sub=e.target.closest("[data-sub]");if(sub){state.sub=sub.dataset.sub;renderProducts();return}
  const cat=e.target.closest("[data-cat]");if(cat){state.cat=cat.dataset.cat;state.sub="";renderProducts();return}
- if(e.target.closest("#drawerLogin")){closeDrawer();loginModal();return}
- if(e.target.closest("#drawerSignup")){closeDrawer();signupModal();return}
  const ac=e.target.closest("[data-account]");if(ac){accountSection(ac.dataset.account);return}
  if(e.target.closest("#cartBtn")){$("#cartPanel").classList.add("open");return}
  if(e.target.closest("#ordersBtn")){ordersModal();return}
@@ -529,6 +547,13 @@ $("#search")?.addEventListener("keydown",e=>{if(e.key==="Enter")searchRun()});
 $(".searchbox>button")?.addEventListener("click",searchRun);
 $("#searchCat")?.addEventListener("change",e=>{state.cat=e.target.value==="كل الأقسام"?"كل الأقسام":e.target.value;state.q="";renderProducts()});
 $("#sort")?.addEventListener("change",e=>{state.sort=e.target.value;renderProducts()});
+$("#filterToggle")?.addEventListener("click",()=>$("#filterPanel")?.classList.toggle("show"));
+$("#applyFilters")?.addEventListener("click",()=>{state.minPrice=Number($("#minPrice").value)||0;state.maxPrice=Number($("#maxPrice").value)||0;state.minRating=Number($("#minRating").value)||0;state.inStock=$("#inStock").checked;state.limit=10;renderProducts();});
+$("#resetFilters")?.addEventListener("click",()=>{state.minPrice=0;state.maxPrice=0;state.minRating=0;state.inStock=false;$("#minPrice").value="";$("#maxPrice").value="";$("#minRating").value="0";$("#inStock").checked=false;renderProducts()});
+$("#loadMore")?.addEventListener("click",()=>{state.limit+=10;renderProducts()});
+$("#compareBtn")?.addEventListener("click",compareModal);
+$("#clearRecent")?.addEventListener("click",()=>{state.recent=[];persist();renderRecent()});
+$("#applyCoupon")?.addEventListener("click",()=>{const code=$("#couponCode").value.trim().toUpperCase();if(code==="SYRIA10"){state.coupon={code};persist();$("#couponMsg").textContent="تم تطبيق خصم 10% 🎉";renderCart()}else{$("#couponMsg").textContent="رمز غير صالح. جرّب SYRIA10"}});
 
 let t=6*3600+25*60+18;
 setInterval(()=>{t=Math.max(0,t-1);let h=Math.floor(t/3600),m=Math.floor(t%3600/60),s=t%60;let x=$("#timer");if(x)x.textContent=[h,m,s].map(n=>String(n).padStart(2,"0")).join(":")},1000);

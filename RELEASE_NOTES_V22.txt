@@ -1,0 +1,20 @@
+Syria Online V22 - Marketplace Upgrade
+
+Implemented in this build:
+- Trendyol-style marketplace browsing layout built on the existing V21 foundation.
+- Product catalog with category/subcategory browsing, search suggestions, sorting and responsive grids.
+- Advanced filters: price range, minimum rating, stock availability.
+- Progressive product loading with "عرض المزيد".
+- Product cards with discount labels, ratings, seller, wishlist and compare controls.
+- Product detail modal with options, stock, delivery information, specifications, reviews summary and sharing.
+- Recently viewed products section.
+- Product comparison for up to four products.
+- Cart quantity controls, coupon code support (SYRIA10 demo), shipping threshold and order total calculation.
+- Existing account, login/register, wishlist, orders, addresses, payments and customer support flows retained.
+- Existing Supabase loading and order persistence retained.
+- Existing admin dashboard retained.
+- Mobile-first responsive behavior improved.
+
+Important:
+- Product prices/content in the bundled demo catalog are demonstration data until real supplier/product feeds are connected.
+- The SYRIA10 coupon is a demo frontend coupon and should be replaced by server-side validation before production.

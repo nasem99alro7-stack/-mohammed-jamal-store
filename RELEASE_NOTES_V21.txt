@@ -16,8 +16,3 @@ Not falsely claimed as live until configured:
 - Licensed card payment gateway
 - Final production domain/DNS
 - Native App Store / Google Play publishing accounts
-
-
-V21 AUTH BUTTON FIX
-- Fixed the drawer's dynamically rendered تسجيل الدخول and إنشاء حساب buttons by handling their clicks through the document-level event delegation already used by the storefront.
-- No visual/layout changes were made to the account drawer.
