@@ -230,7 +230,7 @@ function renderBar(){
  let old=$("#so-v4-bar");if(old)old.remove();
  let bar=document.createElement("div");bar.id="so-v4-bar";bar.className="so-feature-launcher";bar.dir="rtl";
  let u=user();
- bar.innerHTML=`<button class="so-feature-btn primary" data-a>${u?"حسابي":"تسجيل / إنشاء حساب"}</button><button class="so-feature-btn" data-c>🛒 السلة (${get(DB.cart,[]).reduce((s,x)=>s+x.qty,0)})</button><button class="so-feature-btn" data-o>📦 طلباتي</button><button class="so-feature-btn" data-f>❤️ المفضلة</button><button class="so-feature-btn" data-d>🏠 عناويني</button><button class="so-feature-btn" data-s>🔎 بحث وفلاتر</button>`;
+ bar.innerHTML=`<button class="so-feature-btn primary" data-a>${u?"حسابي":"👤 الحساب"}</button><button class="so-feature-btn" data-c>🛒 السلة (${get(DB.cart,[]).reduce((s,x)=>s+x.qty,0)})</button><button class="so-feature-btn" data-o>📦 طلباتي</button><button class="so-feature-btn" data-f>❤️ المفضلة</button><button class="so-feature-btn" data-d>🏠 عناويني</button><button class="so-feature-btn" data-s>🔎 البحث</button>`;
  (document.querySelector("main")||document.body).prepend(bar);
  bar.querySelector("[data-a]").onclick=()=>u?profile():auth();bar.querySelector("[data-c]").onclick=cart;bar.querySelector("[data-o]").onclick=orders;bar.querySelector("[data-f]").onclick=fav;bar.querySelector("[data-d]").onclick=addresses;bar.querySelector("[data-s]").onclick=search;
 }
