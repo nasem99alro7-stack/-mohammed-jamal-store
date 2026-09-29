@@ -133,3 +133,5 @@ button{font-family:inherit;cursor:pointer}
 .profile-fields{display:grid;gap:8px}.profile-fields>div{display:flex;justify-content:space-between;gap:15px;padding:11px 12px;border-bottom:1px solid #edf0ed}.profile-fields b{color:#4c5851}.profile-fields span{text-align:left;color:#202720;max-width:60%;word-break:break-word}.profile-edit{width:100%;margin-top:14px}
 #drawerUserBox{display:grid;gap:3px}.userbox small{display:block;color:#718078;font-size:11px;margin-right:25px}
 @media(max-width:700px){.modalbox{max-height:88vh;overflow:auto}.form-row{grid-template-columns:1fr}.profile-fields span{max-width:58%}}
+.userbox{cursor:pointer}.userbox:active{background:#e5f3e2}
+.drawer-logout{color:#b42323!important;font-weight:700!important}
