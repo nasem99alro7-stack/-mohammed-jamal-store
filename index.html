@@ -2,58 +2,104 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>AI Trading Analyst</title>
-<meta name="description" content="منصة عربية لتحليل الأسواق وإدارة المخاطر">
-<link rel="stylesheet" href="styles.css">
+<title>سوريا أونلاين</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
-<header class="top"><div class="wrap nav">
-  <a class="brand" href="#"><span>◈</span><b>AI Trading Analyst</b></a>
-  <div class="market"><span class="dot"></span> السوق التجريبي متصل</div>
-  <div class="actions"><button class="ghost" onclick="showHelp()">⚠️ المخاطر</button><button class="primary" onclick="runAnalysis()">تحليل الآن</button></div>
-</div></header>
+<div class="top">
+  <div class="wrap topin">
+    <span>🚚 توصيل سريع داخل سوريا وتركيا</span>
+    <div><a id="helpTop">المساعدة</a><a id="trackTop">تتبع الطلب</a><a id="serviceTop">خدمة العملاء</a></div>
+  </div>
+</div>
+
+<header>
+  <div class="wrap head">
+    <button class="hamb" id="menuBtn">☰</button>
+    <a class="logo"><b>سوريا</b> أونلاين <small>كل ما تحتاجه في مكان واحد</small></a>
+    <div class="searchbox">
+      <select id="searchCat"><option>كل الأقسام</option><option>إلكترونيات</option><option>أزياء</option><option>منزل</option><option>جمال</option><option>ألعاب</option></select>
+      <input id="search" placeholder="إبحث عن منتجات، ماركات أو أقسام..." autocomplete="off">
+      <button>⌕</button>
+      <div id="suggestions"></div>
+    </div>
+    <div class="headlinks">
+      <button id="accountBtn">👤 <small>مرحباً، سجل الدخول</small><b>حسابي ▾</b></button>
+      <button id="ordersBtn">📦 <small>طلباتك</small><b>تتبع الطلب</b></button>
+      <button id="favBtn">♡ <small>قائمتك</small><b>المفضلة</b></button>
+      <button id="cartBtn" class="cart">🛒 <i id="cartCount">0</i><b>السلة</b></button>
+    </div>
+  </div>
+  <nav>
+    <div class="wrap navin">
+      <a id="allBtn">☰ جميع الأقسام</a><a id="navDeals">عروض اليوم</a><a id="navNew">وصل حديثاً</a><a id="navBest">الأكثر مبيعاً</a><a id="navFeatured">المنتجات المميزة</a><a id="navBrands">العلامات التجارية</a><a id="navGift">بطاقات الهدايا</a><a id="navSell">بيع معنا</a>
+    </div>
+  </nav>
+</header>
+
+<div id="drawer" class="drawer">
+  <div class="drawerhead"><b>تصفح سوريا أونلاين</b><button id="closeMenu">×</button></div>
+  <div class="userbox" id="drawerUserBox">👤 <b>مرحباً! تسجيل الدخول / إنشاء حساب</b></div>
+  <h3>تصفح حسب القسم</h3>
+  <div id="drawerCategories" class="drawer-categories"></div>
+  <div id="adminSection" style="display:none"><h3>الإدارة</h3><a class="drawer-admin-link" id="drawerAdminLink" href="admin.html">⚙️ لوحة التحكم</a></div><h3>حسابك</h3><a data-account="profile">👤 ملفي الشخصي</a><a data-account="orders">طلباتك</a><a data-account="fav">قائمة المفضلة</a><a data-account="address">العناوين</a><a data-account="payments">طرق الدفع</a><a data-account="recent">المنتجات التي شاهدتها</a><a data-account="returns">الإرجاع والاسترداد</a><h3>الإعدادات</h3><a id="drawerSettings" class="drawer-settings">⚙️ الإعدادات العامة</a><a id="drawerLogout" class="drawer-logout" style="display:none">🚪 تسجيل الخروج</a>
+</div>
+<div id="shade"></div>
 
 <main class="wrap">
 <section class="hero">
-  <div>
-    <span class="eyebrow">AI MARKET LAB</span>
-    <h1>حلّل السوق بوضوح،<br><em>وقرّر بنفسك.</em></h1>
-    <p>لوحة تحليل تعليمية تجمع الشارت، المؤشرات، الدعم والمقاومة، سيناريوهات السوق وإدارة المخاطر في مكان واحد.</p>
+  <div class="heroMain"><div><span>منتجات أصلية • أسعار مميزة • توصيل سريع</span><h1>كل احتياجاتك<br><strong>من سوريا أونلاين</strong></h1><button id="heroShop">تسوق الآن ←</button></div><div class="heroArt">🛍️</div></div>
+  <div class="side">
+    <article><div><h2>إلكترونيات حديثة</h2><p>أفضل الماركات بأسعار مميزة</p><button id="heroElectronics">تسوق الآن</button></div><span>📱</span></article>
+    <article><div><h2>مستلزمات المنزل</h2><p>لبيت أجمل وحياة أكثر راحة</p><button id="heroHome">تسوق الآن</button></div><span>🛋️</span></article>
   </div>
-  <div class="heroBadge"><div class="orb">AI</div><b>تحليل احتمالي</b><span>لا توجد ضمانات للربح</span></div>
 </section>
 
-<section class="controls card">
-  <div><label>الأصل</label><select id="asset" onchange="runAnalysis()"><option>الذهب XAUUSD</option><option>Bitcoin BTCUSD</option><option>EURUSD</option><option>S&P 500</option><option>NASDAQ 100</option></select></div>
-  <div><label>الفريم</label><select id="tf" onchange="runAnalysis()"><option>5 دقائق</option><option>15 دقيقة</option><option>ساعة</option><option>4 ساعات</option><option>يومي</option></select></div>
-  <div><label>رأس المال ($)</label><input id="capital" type="number" value="1000" min="1" oninput="calcRisk()"></div>
-  <div><label>المخاطرة %</label><input id="risk" type="number" value="1" min="0.1" max="10" step="0.1" oninput="calcRisk()"></div>
-  <button class="primary big" onclick="runAnalysis()">🔍 حلّل الشارت</button>
+<section class="cats" id="cats">
+  <a id="cat_offers">٪<small>عروض اليوم</small></a><a id="cat_women">👗<small>ملابس نسائية</small></a><a id="cat_men">👔<small>ملابس رجالية</small></a><a id="cat_kidswear">🧒<small>ملابس أطفال</small></a><a id="cat_electronics">📱<small>إلكترونيات</small></a><a id="cat_home">🛋️<small>المنزل والمطبخ</small></a><a id="cat_beauty">🌹<small>عطور وجمال</small></a><a id="cat_shoes">👟<small>أحذية وحقائب</small></a><a id="cat_sport">🏋️<small>رياضة</small></a><a id="cat_toys">🧸<small>ألعاب وهدايا</small></a>
 </section>
 
-<section class="grid">
-  <div class="card chartCard">
-    <div class="sectionHead"><div><span class="eyebrow">PRICE ACTION</span><h2 id="chartTitle">الذهب XAUUSD</h2></div><span class="badge">بيانات تجريبية</span></div>
-    <div class="chart" id="chart"></div>
-    <div class="legend"><span>— السعر</span><span>— دعم</span><span>— مقاومة</span></div>
-  </div>
-  <aside class="card signal">
-    <span class="eyebrow">AI ANALYSIS</span><h2>ملخص التحليل</h2>
-    <div class="bias" id="bias">محايد</div>
-    <p id="summary">اضغط «حلّل الشارت» للحصول على قراءة تحليلية.</p>
-    <div class="levels"><div><small>الدعم</small><b id="support">—</b></div><div><small>المقاومة</small><b id="resistance">—</b></div></div>
-    <div class="scenarios"><article><b>سيناريو صعود</b><span id="bull">—</span></article><article><b>سيناريو هبوط</b><span id="bear">—</span></article></div>
-  </aside>
+<section class="deal section">
+  <div class="sectitle"><div><h2>🔥 عروض اليوم</h2><a id="showDeals">عرض الكل</a></div><div class="timer">تنتهي خلال <b id="timer">06:25:18</b></div></div>
+  <div class="products" id="deals"></div>
 </section>
 
-<section class="grid three">
-  <div class="card"><span class="eyebrow">INDICATORS</span><h3>المؤشرات</h3><div class="metrics"><div><small>RSI</small><b id="rsi">—</b></div><div><small>MACD</small><b id="macd">—</b></div><div><small>الحجم</small><b id="volume">—</b></div></div></div>
-  <div class="card"><span class="eyebrow">RISK</span><h3>إدارة المخاطر</h3><div class="riskbox"><p>المبلغ المعرض للمخاطرة</p><strong id="riskAmount">$10.00</strong><p>حجم الصفقة المقترح (تعليمي)</p><strong id="position">$1000</strong></div></div>
-  <div class="card"><span class="eyebrow">PLAN</span><h3>مستويات تعليمية</h3><div class="plan"><div>Entry <b id="entry">—</b></div><div>Stop Loss <b id="sl">—</b></div><div>Take Profit <b id="tp">—</b></div></div></div>
+<section class="section">
+  <div class="sectitle"><div><h2>الأكثر مبيعاً</h2><a id="showBest">عرض الكل</a></div><div class="scrollhint">← اسحب للتصفح →</div></div>
+  <div class="products" id="best"></div>
 </section>
 
-<section class="card history"><div class="sectionHead"><div><span class="eyebrow">JOURNAL</span><h2>سجل التحليلات</h2></div><button class="secondary" onclick="clearHistory()">مسح السجل</button></div><div id="history"></div></section>
+<section class="featuregrid">
+  <article><span>🧸</span><div><h3>ألعاب الأطفال</h3><p>عالم من المرح والإبداع</p><button id="featureToys">تسوق الآن</button></div></article>
+  <article><span>🛋️</span><div><h3>مستلزمات المنزل</h3><p>لمنزل أذكى وأناقة</p><button id="featureHome">تسوق الآن</button></div></article>
+  <article><span>💄</span><div><h3>مستلزمات التجميل</h3><p>جمال طبيعي كل يوم</p><button id="featureBeauty">تسوق الآن</button></div></article>
+</section>
+
+<section class="why">
+  <div>🚚<b>توصيل سريع</b><small>إلى جميع أنحاء سوريا وتركيا</small></div>
+  <div>💳<b>دفع آمن</b><small>بطاقة، شام كاش، USDT والمزيد</small></div>
+  <div>↩️<b>إرجاع سهل</b><small>خلال 14 يوم حسب المنتج</small></div>
+  <div>🎧<b>دعم العملاء</b><small>مساعدة على مدار الساعة</small></div>
+</section>
 </main>
-<footer><div class="wrap">AI Trading Analyst · أداة تحليل تعليمية وليست توصية استثمارية.</div></footer>
+
+<footer>
+ <div class="wrap footgrid">
+  <div><h3>خدمة العملاء</h3><a id="footerContact">تواصل معنا</a><a id="footerTrack">تتبع طلبك</a><a id="footerReturns">الإرجاع والاسترداد</a><a id="footerFaq">الأسئلة الشائعة</a></div>
+  <div><h3>حسابك</h3><a id="footerOrders">طلباتك</a><a id="footerFav">المفضلة</a><a id="footerAddress">عناوينك</a><a id="footerPayments">طرق الدفع</a></div>
+  <div><h3>تسوق معنا</h3><a id="footerDeals">العروض</a><a id="footerBest">الأكثر مبيعاً</a><a id="footerBrands">العلامات التجارية</a><a id="footerSell">بيع معنا</a></div>
+  <div><h3>سوريا أونلاين</h3><a id="footerAbout">من نحن</a><a id="footerPrivacy">سياسة الخصوصية</a><a id="footerTerms">شروط الاستخدام</a><a id="footerShipping">سياسة الشحن</a></div>
+ </div>
+ <div class="bottom"><button id="languageBtn">🌐 العربية / English / Türkçe</button><button id="currencyTRY">🇹🇷 ليرة تركية TRY</button><button id="currencySYP">🇸🇾 الليرة السورية SYP</button><span>© 2026 سوريا أونلاين</span></div>
+</footer>
+
+<div id="cartPanel" class="panel"><div class="panelhead"><h2>سلة التسوق</h2><button>×</button></div><div id="cartItems"></div><div class="carttotal">المجموع: <b id="total">₺0</b></div><button class="checkout">المتابعة إلى الدفع</button></div>
+<div id="modal" class="modal"><div class="modalbox"><button class="x">×</button><div id="modalContent"></div></div></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-config.js"></script>
 <script src="app.js"></script>
-</body></html>
+</body>
+</html>
