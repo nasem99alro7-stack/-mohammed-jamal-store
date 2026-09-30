@@ -1,13 +1,59 @@
-<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>GoldTrade Demo</title><script src="https://cdn.jsdelivr.net/npm/chart.js"></script><style>
-*{box-sizing:border-box}body{margin:0;background:#0d1117;color:#e8edf3;font-family:Arial,Tahoma,sans-serif}.wrap{max-width:1200px;margin:auto;padding:18px}.top{background:#151b23;border-bottom:1px solid #27303c}.nav{display:flex;justify-content:space-between;align-items:center}.brand{font-size:22px;font-weight:800}.badge{background:#2b2410;color:#e6c65a;padding:7px 10px;border-radius:8px;font-size:12px}.grid{display:grid;grid-template-columns:1fr 330px;gap:16px;margin-top:16px}.card{background:#151b23;border:1px solid #27303c;border-radius:12px;padding:16px}.price{font-size:32px;font-weight:800}.muted{color:#8d99a8}.up{color:#38d39f}.down{color:#ff6b6b}.chart{height:420px}.form{display:grid;gap:10px}.form input,.form select{width:100%;padding:11px;border:1px solid #303b49;border-radius:8px;background:#0f141b;color:#fff}.btn{border:0;border-radius:8px;padding:12px;font-weight:800;cursor:pointer}.buy{background:#198754;color:white}.sell{background:#dc3545;color:white}.full{width:100%}.row{display:flex;gap:8px}.stat{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}.stat div{background:#0f141b;border-radius:8px;padding:12px}.table{width:100%;border-collapse:collapse;margin-top:12px}.table th,.table td{padding:10px;border-bottom:1px solid #27303c;text-align:right;font-size:13px}.empty{text-align:center;padding:25px;color:#8d99a8}@media(max-width:850px){.grid{grid-template-columns:1fr}.chart{height:330px}}
-</style></head><body><header class="top"><div class="wrap nav"><div class="brand">🟡 GoldTrade</div><span class="badge">تجريبي — بدون أموال حقيقية</span></div></header>
-<main class="wrap"><div class="grid"><section><div class="card"><div class="muted">XAU/USD — الذهب مقابل الدولار</div><div id="price" class="price">—</div><div id="change" class="up">—</div><div class="chart"><canvas id="chart"></canvas></div></div>
-<div class="card" style="margin-top:16px"><b>الصفقات</b><table class="table"><thead><tr><th>النوع</th><th>الدخول</th><th>الحجم</th><th>SL</th><th>TP</th><th>الحالة</th></tr></thead><tbody id="trades"><tr><td colspan="6" class="empty">لا توجد صفقات</td></tr></tbody></table></div></section>
-<aside class="card"><h2>تنفيذ صفقة</h2><div class="form"><label>الحجم (Lot)<input id="lot" type="number" value="0.01" min="0.01" step="0.01"></label><label>Stop Loss<input id="sl" type="number" placeholder="اختياري"></label><label>Take Profit<input id="tp" type="number" placeholder="اختياري"></label><div class="row"><button class="btn sell full" onclick="trade('بيع')">بيع</button><button class="btn buy full" onclick="trade('شراء')">شراء</button></div></div><div class="stat"><div><span class="muted">الرصيد</span><br><b id="balance">$10,000</b></div><div><span class="muted">الهامش</span><br><b id="margin">$0</b></div><div><span class="muted">صفقات</span><br><b id="count">0</b></div></div><p class="muted" style="font-size:12px;margin-top:18px">هذه نسخة محاكاة. السعر المعروض محلي/تجريبي ولا يمثل سعراً تنفيذياً حقيقياً.</p></aside></div></main>
-<script>
-let price=2650,prev=price, balance=10000,trades=[];const labels=[],data=[];for(let i=0;i<60;i++){price+=((Math.random()-.48)*5);labels.push(i);data.push(price)}
-const ctx=document.getElementById('chart');const chart=new Chart(ctx,{type:'line',data:{labels,data:{labels,data}},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{display:false},y:{grid:{color:'#27303c'},ticks:{color:'#8d99a8'}}}}});
-function tick(){prev=price;price+=((Math.random()-.48)*3);labels.push(labels.length);data.push(price);if(labels.length>80){labels.shift();data.shift()}chart.data.labels=labels;chart.data.datasets=[{data,borderColor:'#e6c65a',backgroundColor:'transparent',pointRadius:0,borderWidth:2}];chart.update();document.getElementById('price').textContent='$'+price.toFixed(2);let d=price-prev;let c=document.getElementById('change');c.textContent=(d>=0?'+':'')+d.toFixed(2);c.className=d>=0?'up':'down'};chart.data.datasets=[{data,borderColor:'#e6c65a',pointRadius:0,borderWidth:2}];tick();setInterval(tick,1500);
-function trade(type){let lot=+document.getElementById('lot').value||.01;let sl=document.getElementById('sl').value||'—',tp=document.getElementById('tp').value||'—';trades.unshift({type,entry:price,lot,sl,tp});document.getElementById('trades').innerHTML=trades.map((t,i)=>`<tr><td class="${t.type==='شراء'?'up':'down'}">${t.type}</td><td>$${t.entry.toFixed(2)}</td><td>${t.lot}</td><td>${t.sl}</td><td>${t.tp}</td><td><button class="btn" onclick="closeTrade(${i})">إغلاق</button></td></tr>`).join('');document.getElementById('count').textContent=trades.length}
-function closeTrade(i){trades.splice(i,1);document.getElementById('count').textContent=trades.length;document.getElementById('trades').innerHTML=trades.length?trades.map((t,i)=>`<tr><td class="${t.type==='شراء'?'up':'down'}">${t.type}</td><td>$${t.entry.toFixed(2)}</td><td>${t.lot}</td><td>${t.sl}</td><td>${t.tp}</td><td><button class="btn" onclick="closeTrade(${i})">إغلاق</button></td></tr>`).join(''):'<tr><td colspan="6" class="empty">لا توجد صفقات</td></tr>'}
-</script></body></html>
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AI Trading Analyst</title>
+<meta name="description" content="منصة عربية لتحليل الأسواق وإدارة المخاطر">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header class="top"><div class="wrap nav">
+  <a class="brand" href="#"><span>◈</span><b>AI Trading Analyst</b></a>
+  <div class="market"><span class="dot"></span> السوق التجريبي متصل</div>
+  <div class="actions"><button class="ghost" onclick="showHelp()">⚠️ المخاطر</button><button class="primary" onclick="runAnalysis()">تحليل الآن</button></div>
+</div></header>
+
+<main class="wrap">
+<section class="hero">
+  <div>
+    <span class="eyebrow">AI MARKET LAB</span>
+    <h1>حلّل السوق بوضوح،<br><em>وقرّر بنفسك.</em></h1>
+    <p>لوحة تحليل تعليمية تجمع الشارت، المؤشرات، الدعم والمقاومة، سيناريوهات السوق وإدارة المخاطر في مكان واحد.</p>
+  </div>
+  <div class="heroBadge"><div class="orb">AI</div><b>تحليل احتمالي</b><span>لا توجد ضمانات للربح</span></div>
+</section>
+
+<section class="controls card">
+  <div><label>الأصل</label><select id="asset" onchange="runAnalysis()"><option>الذهب XAUUSD</option><option>Bitcoin BTCUSD</option><option>EURUSD</option><option>S&P 500</option><option>NASDAQ 100</option></select></div>
+  <div><label>الفريم</label><select id="tf" onchange="runAnalysis()"><option>5 دقائق</option><option>15 دقيقة</option><option>ساعة</option><option>4 ساعات</option><option>يومي</option></select></div>
+  <div><label>رأس المال ($)</label><input id="capital" type="number" value="1000" min="1" oninput="calcRisk()"></div>
+  <div><label>المخاطرة %</label><input id="risk" type="number" value="1" min="0.1" max="10" step="0.1" oninput="calcRisk()"></div>
+  <button class="primary big" onclick="runAnalysis()">🔍 حلّل الشارت</button>
+</section>
+
+<section class="grid">
+  <div class="card chartCard">
+    <div class="sectionHead"><div><span class="eyebrow">PRICE ACTION</span><h2 id="chartTitle">الذهب XAUUSD</h2></div><span class="badge">بيانات تجريبية</span></div>
+    <div class="chart" id="chart"></div>
+    <div class="legend"><span>— السعر</span><span>— دعم</span><span>— مقاومة</span></div>
+  </div>
+  <aside class="card signal">
+    <span class="eyebrow">AI ANALYSIS</span><h2>ملخص التحليل</h2>
+    <div class="bias" id="bias">محايد</div>
+    <p id="summary">اضغط «حلّل الشارت» للحصول على قراءة تحليلية.</p>
+    <div class="levels"><div><small>الدعم</small><b id="support">—</b></div><div><small>المقاومة</small><b id="resistance">—</b></div></div>
+    <div class="scenarios"><article><b>سيناريو صعود</b><span id="bull">—</span></article><article><b>سيناريو هبوط</b><span id="bear">—</span></article></div>
+  </aside>
+</section>
+
+<section class="grid three">
+  <div class="card"><span class="eyebrow">INDICATORS</span><h3>المؤشرات</h3><div class="metrics"><div><small>RSI</small><b id="rsi">—</b></div><div><small>MACD</small><b id="macd">—</b></div><div><small>الحجم</small><b id="volume">—</b></div></div></div>
+  <div class="card"><span class="eyebrow">RISK</span><h3>إدارة المخاطر</h3><div class="riskbox"><p>المبلغ المعرض للمخاطرة</p><strong id="riskAmount">$10.00</strong><p>حجم الصفقة المقترح (تعليمي)</p><strong id="position">$1000</strong></div></div>
+  <div class="card"><span class="eyebrow">PLAN</span><h3>مستويات تعليمية</h3><div class="plan"><div>Entry <b id="entry">—</b></div><div>Stop Loss <b id="sl">—</b></div><div>Take Profit <b id="tp">—</b></div></div></div>
+</section>
+
+<section class="card history"><div class="sectionHead"><div><span class="eyebrow">JOURNAL</span><h2>سجل التحليلات</h2></div><button class="secondary" onclick="clearHistory()">مسح السجل</button></div><div id="history"></div></section>
+</main>
+<footer><div class="wrap">AI Trading Analyst · أداة تحليل تعليمية وليست توصية استثمارية.</div></footer>
+<script src="app.js"></script>
+</body></html>
